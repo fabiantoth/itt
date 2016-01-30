@@ -1,0 +1,9 @@
+{
+  "name": "itt",
+  "version": "0.1.0",
+  "description": "Iteration tools.",
+  "main": "index.js",
+  "author": "Nathan",
+  "license": "MIT",
+  "repository": "https://github.com/nathan/itt"
+}
