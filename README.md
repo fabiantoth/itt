@@ -4,7 +4,9 @@ Iteration tools.
 
 # Install
 
-    $ npm i itt
+```
+$ npm i itt
+```
 
 # Use
 
