@@ -180,7 +180,7 @@ itt.range(3).cycle().take(10).toArray()
 An iterator which yields pairs, each containing an index and element of this iterator.
 
 ```js
-itt(['foo', 'bar', 'baz']).enumerate().array()
+itt(['foo', 'bar', 'baz']).enumerate().toArray()
 /* [ [ 0, 'foo' ], [ 1, 'bar' ], [ 2, 'baz' ] ] */
 ```
 
@@ -478,7 +478,7 @@ itt.range(10).map(x => x * x).last()
 An iterator which yields all but the first element of this iterator.
 
 ```js
-itt.range(10).map(x => x * x).tail().array()
+itt.range(10).map(x => x * x).tail().toArray()
 /* [ 1, 4, 9, 16, 25, 36, 49, 64, 81 ] */
 ```
 
@@ -487,7 +487,7 @@ itt.range(10).map(x => x * x).tail().array()
 An iterator which yields all but the last element of this iterator.
 
 ```js
-itt.range(10).map(x => x * x).init().array()
+itt.range(10).map(x => x * x).init().toArray()
 /* [ 0, 1, 4, 9, 16, 25, 36, 49, 64 ] */
 ```
 
@@ -598,6 +598,7 @@ itt.zip(
 **Note:** This method caches some elements of this iterator. As any derived iterator advances, new elements are cached, and once every derived iterator has been iterated past an element, that element is discarded.
 
 ## .toArray()
+**.array() [alias]**
 
 An array of the elements in this iterator. Equivalent to `Array.from(this)`.
 
