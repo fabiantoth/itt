@@ -48,6 +48,37 @@ const chunksOf = G(function*(n, xs) {
   }
   if (list.length) yield list
 })
+const subsequences = G(function*(xs, n = 2) {
+  if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
+  let buffer = []
+  let value, done
+  while (buffer.length < n && ({value, done} = xs.next()) && !done) {
+    buffer.push(value)
+  }
+  if (!done) while (({value, done} = xs.next()) && !done) {
+    yield buffer
+    buffer = buffer.slice(1)
+    buffer.push(value)
+  }
+  if (buffer.length === n) yield buffer
+})
+const lookahead = G(function*(xs, n = 1) {
+  if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
+  let buffer = []
+  let value, done
+  while (buffer.length < n && ({value, done} = xs.next()) && !done) {
+    buffer.push(value)
+  }
+  if (!done) while (({value, done} = xs.next()) && !done) {
+    buffer.push(value)
+    yield buffer
+    buffer = buffer.slice(1)
+  }
+  for (let i = buffer.length - 1; i-- >= 0;) {
+    yield buffer
+    buffer = buffer.slice(1)
+  }
+})
 const drop = G(function*(n, xs) {for (const x of xs) if (n <= 0) yield x; else --n})
 const dropWhile = G(function*(fn, xs) {let init = true; for (const x of xs) if (!init || !fn(x)) {init = false; yield x}})
 const dropLast = G(function*(n, xs) {
@@ -201,39 +232,6 @@ const slice = G(function*(xs, start = 0, end) {
   }
 })
 
-const subsequences = G(function*(xs, n = 2) {
-  if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
-  let buffer = []
-  let value, done
-  while (buffer.length < n && ({value, done} = xs.next()) && !done) {
-    buffer.push(value)
-  }
-  if (!done) while (({value, done} = xs.next()) && !done) {
-    yield buffer
-    buffer = buffer.slice(1)
-    buffer.push(value)
-  }
-  if (buffer.length === n) yield buffer
-})
-
-const lookahead = G(function*(xs, n = 1) {
-  if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
-  let buffer = []
-  let value, done
-  while (buffer.length < n && ({value, done} = xs.next()) && !done) {
-    buffer.push(value)
-  }
-  if (!done) while (({value, done} = xs.next()) && !done) {
-    buffer.push(value)
-    yield buffer
-    buffer = buffer.slice(1)
-  }
-  for (let i = buffer.length - 1; i-- >= 0;) {
-    yield buffer
-    buffer = buffer.slice(1)
-  }
-})
-
 class Iter {
   constructor(iter) {this.iter = iter}
   [Symbol.iterator]() {return this.iter}
@@ -257,6 +255,8 @@ class Iter {
   unshift(...xs) {return unshift(...xs, this.iter)}
   flatten() {return flatten(this.iter)}
   chunksOf(n) {return chunksOf(n, this.iter)}
+  lookahead(n) {return lookahead(this.iter, n)}
+  subsequences(n) {return subsequences(this.iter, n)}
   drop(n) {return drop(n, this.iter)}
   dropWhile(fn) {return dropWhile(fn, this.iter)}
   dropLast(n) {return dropLast(n, this.iter)}
@@ -294,8 +294,6 @@ class Iter {
   unique() {return unique(this.iter)}
 
   slice(start, end) {return slice(this.iter, start, end)}
-  lookahead(n) {return lookahead(this.iter, n)}
-  subsequences(n) {return subsequences(this.iter, n)}
 }
 class SplitSource {
   constructor(n, iter) {
@@ -337,7 +335,8 @@ Object.assign(module.exports = from, {
 
   split, cycle, enumerate,
   map, filter, reject,
-  concat, push, unshift, flatten, chunksOf,
+  concat, push, unshift, flatten,
+  chunksOf, lookahead, subsequences,
   drop, dropWhile, dropLast,
   take, takeWhile, takeLast,
   zip,
@@ -348,5 +347,5 @@ Object.assign(module.exports = from, {
   count, pick,
   sum, product,
   groupBy, unique,
-  slice, lookahead, subsequences,
+  slice,
 })
