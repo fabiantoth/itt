@@ -25,7 +25,7 @@ const itt = require('itt')
 <br>**Transforming** — [.map](#mapfn) [.filter](#filterfn) [.reject](#rejectfn)
 <br>**Querying** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn)
 <br>**Searching** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
-<br>**Manipulating** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn)
+<br>**Manipulating** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--1) [.lookahead](#lookaheadn--1)
 <br>**Combining** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
 <br>**Reducing** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false)
 <br>**Conversion** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
@@ -249,12 +249,42 @@ itt([[1, 2, 3], [4, 5, 6]]).flatten().toArray()
 
 ## .chunksOf(n)
 
-An iterator which yields arrays of `n` elements from this iterator, in sequence. If there are not an even multiple of `n` elements in total, the last array is shorter.
+An iterator which yields arrays of `n` elements from this iterator, in sequence, without duplication. If there are not an even multiple of `n` elements in total, the last array is shorter.
 
 ```js
 itt.range(10).chunksOf(3).toArray()
 /* [ [ 0, 1, 2 ], [ 3, 4, 5 ], [ 6, 7, 8 ], [ 9 ] ] */
 ```
+
+## .subsequences(n = 2)
+
+An iterator which yields each subsequence of `n` elements in this iterator. If there are fewer than `n` elements, yields nothing.
+
+```js
+itt.range(5).subsequences(3).toArray()
+/* [ [ 0, 1, 2 ], [ 1, 2, 3 ], [ 2, 3, 4 ] ] */
+itt.range(5).subsequences(6).toArray()
+/* [] */
+```
+
+**Note:** This method caches at most `n-1` elements of this iterator. It does not pull elements from this iterator, however, until its return value is iterated.
+
+## .lookahead(n = 1)
+
+An iterator which yields arrays, each containing an element from this iterator and `n` elements of lookahead (or `undefined` if past the end of this iterator).
+
+```js
+for (const [here, next] of itt.range(5).lookahead()) {
+  console.log(here, next)
+}
+0 1
+1 2
+2 3
+3 4
+4 undefined
+```
+
+**Note:** This method caches at most `n-1` elements of this iterator. It does not pull elements from this iterator, however, until its return value is iterated.
 
 ## .drop(n)
 
