@@ -596,6 +596,8 @@ itt([1, 4, 7, 6, 4, 6, 5, 2, 1, 0, 9, 7]).unique().toArray()
 /* [ 1, 4, 7, 6, 5, 2, 0, 9 ] */
 ```
 
+**Note:** This method caches all elements of this iterator.
+
 ## .slice([start = 0, [end = undefined]])
 
 Like `Array.prototype.slice`. Returns an iterator which yields a subsequence of the elements of this iterator, starting at the `start`th element (inclusive) and ending at the `end`th element (exclusive).
