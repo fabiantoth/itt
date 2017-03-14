@@ -20,7 +20,7 @@ const itt = require('itt')
 <br>**[Object iterators](#object-iterators)** — [entries(…)](#entrieso) [keys(…)](#keyso) [values(…)](#valueso)
 <br>**[Utilities](#utilities)** — [is(…)](#ittisthing) [generator(…)](#ittgeneratorg)
 
-[Iterator Methods](#iterator-methods)
+**[Iterator Methods](#iterator-methods)**
 <br>**[Slicing](#slicing)** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.filter](#filterfn) [.reject](#rejectfn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn)
