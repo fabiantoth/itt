@@ -16,20 +16,20 @@ const itt = require('itt')
 
 # API
 
-**Constructors** — [from(…)](#ittthing-ittfromthing) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn)
-<br>**Object iterators** — [entries(…)](#entrieso) [keys(…)](#keyso) [values(…)](#valueso)
-<br>**Utilities** — [is(…)](#ittisthing) [generator(…)](#ittgeneratorg)
+**[Constructors](#constructors)** — [from(…)](#ittthing-ittfromthing) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn)
+<br>**[Object iterators](#object-iterators)** — [entries(…)](#entrieso) [keys(…)](#keyso) [values(…)](#valueso)
+<br>**[Utilities](#utilities)** — [is(…)](#ittisthing) [generator(…)](#ittgeneratorg)
 
 [Iterator Methods](#iterator-methods)
-<br>**Slicing** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
-<br>**Transforming** — [.map](#mapfn) [.filter](#filterfn) [.reject](#rejectfn)
-<br>**Querying** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn)
-<br>**Searching** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
-<br>**Manipulating** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
-<br>**Combining** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
-<br>**Reducing** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false)
-<br>**Conversion** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
-<br>**Splitting** — [.split](#splitn--2)
+<br>**[Slicing](#slicing)** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
+<br>**[Transforming](#transforming)** — [.map](#mapfn) [.filter](#filterfn) [.reject](#rejectfn)
+<br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn)
+<br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
+<br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
+<br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
+<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false)
+<br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
+<br>**[Splitting](#splitting)** — [.split](#splitn--2)
 
 ## Constructors
 ### itt(thing), itt.from(thing)
@@ -109,7 +109,7 @@ itt.iterate(1, x => x * 2).take(5).toArray()
 /* [ 1, 2, 4, 8, 16 ] */
 ```
 
-## Object Iterators
+## Object iterators
 
 ### entries(o)
 
