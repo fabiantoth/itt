@@ -33,7 +33,6 @@ const cycle = G(function*(xs) {
 })
 const enumerate = G(function*(xs) {let i = 0; for (const x of xs) yield [i++, x]})
 const map = G(function*(fn, xs) {for (const x of xs) yield fn(x)})
-map.over = G(function*(xs, fn) {for (const x of xs) yield fn(x)})
 const filter = G(function*(fn, xs) {for (const x of xs) if (fn(x)) yield x})
 const reject = G(function*(fn, xs) {for (const x of xs) if (!fn(x)) yield x})
 const concat = G(function*(...xss) {for (const xs of xss) yield* xs})
