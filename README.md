@@ -5,8 +5,8 @@ Iteration tools.
 ```js
 function *primes() {
   const seen = new Set
-  next: for (let p = 2; ; ++p) {
-    for (const n of seen) if (!(p % n)) continue next
+  for (let p = 2; ; ++p) {
+    if (itt(seen).some(n => p % n === 0)) continue
     yield p
     seen.add(p)
   }
