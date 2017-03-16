@@ -2,6 +2,32 @@
 
 Iteration tools.
 
+```js
+function *primes() {
+  const seen = new Set
+  next: for (let p = 2; ; ++p) {
+    for (const n of seen) if (!(p % n)) continue next
+    yield p
+    seen.add(p)
+  }
+}
+
+console.log(
+  itt(primes())
+  .takeWhile(x => x < 1000)
+  .map(x => `${x} is prime!`)
+  .join('\n'))
+
+/*
+2 is prime!
+3 is prime!
+5 is prime!
+7 is prime!
+11 is prime!
+...
+*/
+```
+
 # Install
 
 ```
