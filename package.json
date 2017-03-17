@@ -2,6 +2,7 @@
   "name": "itt",
   "version": "0.2.0",
   "description": "Iteration tools.",
+  "keywords": ["iterator", "iterators", "iteration", "generator", "generators", "es6", "lazy"],
   "main": "index.js",
   "author": "Nathan",
   "license": "MIT",
