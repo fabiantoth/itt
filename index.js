@@ -33,6 +33,7 @@ const cycle = G(function*(xs) {
 })
 const enumerate = G(function*(xs) {let i = 0; for (const x of xs) yield [i++, x]})
 const map = G(function*(fn, xs) {for (const x of xs) yield fn(x)})
+const tap = G(function*(fn, xs) {for (const x of xs) {fn(x); yield x}})
 const filter = G(function*(fn, xs) {for (const x of xs) if (fn(x)) yield x})
 const reject = G(function*(fn, xs) {for (const x of xs) if (!fn(x)) yield x})
 const concat = G(function*(...xss) {for (const xs of xss) yield* xs})
@@ -247,6 +248,7 @@ class Iter {
   cycle() {return cycle(this.iter)}
   enumerate() {return enumerate(this.iter)}
   map(fn) {return map(fn, this.iter)}
+  tap(fn) {return tap(fn, this.iter)}
   filter(fn) {return filter(fn, this.iter)}
   reject(fn) {return reject(fn, this.iter)}
   concat(...xss) {return concat(this.iter, ...xss)}

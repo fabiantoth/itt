@@ -49,7 +49,7 @@ const itt = require('itt')
 **[Iterator Methods](#iterator-methods)**
 <br>**[Slicing](#slicing)** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.filter](#filterfn) [.reject](#rejectfn)
-<br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn)
+<br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.use](#usefn)
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
@@ -395,6 +395,28 @@ itt(['foo', 'bar', 'baz']).some(x => x.startsWith('b'))
 
 itt.range(3).map(x => x * x).some(x => x > 10)
 /* false */
+```
+
+### .tap(fn)
+
+An iterator which yields each element `x` of this iterator after calling `fn(x)`. Useful for inspecting intermediate iterators with `console.log` and for running iterators through side-effectful functions.
+
+```js
+const alnum = itt.range(0x21, 0x7f)
+  .map(String.fromCharCode)
+  .filter(s => /\w/.test(s))
+  .tap(console.log)
+console.log('total: %d', alnum.count())
+/*
+0
+1
+2
+...
+x
+y
+z
+total: 63
+*/
 ```
 
 ## Searching
