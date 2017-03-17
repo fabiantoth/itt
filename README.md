@@ -25,6 +25,9 @@ console.log(
 7 is prime!
 11 is prime!
 ...
+983 is prime!
+991 is prime!
+997 is prime!
 */
 ```
 
