@@ -31,6 +31,17 @@ console.log(
 */
 ```
 
+You can even use `itt` to implement the `primes` generator:
+
+```js
+function primes() {
+  const seen = new Set
+  return itt.irange(2)
+    .filter(p => itt(seen).every(n => p % n !== 0))
+    .tap(p => seen.add(p))
+}
+```
+
 # Install
 
 ```
