@@ -598,11 +598,13 @@ An iterator which yields arrays, each containing an element from this iterator a
 for (const [here, next] of itt.range(5).lookahead()) {
   console.log(here, next)
 }
+/*
 0 1
 1 2
 2 3
 3 4
 4 undefined
+*/
 ```
 
 **Note:** This method caches at most `n` elements of this iterator. It does not pull elements from this iterator, however, until its return value is iterated.
