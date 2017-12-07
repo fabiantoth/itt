@@ -56,7 +56,7 @@ const itt = require('itt')
 
 # API
 
-**[Constructors](#constructors)** — [from(…)](#ittthing-ittfromthing) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn)
+**[Constructors](#constructors)** — [from(…)](#ittthing-ittfromthing) [empty()](#empty) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn)
 <br>**[Object iterators](#object-iterators)** — [entries(…)](#entrieso) [keys(…)](#keyso) [values(…)](#valueso)
 <br>**[Utilities](#utilities)** — [is(…)](#ittisthing) [generator(…)](#ittgeneratorg)
 
@@ -102,6 +102,15 @@ log 1
 compute 2
 log 4
 */
+```
+
+### empty()
+
+An iterator which yields no values.
+
+```js
+itt.empty().toArray()
+/* [] */
 ```
 
 ### range([start = 0,] end, [skip = 1])
