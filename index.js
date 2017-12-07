@@ -4,6 +4,7 @@ function is(xs) {return typeof xs[Symbol.iterator] === 'function' || typeof xs.n
 function generator(gen) {return (...args) => new Iter(gen(...args))}
 const G = generator
 function from(iter) {return new Iter(iter[Symbol.iterator] ? iter[Symbol.iterator]() : iter)}
+const empty = G(function*() {})
 
 const range = G(function*(start, end, skip = 1) {
   if (end === undefined) [start, end] = [0, start]
@@ -327,7 +328,7 @@ class SplitIter extends Iter {
 }
 
 Object.assign(module.exports = from, {
-  is, from, generator,
+  is, from, generator, empty,
   range, irange,
   replicate, forever, iterate,
   entries, keys, values,
