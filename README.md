@@ -566,7 +566,7 @@ itt([1, 4, 7, 6, 4, 6, 5, 2, 1, 0, 9, 7]).unique().toArray()
 /* [ 1, 4, 7, 6, 5, 2, 0, 9 ] */
 ```
 
-**Note:** This method caches all elements of this iterator.
+**Note:** This method caches all elements of this iterator. It does not pull elements from this iterator, however, until its return value is iterated.
 
 ### .flatten()
 
