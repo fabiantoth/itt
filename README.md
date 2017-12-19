@@ -734,7 +734,7 @@ itt([6, 1, 4, 9, 3, 7]).map(x => x * x).min()
 
 ### .minMax()
 
-The minimum and maximum elements of this iterator, as a two-element array `[min, max`].
+The minimum and maximum elements of this iterator as a pair `[min, max]`.
 
 ```js
 itt([6, 1, 4, 9, 3, 7]).map(x => x * x).minMax()
