@@ -11,7 +11,9 @@
     "es6",
     "lazy"
   ],
-  "files": ["index.js"],
+  "files": [
+    "index.js"
+  ],
   "main": "index.js",
   "author": "Nathan",
   "license": "MIT",
