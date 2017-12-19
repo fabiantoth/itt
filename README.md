@@ -761,6 +761,22 @@ itt([1, 4, 7, 6, 4, 6, 5, 2, 1, 0, 9, 7]).groupBy(x => x % 3, true)
 /* Map { 1 => Set { 1, 4, 7 }, 0 => Set { 6, 0, 9 }, 2 => Set { 5, 2 } } */
 ```
 
+### .keyBy(fn)
+
+Calls `fn(x)` for each element of this iterator and returns a map from return values of `fn` to elements. Later elements overwrite earlier elements in the map.
+
+```js
+itt([
+  {name: 'Jane', age: 24},
+  {name: 'Alice', age: 53},
+  {name: 'Kyle', age: 33},
+]).keyBy(p => p.name)
+/* Map {
+  'Jane' => { name: 'Jane', age: 24 },
+  'Alice' => { name: 'Alice', age: 53 },
+  'Kyle' => { name: 'Kyle', age: 33 } } */
+```
+
 ## Conversion
 
 ### .toArray()

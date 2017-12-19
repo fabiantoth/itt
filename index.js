@@ -167,6 +167,9 @@ function groupBy(fn, unique, xs) {
     else m.set(k, [x])
   }, xs)
 }
+function keyBy(fn, xs) {
+  return inject(new Map, (m, x) => m.set(fn(x), x), xs)
+}
 
 const unique = G(function*(xs) {
   const used = new Set
@@ -316,6 +319,7 @@ class Iter {
   minMax() {return minMax(this.iter)}
 
   groupBy(fn, unique = false) {return groupBy(fn, unique, this.iter)}
+  keyBy(fn) {return keyBy(fn, this.iter)}
   unique() {return unique(this.iter)}
 
   slice(start, end) {return slice(this.iter, start, end)}
@@ -371,6 +375,6 @@ Object.assign(module.exports = from, {
   first, head, last, tail, init,
   count, pick,
   sum, product, min, max, minMax,
-  groupBy, unique,
+  groupBy, keyBy, unique,
   slice,
 })
