@@ -23,7 +23,7 @@ const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
 const values = G(function*(o) {for (const k of _keys(o)) yield o[k]})
 
-function split(n = 2, xs) {return new SplitSource(n, xs).derived}
+function fork(n = 2, xs) {return new ForkSource(n, xs).derived}
 const cycle = G(function*(xs) {
   const cache = []
   for (const x of xs) {
@@ -268,7 +268,7 @@ class Iter {
   join(sep = ',') {return join(sep, this.iter)}
   intersperse(sep) {return intersperse(sep, this.iter)}
 
-  split(n = 2) {return split(n, this.iter)}
+  fork(n = 2) {return fork(n, this.iter)}
   repeat(n) {return repeat(n, this.iter)}
   cycle() {return cycle(this.iter)}
   enumerate() {return enumerate(this.iter)}
@@ -324,12 +324,12 @@ class Iter {
 
   slice(start, end) {return slice(this.iter, start, end)}
 }
-class SplitSource {
+class ForkSource {
   constructor(n, iter) {
     this.iter = iter
     this.derived = Array(n)
     for (let i = this.derived.length; i--;) {
-      this.derived[i] = new SplitIter(this)
+      this.derived[i] = new ForkIter(this)
     }
   }
   [Symbol.iterator]() {return this.derived[Symbol.iterator]()}
@@ -339,7 +339,7 @@ class SplitSource {
     for (const b of this.derived) b.push(value)
   }
 }
-class SplitIter extends Iter {
+class ForkIter extends Iter {
   constructor(source) {
     super()
     this.iter = this
@@ -362,7 +362,7 @@ Object.assign(module.exports = from, {
   toArray, array, toMap, toSet, toObject,
   intersperse, join,
 
-  split, repeat, cycle, enumerate,
+  fork, repeat, cycle, enumerate,
   map, flatMap, filter, reject,
   concat, push, unshift, flatten,
   chunksOf, lookahead, subsequences,

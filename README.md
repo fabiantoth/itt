@@ -69,7 +69,7 @@ const itt = require('itt')
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
 <br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn)
 <br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
-<br>**[Splitting](#splitting)** — [.split](#splitn--2)
+<br>**[Forking](#forking)** — [.fork](#forkn--2)
 
 ## Constructors
 ### itt(thing), itt.from(thing)
@@ -820,14 +820,14 @@ itt(['foo', 'bar', 'baz']).map(s => [s, s.toUpperCase()]).toObject()
 /* { foo: 'FOO', bar: 'BAR', baz: 'BAZ' } */
 ```
 
-## Splitting
+## Forking
 
-### .split(n = 2)
+### .fork(n = 2)
 
 An array of `n` iterators which all yield every element of this iterator in sequence.
 
 ```js
-const [a, b] = itt.range(5).split()
+const [a, b] = itt.range(5).fork()
 itt.zip(
   a.map(x => x * x),
   b.map(x => x * x * x)).toArray()
