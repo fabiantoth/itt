@@ -135,6 +135,16 @@ function sum(xs) {return reduce(0, (x, y) => x + Number(y), xs)}
 function product(xs) {return reduce(1, (x, y) => x * y, xs)}
 function max(xs) {return reduce(-Infinity, Math.max, xs)}
 function min(xs) {return reduce(Infinity, Math.min, xs)}
+function minMax(xs) {
+  let min = Infinity, max = -Infinity
+  for (const x of xs) {
+    const b = +x
+    if (b < min) min = b
+    if (b > max) max = b
+  }
+  return [min, max]
+}
+
 function groupBy(fn, unique, xs) {
   if (!xs) [unique, xs] = [false, unique]
   return inject(new Map, unique ? (m, x) => {
@@ -291,6 +301,7 @@ class Iter {
   product() {return product(this.iter)}
   max() {return max(this.iter)}
   min() {return min(this.iter)}
+  minMax() {return minMax(this.iter)}
 
   groupBy(fn, unique = false) {return groupBy(fn, unique, this.iter)}
   unique() {return unique(this.iter)}
@@ -347,7 +358,7 @@ Object.assign(module.exports = from, {
   reduce, inject,
   first, head, last, tail, init,
   count, pick,
-  sum, product, min, max,
+  sum, product, min, max, minMax,
   groupBy, unique,
   slice,
 })

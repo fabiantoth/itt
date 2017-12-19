@@ -67,7 +67,7 @@ const itt = require('itt')
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
-<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false)
+<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minMax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false)
 <br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
 <br>**[Splitting](#splitting)** — [.split](#splitn--2)
 
@@ -710,6 +710,15 @@ The minimum element of this iterator.
 ```js
 itt([6, 1, 4, 9, 3, 7]).map(x => x * x).min()
 /* 1 */
+```
+
+### .minMax()
+
+The minimum and maximum elements of this iterator, as a two-element array `[min, max`].
+
+```js
+itt([6, 1, 4, 9, 3, 7]).map(x => x * x).minMax()
+/* [1, 81] */
 ```
 
 ### .join(sep = ',')
