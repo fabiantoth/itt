@@ -807,4 +807,4 @@ itt.zip(
 /* [ [ 0, 0 ], [ 1, 1 ], [ 4, 8 ], [ 9, 27 ], [ 16, 64 ] ] */
 ```
 
-**Note:** This method caches some elements of this iterator. As any derived iterator advances, new elements are cached, and once every derived iterator has been iterated past an element, that element is discarded.
+**Note:** This method caches some elements of this iterator. As any derived iterator advances, new elements are cached, and once every derived iterator has advanced past an element, that element is discarded.
