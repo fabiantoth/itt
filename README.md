@@ -65,7 +65,7 @@ const itt = require('itt')
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.flatMap](#flatmapfn) [.filter](#filterfn) [.reject](#rejectfn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
-<br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
+<br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
 <br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false)
 <br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
@@ -562,6 +562,17 @@ An iterator which yields the elements of this iterator, in order, cycled forever
 ```js
 itt.range(3).cycle().take(10).toArray()
 /* [ 0, 1, 2, 0, 1, 2, 0, 1, 2, 0 ] */
+```
+
+**Note:** This method caches all elements of this iterator. It does not pull elements from this iterator, however, until its return value is iterated.
+
+### .repeat(n)
+
+An iterator which yields the elements of this iterator, in order, cycled n times.
+
+```js
+itt.range(3).repeat(3).toArray()
+/* [ 0, 1, 2, 0, 1, 2, 0, 1, 2 ] */
 ```
 
 **Note:** This method caches all elements of this iterator. It does not pull elements from this iterator, however, until its return value is iterated.

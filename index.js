@@ -32,6 +32,15 @@ const cycle = G(function*(xs) {
   }
   for (;;) yield* cache
 })
+const repeat = G(function*(n, xs) {
+  if (n === 0) return
+  const cache = []
+  for (const x of xs) {
+    cache.push(x)
+    yield x
+  }
+  for (let i = 1; i < n; ++i) yield* cache
+})
 const enumerate = G(function*(xs) {let i = 0; for (const x of xs) yield [i++, x]})
 const map = G(function*(fn, xs) {for (const x of xs) yield fn(x)})
 const flatMap = G(function*(fn, xs) {for (const x of xs) yield* fn(x)})
@@ -257,6 +266,7 @@ class Iter {
   intersperse(sep) {return intersperse(sep, this.iter)}
 
   split(n = 2) {return split(n, this.iter)}
+  repeat(n) {return repeat(n, this.iter)}
   cycle() {return cycle(this.iter)}
   enumerate() {return enumerate(this.iter)}
   map(fn) {return map(fn, this.iter)}
@@ -348,7 +358,7 @@ Object.assign(module.exports = from, {
   toArray, array, toMap, toSet, toObject,
   intersperse, join,
 
-  split, cycle, enumerate,
+  split, repeat, cycle, enumerate,
   map, flatMap, filter, reject,
   concat, push, unshift, flatten,
   chunksOf, lookahead, subsequences,
