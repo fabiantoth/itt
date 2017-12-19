@@ -347,7 +347,7 @@ Object.assign(module.exports = from, {
   reduce, inject,
   first, head, last, tail, init,
   count, pick,
-  sum, product,
+  sum, product, min, max,
   groupBy, unique,
   slice,
 })
