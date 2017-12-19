@@ -33,7 +33,7 @@ const cycle = G(function*(xs) {
   for (;;) yield* cache
 })
 const repeat = G(function*(n, xs) {
-  if (n === 0) return
+  if (n <= 0) return
   const cache = []
   for (const x of xs) {
     cache.push(x)
