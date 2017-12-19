@@ -770,11 +770,11 @@ itt([
   {name: 'Jane', age: 24},
   {name: 'Alice', age: 53},
   {name: 'Kyle', age: 33},
-]).keyBy(p => p.name)
+]).keyBy(p => p.name.toLowerCase())
 /* Map {
-  'Jane' => { name: 'Jane', age: 24 },
-  'Alice' => { name: 'Alice', age: 53 },
-  'Kyle' => { name: 'Kyle', age: 33 } } */
+  'jane' => { name: 'Jane', age: 24 },
+  'alice' => { name: 'Alice', age: 53 },
+  'kyle' => { name: 'Kyle', age: 33 } } */
 ```
 
 ## Conversion
