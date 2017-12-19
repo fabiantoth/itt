@@ -62,7 +62,7 @@ const itt = require('itt')
 
 **[Iterator Methods](#iterator-methods)**
 <br>**[Slicing](#slicing)** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
-<br>**[Transforming](#transforming)** — [.map](#mapfn) [.filter](#filterfn) [.reject](#rejectfn)
+<br>**[Transforming](#transforming)** — [.map](#mapfn) [.flatMap](#flatmapfn) [.filter](#filterfn) [.reject](#rejectfn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
@@ -337,6 +337,15 @@ An iterator which yields `fn(x)` for each element `x` of this iterator.
 ```js
 itt.range(5).map(x => x * x).toArray()
 /* [ 0, 1, 4, 9, 16 ] */
+```
+
+### .flatMap(fn)
+
+An iterator which yields the elements of `fn(x)` for each element `x` of this iterator. Equivalent to `.map(fn).flatten()`.
+
+```js
+itt.range(5).flatMap(x => [x, x * x]).toArray()
+/* [ 0, 0, 1, 1, 2, 4, 3, 9, 4, 16 ] */
 ```
 
 ### .filter(fn)
