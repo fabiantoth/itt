@@ -3,13 +3,11 @@
 Iteration tools.
 
 ```js
-function *primes() {
+function primes() {
   const seen = new Set
-  for (let p = 2; ; ++p) {
-    if (itt(seen).some(n => p % n === 0)) continue
-    yield p
-    seen.add(p)
-  }
+  return itt.irange(2)
+    .filter(p => itt(seen).every(n => p % n !== 0))
+    .tap(p => seen.add(p))
 }
 
 console.log(
@@ -29,17 +27,6 @@ console.log(
 991 is prime!
 997 is prime!
 */
-```
-
-You can even use `itt` to implement the `primes` generator:
-
-```js
-function primes() {
-  const seen = new Set
-  return itt.irange(2)
-    .filter(p => itt(seen).every(n => p % n !== 0))
-    .tap(p => seen.add(p))
-}
 ```
 
 # Install
