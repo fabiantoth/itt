@@ -375,6 +375,15 @@ itt.irange(1).scan(0, (x, y) => x + y).take(5).toArray()
 /* [ 1, 3, 6, 10, 15 ] */
 ```
 
+### .scan1(fn)
+
+Like `.scan`, but draws (and yields) the initial value of `a` from the first element of this iterator, accumulating `a = fn(a, x)` for each subsequent element.
+
+```js
+itt.irange(1).scan1((x, y) => x + y).take(5).toArray()
+/* [ 1, 3, 6, 10, 15 ] */
+```
+
 ## Querying
 
 ### .first()
