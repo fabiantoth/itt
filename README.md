@@ -31,7 +31,7 @@ console.log(
 
 # Install
 
-```
+```sh
 $ npm i itt
 ```
 
