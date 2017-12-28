@@ -371,8 +371,8 @@ itt([1, 5, 3, 2, 5, 9, 4, 95, 1, 4, 5, 2, 8]).reject(x => x % 2).toArray()
 Accumulates `a = fn(a, x)` for each element of this iterator, in iteration order, and yields each intermediate result. The resultant iterator always yields the same number of elements as this iterator.
 
 ```js
-itt.irange(1).scan(0, (x, y) => x + y).take(5).toArray()
-/* [ 1, 3, 6, 10, 15 ] */
+itt.irange().scan(0, (x, y) => x + y).take(5).toArray()
+/* [ 0, 1, 3, 6, 10 ] */
 ```
 
 ### .scan1(fn)
@@ -380,8 +380,8 @@ itt.irange(1).scan(0, (x, y) => x + y).take(5).toArray()
 Like `.scan`, but draws (and yields) the initial value of `a` from the first element of this iterator, accumulating `a = fn(a, x)` for each subsequent element.
 
 ```js
-itt.irange(1).scan1((x, y) => x + y).take(5).toArray()
-/* [ 1, 3, 6, 10, 15 ] */
+itt.irange().scan1((x, y) => x + y).take(5).toArray()
+/* [ 0, 1, 3, 6, 10 ] */
 ```
 
 ## Querying
