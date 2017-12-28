@@ -372,6 +372,7 @@ Accumulates `a = fn(a, x)` for each element of this iterator, in iteration order
 
 ```js
 itt.irange(1).scan(0, (x, y) => x + y).take(5).toArray()
+/* [ 1, 3, 6, 10, 15 ] */
 ```
 
 ## Querying
