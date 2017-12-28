@@ -130,6 +130,7 @@ function indexOf(y, xs) {let i = 0; for (const x of xs) {if (x === y) return i; 
 function lastIndexOf(y, xs) {let i = 0, j = -1; for (const x of xs) {if (x === y) j = i; ++i} return j}
 function includes(y, xs) {for (const x of xs) if (x === y) return true; return false}
 function reduce(a, fn, xs) {for (const x of xs) a = fn(a, x); return a}
+const scan = G(function*(a, fn, xs) {for (const x of xs) {a = fn(a, x); yield a}})
 function inject(a, fn, xs) {for (const x of xs) fn(a, x); return a}
 
 function first(xs) {if (Array.isArray(xs)) return xs[0]; for (const x of xs) return x}
@@ -302,6 +303,7 @@ class Iter {
   lastIndexOf(x) {return lastIndexOf(x, this.iter)}
   includes(x) {return includes(x, this.iter)}
   reduce(a, fn) {return reduce(a, fn, this.iter)}
+  scan(a, fn) {return scan(a, fn, this.iter)}
   inject(a, fn) {return inject(a, fn, this.iter)}
 
   first() {return first(this.iter)}
@@ -371,7 +373,7 @@ Object.assign(module.exports = from, {
   zip,
   every, some,
   find, findLast, findIndex, findLastIndex, indexOf, lastIndexOf, includes,
-  reduce, inject,
+  reduce, scan, inject,
   first, head, last, tail, init,
   count, pick,
   sum, product, min, max, minMax,
