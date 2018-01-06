@@ -782,6 +782,25 @@ itt([
   'kyle' => { name: 'Kyle', age: 33 } } */
 ```
 
+### .forEach(fn)
+
+Calls `fn(x)` for each element of this iterator, in iteration order. Ergonomically nicer than a `for (…) {…}` loop after a sequence of method calls or when not passing a function literal as an argument.
+
+```js
+itt.irange()
+  .take(10)
+  .filter(x => x % 2)
+  .map(x => x * x)
+  .forEach(console.log)
+/*
+1
+9
+25
+49
+81
+*/
+```
+
 ## Conversion
 
 ### .toArray()
