@@ -816,7 +816,7 @@ itt.irange()
 
 ### .drain()
 
-Consumes the iterator and returns nothing (`undefined`). Useful for iterators with side effects. Equivalent to `.forEach(() => {})`.
+Consumes all elements of this iterator and returns nothing (`undefined`). Useful for iterators with side effects. Equivalent to `.forEach(() => {})`.
 
 ```js
 itt.range(5).tap(console.log).drain()
