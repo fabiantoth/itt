@@ -54,7 +54,7 @@ const itt = require('itt')
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.push](#pushx-) [.unshift](#unshiftx-)
-<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn) [.forEach](#foreachfn)
+<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn) [.forEach](#foreachfn) [.drain](#drain)
 <br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
 <br>**[Forking](#forking)** — [.fork](#forkn--2)
 
@@ -784,7 +784,7 @@ itt([
 
 ### .forEach(fn)
 
-Calls `fn(x)` for each element of this iterator, in iteration order. Ergonomically nicer than a `for (…) {…}` loop after a sequence of method calls or when not passing a function literal as an argument.
+Calls `fn(x)` for each element of this iterator, in iteration order. Ergonomically nicer than a `for (…) {…}` loop after a sequence of method calls or when not passing a function literal as an argument. Equivalent to `.tap(fn).drain()`.
 
 ```js
 itt.irange()
@@ -798,6 +798,21 @@ itt.irange()
 25
 49
 81
+*/
+```
+
+### .drain()
+
+Consumes the iterator and returns nothing (`undefined`). Useful for iterators with side effects. Equivalent to `.forEach(() => {})`.
+
+```js
+itt.range(5).tap(console.log).drain()
+/*
+0
+1
+2
+3
+4
 */
 ```
 

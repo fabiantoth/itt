@@ -145,6 +145,7 @@ const scan1 = G(function*(fn, xs) {
 })
 function inject(a, fn, xs) {for (const x of xs) fn(a, x); return a}
 function forEach(fn, xs) {for (const x of xs) fn(x)}
+function drain(xs) {for (const x of xs) {}}
 
 function first(xs) {if (Array.isArray(xs)) return xs[0]; for (const x of xs) return x}
 const head = first
@@ -320,6 +321,7 @@ class Iter {
   scan1(fn) {return scan1(fn, this.iter)}
   inject(a, fn) {return inject(a, fn, this.iter)}
   forEach(fn) {return forEach(fn, this.iter)}
+  drain() {return drain(this.iter)}
 
   first() {return first(this.iter)}
   head() {return head(this.iter)}
@@ -388,7 +390,7 @@ Object.assign(module.exports = from, {
   zip,
   every, some,
   find, findLast, findIndex, findLastIndex, indexOf, lastIndexOf, includes,
-  reduce, scan, scan1, inject, forEach,
+  reduce, scan, scan1, inject, forEach, drain,
   first, head, last, tail, init,
   count, pick,
   sum, product, min, max, minMax,
