@@ -119,6 +119,14 @@ const zip = G(function*(...xss) {
     yield rs.map(r => r.value)
   }
 })
+const parallel = G(function*(...xss) {
+  const its = xss.map(xs => xs[Symbol.iterator]())
+  for (;;) {
+    const rs = its.map(it => it.next())
+    if (rs.every(r => r.done)) return
+    yield rs.map(r => r.value)
+  }
+})
 
 function every(fn, xs) {for (const x of xs) if (!fn(x)) return false; return true}
 function some(fn, xs) {for (const x of xs) if (fn(x)) return true; return false}
@@ -306,6 +314,7 @@ class Iter {
   takeWhile(fn) {return takeWhile(fn, this.iter)}
   takeLast(n) {return takeLast(n, this.iter)}
   zip(...xss) {return zip(this.iter, ...xss)}
+  parallel(...xss) {return parallel(this.iter, ...xss)}
 
   every(fn) {return every(fn, this.iter)}
   some(fn) {return some(fn, this.iter)}
@@ -387,7 +396,7 @@ Object.assign(module.exports = from, {
   chunksOf, lookahead, subsequences,
   drop, dropWhile, dropLast,
   take, takeWhile, takeLast,
-  zip,
+  zip, parallel,
   every, some,
   find, findLast, findIndex, findLastIndex, indexOf, lastIndexOf, includes,
   reduce, scan, scan1, inject, forEach, drain,

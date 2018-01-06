@@ -663,6 +663,19 @@ itt.irange().zip(['a', 'b', 'c']).toArray()
 /* [ [ 0, 'a' ], [ 1, 'b' ], [ 2, 'c' ] ] */
 ```
 
+### .parallel(xs, [...])
+
+An iterator which yields arrays containing one element from this iterator and one element from each argument iterator, stopping when all iterators are done.
+
+```js
+itt.range(5).parallel(['a', 'b', 'c']).toArray()
+/* [ [ 0, 'a' ],
+  [ 1, 'b' ],
+  [ 2, 'c' ],
+  [ 3, undefined ],
+  [ 4, undefined ] ] */
+```
+
 ### .push(x, [...])
 
 An iterator which yields the elements of this iterator, followed by `x`, etc.
