@@ -663,6 +663,15 @@ itt.irange().zip(['a', 'b', 'c']).toArray()
 /* [ [ 0, 'a' ], [ 1, 'b' ], [ 2, 'c' ] ] */
 ```
 
+### .transpose()
+
+An iterator which yields arrays of elements at sequential indices in each element of this iterator, whose elements must be iterable. Equivalent to `zip(...this)`.
+
+```js
+itt([[1, 2, 3], [4, 5, 6], [7, 8, 9, 10]]).transpose().toArray()
+/* [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ] ] */
+```
+
 ### .parallel(xs, [...])
 
 An iterator which yields arrays containing one element from this iterator and one element from each argument iterator, stopping when all iterators are done.
