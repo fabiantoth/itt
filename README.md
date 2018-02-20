@@ -185,7 +185,7 @@ True if `thing` is iterable or an iterator.
 
 ```js
 itt.is(1) // false
-iit.is('test') // true
+itt.is('test') // true
 itt.is('test'[Symbol.iterator]()) // true
 itt.is(itt.range(5)) // true
 ```
