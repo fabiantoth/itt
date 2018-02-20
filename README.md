@@ -53,8 +53,8 @@ const itt = require('itt')
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1)
-<br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.transpose](#transpose) [.parallel](#parallelxs-) [.push](#pushx-) [.unshift](#unshiftx-)
-<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn) [.forEach](#foreachfn) [.drain](#drain)
+<br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.parallel](#parallelxs-) [.push](#pushx-) [.unshift](#unshiftx-)
+<br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn) [.transpose](#transpose) [.forEach](#foreachfn) [.drain](#drain)
 <br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
 <br>**[Forking](#forking)** — [.fork](#forkn--2)
 
@@ -663,15 +663,6 @@ itt.irange().zip(['a', 'b', 'c']).toArray()
 /* [ [ 0, 'a' ], [ 1, 'b' ], [ 2, 'c' ] ] */
 ```
 
-### .transpose()
-
-An iterator which yields arrays of elements at sequential indices in each element of this iterator, whose elements must be iterable. Equivalent to `zip(...this)`.
-
-```js
-itt([[1, 2, 3], [4, 5, 6], [7, 8, 9, 10]]).transpose().toArray()
-/* [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ] ] */
-```
-
 ### .parallel(xs, [...])
 
 An iterator which yields arrays containing one element from this iterator and one element from each argument iterator, stopping when all iterators are done.
@@ -802,6 +793,15 @@ itt([
   'jane' => { name: 'Jane', age: 24 },
   'alice' => { name: 'Alice', age: 53 },
   'kyle' => { name: 'Kyle', age: 33 } } */
+```
+
+### .transpose()
+
+An iterator which yields arrays of elements at sequential indices in each element of this iterator, whose elements must be iterable. Equivalent to `zip(...this)`.
+
+```js
+itt([[1, 2, 3], [4, 5, 6], [7, 8, 9, 10]]).transpose().toArray()
+/* [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ] ] */
 ```
 
 ### .forEach(fn)
