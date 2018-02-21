@@ -17,5 +17,11 @@
   "main": "index.js",
   "author": "Nathan",
   "license": "MIT",
-  "repository": "https://github.com/nathan/itt"
+  "repository": "https://github.com/nathan/itt",
+  "devDependencies": {
+    "jest": "^22.3.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
 }
