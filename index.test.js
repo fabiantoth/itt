@@ -25,6 +25,11 @@ test('from', () => {
   expect(itt.from([1, 2, 3, 4]).toArray).toBeDefined()
 })
 
+test('empty', () => {
+  expect(itt.empty().next()).toEqual({value: undefined, done: true})
+  expect(Array.from(itt.empty())).toEqual([])
+})
+
 test('mean', () => {
   expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   expect(itt.mean([])).toBe(NaN)
