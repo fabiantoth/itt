@@ -20,6 +20,11 @@ test('generator', () => {
   expect(g().toArray).toBeDefined()
 })
 
+test('from', () => {
+  expect(itt([1, 2, 3, 4]).toArray).toBeDefined()
+  expect(itt.from([1, 2, 3, 4]).toArray).toBeDefined()
+})
+
 test('mean', () => {
   expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   expect(itt.mean([])).toBe(NaN)
