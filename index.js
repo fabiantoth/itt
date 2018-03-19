@@ -166,6 +166,14 @@ function count(xs) {if (Array.isArray(xs)) return xs.length; let i = 0; for (con
 function pick(i, xs) {if (Array.isArray(xs)) return xs[i]; for (const x of xs) if (i-- <= 0) return x}
 
 function sum(xs) {return reduce(0, (x, y) => x + Number(y), xs)}
+function mean(xs) {
+  let count = 0, sum = 0
+  for (const x of xs) {
+    sum += x
+    ++count
+  }
+  return sum / count
+}
 function product(xs) {return reduce(1, (x, y) => x * y, xs)}
 function max(xs) {return reduce(-Infinity, Math.max, xs)}
 function min(xs) {return reduce(Infinity, Math.min, xs)}
@@ -343,6 +351,7 @@ class Iter {
   pick(i) {return pick(i, this.iter)}
 
   sum() {return sum(this.iter)}
+  mean() {return mean(this.iter)}
   product() {return product(this.iter)}
   max() {return max(this.iter)}
   min() {return min(this.iter)}
@@ -404,7 +413,7 @@ Object.assign(module.exports = from, {
   reduce, scan, scan1, inject, forEach, drain,
   first, head, last, tail, init,
   count, pick,
-  sum, product, min, max, minMax,
+  sum, mean, product, min, max, minMax,
   groupBy, keyBy, unique,
   slice,
 })
