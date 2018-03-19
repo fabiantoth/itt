@@ -732,6 +732,15 @@ itt.range(6).sum()
 /* 15 */
 ```
 
+### .mean()
+
+The arithmetic mean of the elements of this iterator. Returns `NaN` if this iterator has no elements.
+
+```js
+itt.range(6).mean()
+/* 2.5 */
+```
+
 ### .product()
 
 The product of the elements of this iterator.
