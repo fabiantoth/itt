@@ -67,6 +67,30 @@ describe('range', () => {
   })
 })
 
+describe('irange', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.irange().toArray).toBeDefined()
+  })
+  test('accepts no arguments', () => {
+    let i = itt.irange()
+    for (let value = 0; value < 10; ++value) {
+      expect(i.next()).toEqual({value, done: false})
+    }
+  })
+  test('accepts one argument', () => {
+    let i = itt.irange(5)
+    for (let value = 5; value < 15; ++value) {
+      expect(i.next()).toEqual({value, done: false})
+    }
+  })
+  test('accepts two arguments', () => {
+    let i = itt.irange(5, -1)
+    for (let value = 5; value > -5; --value) {
+      expect(i.next()).toEqual({value, done: false})
+    }
+  })
+})
+
 test('mean', () => {
   expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   expect(itt.mean([])).toBe(NaN)
