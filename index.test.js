@@ -25,9 +25,14 @@ test('from', () => {
   expect(itt.from([1, 2, 3, 4]).toArray).toBeDefined()
 })
 
-test('empty', () => {
-  expect(itt.empty().next()).toEqual({value: undefined, done: true})
-  expect(Array.from(itt.empty())).toEqual([])
+describe('empty', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.empty().toArray).toBeDefined()
+  })
+  test('returns an empty iterator', () => {
+    expect(itt.empty().next()).toEqual({value: undefined, done: true})
+    expect(Array.from(itt.empty())).toEqual([])
+  })
 })
 
 describe('range', () => {
