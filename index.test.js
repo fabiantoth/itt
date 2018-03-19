@@ -10,3 +10,12 @@ test('is', () => {
   expect(itt.is([1, 2, 3][Symbol.iterator]())).toBeTruthy()
   expect(itt.is(itt.range(5))).toBeTruthy()
 })
+
+test('generator', () => {
+  const g = itt.generator(function*() {
+    yield 1
+    yield 2
+    yield 3
+  })
+  expect(g().toArray).toBeDefined()
+})
