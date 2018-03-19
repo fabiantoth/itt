@@ -19,3 +19,10 @@ test('generator', () => {
   })
   expect(g().toArray).toBeDefined()
 })
+
+test('mean', () => {
+  expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
+  expect(itt.mean([])).toBe(NaN)
+  expect(itt([1, 2, 3]).mean()).toBe(2)
+  expect(itt(function*(){}()).mean()).toBe(NaN)
+})
