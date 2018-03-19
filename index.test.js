@@ -11,13 +11,19 @@ test('is', () => {
   expect(itt.is(itt.range(5))).toBeTruthy()
 })
 
-test('generator', () => {
-  const g = itt.generator(function*() {
-    yield 1
-    yield 2
-    yield 3
+describe('generator', () => {
+  test('returns a wrapped generator', () => {
+    expect(itt.generator(function*(){})().toArray).toBeDefined()
   })
-  expect(g().toArray).toBeDefined()
+  test('forwards arguments', () => {
+    const g = itt.generator(function*(a = 1, b = 2) {
+      yield a
+      yield b
+    })
+    expect(Array.from(g())).toEqual([1, 2])
+    expect(Array.from(g(3))).toEqual([3, 2])
+    expect(Array.from(g(3, 4))).toEqual([3, 4])
+  })
 })
 
 test('from', () => {
