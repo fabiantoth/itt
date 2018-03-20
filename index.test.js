@@ -460,6 +460,39 @@ describe('reject', () => {
   })
 })
 
+describe('concat', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.concat([1, 2, 3], [4, 5, 6]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).concat([4, 5, 6]).toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given no iterators', () => {
+    expect(Array.from(itt.concat())).toEqual([])
+  })
+  test('returns an empty iterator when given all empty iterators', () => {
+    expect(Array.from(itt.concat([], function*() {}(), []))).toEqual([])
+  })
+  test('yields the concatenation of its input iterators', () => {
+    expect(Array.from(itt.concat([1, 2, 3]))).toEqual([1, 2, 3])
+    expect(Array.from(itt.concat([1, 2, 3], function*() {yield 4; yield 5}(), [6, 7]))).toEqual([1, 2, 3, 4, 5, 6, 7])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false, it3 = false, it4 = false
+    const i = itt.concat(function*() {it1 = true; yield 1; it2 = true; yield 2}(), function*() {it3 = true; yield 3; it4 = true; yield 4}())
+    expect(it1).toBe(false)
+    expect(it3).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+    expect(it3).toBe(false)
+    i.next()
+    expect(it2).toBe(true)
+    expect(it3).toBe(false)
+    i.next()
+    expect(it2).toBe(true)
+    expect(it3).toBe(true)
+    expect(it4).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
