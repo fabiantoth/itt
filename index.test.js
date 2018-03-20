@@ -266,6 +266,33 @@ describe('cycle', () => {
   })
 })
 
+describe('repeat', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.repeat(3, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).repeat(3).toArray).toBeDefined()
+  })
+  test('returns an empty iterator for n <= 0', () => {
+    expect(Array.from(itt.repeat(0, [1, 2, 3]))).toEqual([])
+    expect(Array.from(itt.repeat(-1, [1, 2, 3]))).toEqual([])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.repeat(0, []))).toEqual([])
+    expect(Array.from(itt.repeat(-1, []))).toEqual([])
+    expect(Array.from(itt.repeat(5, []))).toEqual([])
+    expect(Array.from(itt.repeat(100, []))).toEqual([])
+  })
+  test('yields n copies of the iterator', () => {
+    expect(Array.from(itt.repeat(3, [4, 5, 6]))).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.repeat(2, function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
