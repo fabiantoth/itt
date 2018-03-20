@@ -803,6 +803,20 @@ describe('take', () => {
   })
 })
 
+describe('every', () => {
+  test('returns true for an empty iterator', () => {
+    expect(itt.every(x => false, [])).toBe(true)
+    expect(itt.every(x => false, function*() {}())).toBe(true)
+  })
+  test('returns true if every element satisfies fn', () => {
+    expect(itt.every(x => x % 2, [3, 5, 7])).toBe(true)
+  })
+  test('returns false if any element does not satisfy fn', () => {
+    expect(itt.every(x => x % 2, [1, 2, 3, 4, 5])).toBe(false)
+    expect(itt.every(x => x > 10, [1])).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
