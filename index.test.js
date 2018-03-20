@@ -172,6 +172,23 @@ describe('keys', () => {
   })
 })
 
+describe('values', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.values({}).toArray).toBeDefined()
+  })
+  test('yields no values for empty objects', () => {
+    expect(Array.from(itt.values({}))).toEqual([])
+    expect(Array.from(itt.values(Object.create(null)))).toEqual([])
+    expect(Array.from(itt.values(Object.create({a: 1, b: 2})))).toEqual([])
+  })
+  test('yields its input object\'s own values', () => {
+    expect(Array.from(itt.values({a: 1, b: 2, c: 3}))).toEqual([1, 2, 3])
+  })
+  test('yields only own values', () => {
+    expect(Array.from(itt.values(Object.assign(Object.create({a: 1, b: 2, c: 3}), {d: 9, e: 8})))).toEqual([9, 8])
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
