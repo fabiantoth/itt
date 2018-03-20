@@ -371,6 +371,35 @@ describe('flatMap', () => {
   })
 })
 
+describe('tap', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.tap(x => {}, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).tap(x => {}).toArray).toBeDefined()
+  })
+  test('returns its input iterator unchanged', () => {
+    expect(Array.from(itt.tap(x => x + 1, [1, 3, 5, 7]))).toEqual([1, 3, 5, 7])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    const f = jest.fn(), g = jest.fn()
+    expect(Array.from(itt.tap(f, []))).toEqual([])
+    expect(Array.from(itt.tap(g, function*() {}()))).toEqual([])
+    expect(f).not.toHaveBeenCalled()
+    expect(g).not.toHaveBeenCalled()
+  })
+  test('applies fn to each iterator element', () => {
+    const res = []
+    expect(Array.from(itt.tap(x => res.push(8 - x), [5, 6, 7]))).toEqual([5, 6, 7])
+    expect(res).toEqual([3, 2, 1])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.flatMap(x => [x, x], function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
