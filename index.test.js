@@ -815,6 +815,11 @@ describe('every', () => {
     expect(itt.every(x => x % 2, [1, 2, 3, 4, 5])).toBe(false)
     expect(itt.every(x => x > 10, [1])).toBe(false)
   })
+  test(`short-circuits when an element does not satisfy fn`, () => {
+    let it = false
+    const i = itt.every(x => false, function*() {yield 1; it = true; yield 2}())
+    expect(it).toBe(false)
+  })
 })
 
 describe('some', () => {
@@ -828,6 +833,11 @@ describe('some', () => {
   })
   test('returns false if no element satisfies fn', () => {
     expect(itt.some(x => x > 10, [1, 2, 3, 4, 5])).toBe(false)
+  })
+  test(`short-circuits when an element satisfies fn`, () => {
+    let it = false
+    const i = itt.some(x => true, function*() {yield 1; it = true; yield 2}())
+    expect(it).toBe(false)
   })
 })
 
@@ -843,6 +853,11 @@ describe('find', () => {
   })
   test('returns undefined if no element satisfies fn', () => {
     expect(itt.find(x => x === 10, [1, 2, 3])).toBe(undefined)
+  })
+  test(`short-circuits when an element satisfies fn`, () => {
+    let it = false
+    const i = itt.find(x => true, function*() {yield 1; it = true; yield 2}())
+    expect(it).toBe(false)
   })
 })
 
