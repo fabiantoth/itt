@@ -978,6 +978,33 @@ describe('lastIndexOf', () => {
   })
 })
 
+describe('includes', () => {
+  test('returns true if an element is identical to x', () => {
+    expect(itt.includes('a', ['d', 'b', 'a', 'c', 'e'])).toBe(true)
+    expect(itt.includes('d', ['d', 'b', 'a'])).toBe(true)
+    expect(itt.includes('a', ['a', 'a', 'a', 'a'])).toBe(true)
+    expect(itt.includes('c', ['a', 'b', 'c', 'c'])).toBe(true)
+  })
+  test('returns false if no element is identical to x', () => {
+    expect(itt.includes('a', ['d', 'b', 'f', 'c', 'e'])).toBe(false)
+    expect(itt.includes('z', ['d', 'b', 'a'])).toBe(false)
+  })
+  test('returns false for an empty iterator', () => {
+    expect(itt.includes('a', [])).toBe(false)
+    expect(itt.includes('z', function*() {}())).toBe(false)
+  })
+  test('uses === for equality', () => {
+    expect(itt.includes('1', [1, 2, 3])).toBe(false)
+    expect(itt.includes(-0, [1, 1, 0])).toBe(true)
+    expect(itt.includes(NaN, [NaN, NaN, NaN])).toBe(false)
+  })
+  test(`short-circuits when an element is identical to x`, () => {
+    let it = false
+    const i = itt.includes(1, function*() {yield 1; it = true; yield 2}())
+    expect(it).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
