@@ -307,6 +307,13 @@ describe('enumerate', () => {
     expect(Array.from(itt.enumerate(['a', 'b', 'c', 'd']))).toEqual([[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']])
     expect(Array.from(itt.enumerate(function*() {yield 5; yield 7; yield 10}()))).toEqual([[0, 5], [1, 7], [2, 10]])
   })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.enumerate(function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
 })
 
 describe('map', () => {
@@ -324,6 +331,13 @@ describe('map', () => {
   test('applies fn to each element of the iterator', () => {
     expect(Array.from(itt.map(x => x * x, function*() {yield 1; yield 2; yield 3}()))).toEqual([1, 4, 9])
     expect(Array.from(itt.map(x => x + '!', ['cats', 'dogs', 'cows']))).toEqual(['cats!', 'dogs!', 'cows!'])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.map(x => x + 1, function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
   })
 })
 
