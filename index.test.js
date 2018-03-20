@@ -826,7 +826,7 @@ describe('some', () => {
     expect(itt.some(x => x > 1, [3, 5, 7])).toBe(true)
     expect(itt.some(x => x % 2, [1, 2, 3, 4, 5])).toBe(true)
   })
-  test('returns false if every element does not satisfy fn', () => {
+  test('returns false if no element satisfies fn', () => {
     expect(itt.some(x => x > 10, [1, 2, 3, 4, 5])).toBe(false)
   })
 })
