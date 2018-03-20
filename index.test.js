@@ -194,6 +194,9 @@ describe('fork', () => {
     const [a, b] = itt.fork([1, 2, 3])
     expect(a.toArray).toBeDefined()
     expect(b.toArray).toBeDefined()
+    const [c, d] = itt([1, 2, 3]).fork()
+    expect(c.toArray).toBeDefined()
+    expect(d.toArray).toBeDefined()
   })
   test('returns two forks by default', () => {
     expect(itt.fork([1, 2, 3]).length).toBe(2)
@@ -240,6 +243,7 @@ describe('fork', () => {
 describe('cycle', () => {
   test('returns wrapped iterators', () => {
     expect(itt.cycle([1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).cycle().toArray).toBeDefined()
   })
   test('cycles the iterator endlessly', () => {
     const i = itt.cycle([1, 2, 3])
