@@ -58,6 +58,9 @@ const push = G(function*(...ys) {const xs = ys.pop(); yield* xs; yield* ys})
 const unshift = G(function*(...ys) {const xs = ys.pop(); yield* ys; yield* xs})
 const flatten = G(function*(xs) {for (const x of xs) yield* x})
 const chunksOf = G(function*(n, xs) {
+  if (n <= 0) {
+    for (;;) yield []
+  }
   let list = []
   for (const x of xs) {
     list.push(x)
