@@ -237,6 +237,31 @@ describe('fork', () => {
   })
 })
 
+describe('cycle', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.cycle([1, 2, 3]).toArray).toBeDefined()
+  })
+  test('cycles the iterator endlessly', () => {
+    const i = itt.cycle([1, 2, 3])
+    expect(i.next()).toEqual({value: 1, done: false})
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(i.next()).toEqual({value: 3, done: false})
+    expect(i.next()).toEqual({value: 1, done: false})
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(i.next()).toEqual({value: 3, done: false})
+    expect(i.next()).toEqual({value: 1, done: false})
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(i.next()).toEqual({value: 3, done: false})
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.cycle(function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
