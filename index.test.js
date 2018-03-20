@@ -590,7 +590,7 @@ describe('flatten', () => {
 describe('chunksOf', () => {
   test('returns wrapped iterators', () => {
     expect(itt.chunksOf(2, [1, 2, 3]).toArray).toBeDefined()
-    expect(itt([1, 2, 3]).reject(x => false).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).chunksOf(2).toArray).toBeDefined()
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.chunksOf(2, []))).toEqual([])
