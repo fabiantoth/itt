@@ -846,6 +846,21 @@ describe('find', () => {
   })
 })
 
+describe('findLast', () => {
+  test('returns an element that satisfies fn', () => {
+    expect(itt.findLast(x => x === 3, [1, 2, 3, 4])).toBe(3)
+    expect(itt.findLast(x => x === 0, [0, 1, 2, 3, 4])).toBe(0)
+    expect(itt.findLast(x => x > 3, [1, 2, 3, 4])).toBe(4)
+  })
+  test('returns the last element that satisfies fn', () => {
+    expect(itt.findLast(x => x > 0, [1, 2, 3])).toBe(3)
+    expect(itt.findLast(x => x > 2, [5, 4, 3, 2, 1])).toBe(3)
+  })
+  test('returns undefined if no element satisfies fn', () => {
+    expect(itt.findLast(x => x === 10, [1, 2, 3])).toBe(undefined)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
