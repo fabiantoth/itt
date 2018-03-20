@@ -280,6 +280,7 @@ describe('repeat', () => {
     expect(Array.from(itt.repeat(-1, []))).toEqual([])
     expect(Array.from(itt.repeat(5, []))).toEqual([])
     expect(Array.from(itt.repeat(100, []))).toEqual([])
+    expect(Array.from(itt.repeat(100, function*() {}()))).toEqual([])
   })
   test('yields n copies of the iterator', () => {
     expect(Array.from(itt.repeat(3, [4, 5, 6]))).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6])
