@@ -190,6 +190,11 @@ describe('values', () => {
 })
 
 describe('fork', () => {
+  test('returns wrapped iterators', () => {
+    const [a, b] = itt.fork([1, 2, 3])
+    expect(a.toArray).toBeDefined()
+    expect(b.toArray).toBeDefined()
+  })
   test('returns two forks by default', () => {
     expect(itt.fork([1, 2, 3]).length).toBe(2)
     expect(itt([1, 2, 3]).fork().length).toBe(2)
