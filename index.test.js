@@ -293,6 +293,19 @@ describe('repeat', () => {
   })
 })
 
+describe('enumerate', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.enumerate(['a', 'b', 'c']).toArray).toBeDefined()
+    expect(itt(['a', 'b', 'c']).enumerate().toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.enumerate([]))).toEqual([])
+  })
+  test('returns pairs of indices and iterator elements', () => {
+    expect(Array.from(itt.enumerate(['a', 'b', 'c', 'd']))).toEqual([[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']])
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
