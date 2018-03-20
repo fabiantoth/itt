@@ -854,6 +854,10 @@ describe('find', () => {
   test('returns undefined if no element satisfies fn', () => {
     expect(itt.find(x => x === 10, [1, 2, 3])).toBe(undefined)
   })
+  test('returns undefined for an empty iterator', () => {
+    expect(itt.find(x => true, [])).toBe(undefined)
+    expect(itt.find(x => true, function*() {}())).toBe(undefined)
+  })
   test(`short-circuits when an element satisfies fn`, () => {
     let it = false
     const i = itt.find(x => true, function*() {yield 1; it = true; yield 2}())
@@ -874,6 +878,10 @@ describe('findLast', () => {
   test('returns undefined if no element satisfies fn', () => {
     expect(itt.findLast(x => x === 10, [1, 2, 3])).toBe(undefined)
   })
+  test('returns undefined for an empty iterator', () => {
+    expect(itt.findLast(x => true, [])).toBe(undefined)
+    expect(itt.findLast(x => true, function*() {}())).toBe(undefined)
+  })
 })
 
 describe('findIndex', () => {
@@ -887,6 +895,10 @@ describe('findIndex', () => {
   })
   test('returns -1 if no element satisfies fn', () => {
     expect(itt.findIndex(x => x === 10, [1, 2, 3])).toBe(-1)
+  })
+  test('returns -1 for an empty iterator', () => {
+    expect(itt.findIndex(x => true, [])).toBe(-1)
+    expect(itt.findIndex(x => true, function*() {}())).toBe(-1)
   })
   test(`short-circuits when an element satisfies fn`, () => {
     let it = false
@@ -906,6 +918,10 @@ describe('findLastIndex', () => {
   })
   test('returns -1 if no element satisfies fn', () => {
     expect(itt.findLastIndex(x => x === 10, [1, 2, 3])).toBe(-1)
+  })
+  test('returns -1 for an empty iterator', () => {
+    expect(itt.findLastIndex(x => true, [])).toBe(-1)
+    expect(itt.findLastIndex(x => true, function*() {}())).toBe(-1)
   })
 })
 
