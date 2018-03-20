@@ -147,7 +147,7 @@ describe('entries', () => {
     expect(Array.from(itt.entries(Object.create(null)))).toEqual([])
     expect(Array.from(itt.entries(Object.create({a: 1, b: 2})))).toEqual([])
   })
-  test('yields its input object\'s own key/value entries', () => {
+  test(`yields its input object's own key/value entries`, () => {
     expect(Array.from(itt.entries({a: 1, b: 2, c: 3}))).toEqual([['a', 1], ['b', 2], ['c', 3]])
   })
   test('yields only own key/value entries', () => {
@@ -164,7 +164,7 @@ describe('keys', () => {
     expect(Array.from(itt.keys(Object.create(null)))).toEqual([])
     expect(Array.from(itt.keys(Object.create({a: 1, b: 2})))).toEqual([])
   })
-  test('yields its input object\'s own keys', () => {
+  test(`yields its input object's own keys`, () => {
     expect(Array.from(itt.keys({a: 1, b: 2, c: 3}))).toEqual(['a', 'b', 'c'])
   })
   test('yields only own keys', () => {
@@ -181,7 +181,7 @@ describe('values', () => {
     expect(Array.from(itt.values(Object.create(null)))).toEqual([])
     expect(Array.from(itt.values(Object.create({a: 1, b: 2})))).toEqual([])
   })
-  test('yields its input object\'s own values', () => {
+  test(`yields its input object's own values`, () => {
     expect(Array.from(itt.values({a: 1, b: 2, c: 3}))).toEqual([1, 2, 3])
   })
   test('yields only own values', () => {
