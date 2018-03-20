@@ -81,7 +81,8 @@ const subsequences = G(function*(n = 2, xs) {
   }
   if (buffer.length === n) yield buffer
 })
-const lookahead = G(function*(xs, n = 1) {
+const lookahead = G(function*(n = 1, xs) {
+  if (xs === undefined) {xs = n; n = 1}
   if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
   let buffer = []
   let value, done
@@ -322,7 +323,7 @@ class Iter {
   unshift(...xs) {return unshift(...xs, this.iter)}
   flatten() {return flatten(this.iter)}
   chunksOf(n) {return chunksOf(n, this.iter)}
-  lookahead(n) {return lookahead(this.iter, n)}
+  lookahead(n) {return lookahead(n, this.iter)}
   subsequences(n) {return subsequences(n, this.iter)}
   drop(n) {return drop(n, this.iter)}
   dropWhile(fn) {return dropWhile(fn, this.iter)}
