@@ -189,6 +189,44 @@ describe('values', () => {
   })
 })
 
+describe('fork', () => {
+  test('returns two forks by default', () => {
+    expect(itt.fork([1, 2, 3]).length).toBe(2)
+    expect(itt([1, 2, 3]).fork().length).toBe(2)
+  })
+  test('returns n forks', () => {
+    expect(itt.fork(1, [1, 2, 3]).length).toBe(1)
+    expect(itt([1, 2, 3]).fork(1).length).toBe(1)
+    expect(itt.fork(4, [1, 2, 3]).length).toBe(4)
+    expect(itt([1, 2, 3]).fork(4).length).toBe(4)
+  })
+  test('returns no forks for n = 0', () => {
+    expect(itt.fork(0, [1, 2, 3]).length).toBe(0)
+    expect(itt([1, 2, 3]).fork(0).length).toBe(0)
+  })
+  test('returns independent iterators', () => {
+    const [a, b, c] = itt.fork(3, function*() {yield 1; yield 2; yield 3}())
+    expect(Array.from(a)).toEqual([1, 2, 3])
+    expect(Array.from(b)).toEqual([1, 2, 3])
+    expect(Array.from(c)).toEqual([1, 2, 3])
+
+    const [d, e, f, g] = itt.fork(4, function*() {yield 1; yield 2; yield 3}())
+    expect(Array.from(g)).toEqual([1, 2, 3])
+    expect(Array.from(f)).toEqual([1, 2, 3])
+    expect(Array.from(e)).toEqual([1, 2, 3])
+    expect(Array.from(d)).toEqual([1, 2, 3])
+  })
+  test('discards values that have been iterated completely', () => {
+    const [a, b, c] = itt.fork(3, function*() {yield 1; yield 2; yield 3}())
+    c.next()
+    b.next()
+    a.next()
+    expect(a.buffer).toEqual([])
+    expect(b.buffer).toEqual([])
+    expect(c.buffer).toEqual([])
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
