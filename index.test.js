@@ -430,6 +430,36 @@ describe('filter', () => {
   })
 })
 
+describe('reject', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.reject(x => false, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).reject(x => false).toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    const f = jest.fn(), g = jest.fn()
+    expect(Array.from(itt.reject(f, []))).toEqual([])
+    expect(Array.from(itt.reject(g, function*() {}()))).toEqual([])
+    expect(f).not.toHaveBeenCalled()
+    expect(g).not.toHaveBeenCalled()
+  })
+  test(`yields only elements which don't satisfy fn`, () => {
+    expect(Array.from(itt.reject(x => x % 2, [9, 8, 6, 4, 5, 3, 1, 2]))).toEqual([8, 6, 4, 2])
+  })
+  test('returns an empty iterator when every element satisfies fn', () => {
+    expect(Array.from(itt.reject(x => true, [1, 2, 3]))).toEqual([])
+    expect(Array.from(itt.reject(x => true, function*() {yield 1; yield 2; yield 3}()))).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false, it3 = false
+    const i = itt.reject(x => x % 2, function*() {it1 = true; yield 1; it2 = true; yield 2; it3 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(it1).toBe(true)
+    expect(it2).toBe(true)
+    expect(it3).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
