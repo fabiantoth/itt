@@ -129,6 +129,12 @@ describe('iterate', () => {
     expect(i.next()).toEqual({value: 2, done: false})
     expect(i.next()).toEqual({value: 4, done: false})
     expect(i.next()).toEqual({value: 8, done: false})
+
+    const j = itt.iterate('a', x => `(${x})`)
+    expect(j.next()).toEqual({value: 'a', done: false})
+    expect(j.next()).toEqual({value: '(a)', done: false})
+    expect(j.next()).toEqual({value: '((a))', done: false})
+    expect(j.next()).toEqual({value: '(((a)))', done: false})
   })
 })
 
