@@ -23,7 +23,7 @@ const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
 const values = G(function*(o) {for (const k of _keys(o)) yield o[k]})
 
-function fork(n, xs) {
+function fork(n = 2, xs) {
   if (xs === undefined) {xs = n; n = 2}
   return new ForkSource(n, xs).derived
 }
@@ -306,7 +306,7 @@ class Iter {
   join(sep = ',') {return join(sep, this.iter)}
   intersperse(sep) {return intersperse(sep, this.iter)}
 
-  fork(n = 2) {return fork(n, this.iter)}
+  fork(n) {return fork(n, this.iter)}
   repeat(n) {return repeat(n, this.iter)}
   cycle() {return cycle(this.iter)}
   enumerate() {return enumerate(this.iter)}
