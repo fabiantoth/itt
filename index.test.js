@@ -309,6 +309,24 @@ describe('enumerate', () => {
   })
 })
 
+describe('map', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.map(x => x + 1, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).map(x => x + 1).toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    const f = jest.fn(), g = jest.fn()
+    expect(Array.from(itt.map(f, []))).toEqual([])
+    expect(Array.from(itt.map(g, function*() {}()))).toEqual([])
+    expect(f).not.toHaveBeenCalled()
+    expect(g).not.toHaveBeenCalled()
+  })
+  test('applies fn to each element of the iterator', () => {
+    expect(Array.from(itt.map(x => x * x, function*() {yield 1; yield 2; yield 3}()))).toEqual([1, 4, 9])
+    expect(Array.from(itt.map(x => x + '!', ['cats', 'dogs', 'cows']))).toEqual(['cats!', 'dogs!', 'cows!'])
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
