@@ -66,6 +66,7 @@ const chunksOf = G(function*(n = 2, xs) {
 })
 const subsequences = G(function*(n = 2, xs) {
   if (xs === undefined) {xs = n; n = 2}
+  if (n <= 0) for (;;) yield []
   if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
   let buffer = []
   let value, done
