@@ -947,6 +947,11 @@ describe('indexOf', () => {
     expect(itt.indexOf(-0, [1, 1, 0])).toBe(2)
     expect(itt.indexOf(NaN, [NaN, NaN, NaN])).toBe(-1)
   })
+  test(`short-circuits when an element satisfies fn`, () => {
+    let it = false
+    const i = itt.indexOf(1, function*() {yield 1; it = true; yield 2}())
+    expect(it).toBe(false)
+  })
 })
 
 describe('mean', () => {
