@@ -72,19 +72,19 @@ describe('irange', () => {
     expect(itt.irange().toArray).toBeDefined()
   })
   test('yields 0, 1, 2, ... when given no arguments', () => {
-    let i = itt.irange()
+    const i = itt.irange()
     for (let value = 0; value < 10; ++value) {
       expect(i.next()).toEqual({value, done: false})
     }
   })
   test('yields n, n+1, n+2, ... when given one argument', () => {
-    let i = itt.irange(5)
+    const i = itt.irange(5)
     for (let value = 5; value < 15; ++value) {
       expect(i.next()).toEqual({value, done: false})
     }
   })
   test('yields n, n+k, n+2k, ... when given two arguments', () => {
-    let i = itt.irange(5, -1)
+    const i = itt.irange(5, -1)
     for (let value = 5; value > -5; --value) {
       expect(i.next()).toEqual({value, done: false})
     }
@@ -109,7 +109,7 @@ describe('forever', () => {
     expect(itt.forever().toArray).toBeDefined()
   })
   test('yields its argument forever', () => {
-    let i = itt.forever('a')
+    const i = itt.forever('a')
     for (let n = 20; n--;) {
       expect(i.next()).toEqual({value: 'a', done: false})
     }
