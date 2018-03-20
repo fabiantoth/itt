@@ -104,6 +104,18 @@ describe('replicate', () => {
   })
 })
 
+describe('forever', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.forever().toArray).toBeDefined()
+  })
+  test('yields its argument forever', () => {
+    let i = itt.forever('a')
+    for (let n = 20; n--;) {
+      expect(i.next()).toEqual({value: 'a', done: false})
+    }
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
