@@ -393,7 +393,7 @@ describe('tap', () => {
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
-    const i = itt.flatMap(x => [x, x], function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    const i = itt.tap(x => {}, function*() {it1 = true; yield 1; it2 = true; yield 2}())
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
