@@ -666,6 +666,38 @@ describe('subsequences', () => {
   })
 })
 
+describe('lookahead', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.lookahead(1, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).lookahead(1).toArray).toBeDefined()
+  })
+  test('defaults to lookahead of 1', () => {
+    expect(Array.from(itt.lookahead([1, 2, 3, 4]))).toEqual([[1, 2], [2, 3], [3, 4], [4]])
+    expect(Array.from(itt([1, 2, 3, 4]).lookahead())).toEqual([[1, 2], [2, 3], [3, 4], [4]])
+  })
+  test('yields n lookahead elements', () => {
+    expect(Array.from(itt.lookahead(3, [1, 2, 3, 4, 5, 6]))).toEqual([[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6], [4, 5, 6], [5, 6], [6]])
+    expect(Array.from(itt.lookahead(3, [1, 2, 3, 4]))).toEqual([[1, 2, 3, 4], [2, 3, 4], [3, 4], [4]])
+    expect(Array.from(itt.lookahead(1, [1, 2, 3, 4]))).toEqual([[1, 2], [2, 3], [3, 4], [4]])
+    expect(Array.from(itt.lookahead(3, [1, 2]))).toEqual([[1, 2], [2]])
+    expect(Array.from(itt.lookahead(4, [1]))).toEqual([[1]])
+  })
+  test('yields no lookahead if n <= 0', () => {
+    expect(Array.from(itt.lookahead(0, [1, 2, 3, 4]))).toEqual([[1], [2], [3], [4]])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.lookahead(2, []))).toEqual([])
+    expect(Array.from(itt.lookahead(5, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.lookahead(1, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: [1, 2], done: false})
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
