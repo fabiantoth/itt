@@ -930,6 +930,10 @@ describe('indexOf', () => {
     expect(itt.indexOf('a', ['d', 'b', 'a', 'c', 'e'])).toBe(2)
     expect(itt.indexOf('d', ['d', 'b', 'a'])).toBe(0)
   })
+  test('returns the index of the first element identical to x', () => {
+    expect(itt.indexOf('a', ['a', 'a', 'a', 'a'])).toBe(0)
+    expect(itt.indexOf('c', ['a', 'b', 'c', 'd'])).toBe(2)
+  })
   test('returns -1 if no element is identical to x', () => {
     expect(itt.indexOf('a', ['d', 'b', 'f', 'c', 'e'])).toBe(-1)
     expect(itt.indexOf('z', ['d', 'b', 'a'])).toBe(-1)
