@@ -408,7 +408,7 @@ Object.assign(module.exports = from, {
   intersperse, join,
 
   fork, repeat, cycle, enumerate,
-  map, flatMap, filter, reject,
+  map, tap, flatMap, filter, reject,
   concat, push, unshift, flatten,
   chunksOf, lookahead, subsequences,
   drop, dropWhile, dropLast,
