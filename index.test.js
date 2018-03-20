@@ -831,6 +831,21 @@ describe('some', () => {
   })
 })
 
+describe('find', () => {
+  test('returns an element that satisfies fn', () => {
+    expect(itt.find(x => x === 3, [1, 2, 3, 4])).toBe(3)
+    expect(itt.find(x => x === 0, [0, 1, 2, 3, 4])).toBe(0)
+    expect(itt.find(x => x > 3, [1, 2, 3, 4])).toBe(4)
+  })
+  test('returns the first element that satisfies fn', () => {
+    expect(itt.find(x => x > 0, [1, 2, 3])).toBe(1)
+    expect(itt.find(x => x > 2, [1, 2, 3, 4, 5])).toBe(3)
+  })
+  test('returns undefined if no element satisfies fn', () => {
+    expect(itt.find(x => x === 10, [1, 2, 3])).toBe(undefined)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
