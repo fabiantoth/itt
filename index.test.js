@@ -71,19 +71,19 @@ describe('irange', () => {
   test('returns wrapped iterators', () => {
     expect(itt.irange().toArray).toBeDefined()
   })
-  test('accepts no arguments', () => {
+  test('yields 0, 1, 2, ... when given no arguments', () => {
     let i = itt.irange()
     for (let value = 0; value < 10; ++value) {
       expect(i.next()).toEqual({value, done: false})
     }
   })
-  test('accepts one argument', () => {
+  test('yields n, n+1, n+2, ... when given one argument', () => {
     let i = itt.irange(5)
     for (let value = 5; value < 15; ++value) {
       expect(i.next()).toEqual({value, done: false})
     }
   })
-  test('accepts two arguments', () => {
+  test('yields n, n+k, n+2k, ... when given two arguments', () => {
     let i = itt.irange(5, -1)
     for (let value = 5; value > -5; --value) {
       expect(i.next()).toEqual({value, done: false})
