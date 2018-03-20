@@ -750,6 +750,32 @@ describe('dropWhile', () => {
   })
 })
 
+describe('dropLast', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.dropLast(1, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).dropLast(1).toArray).toBeDefined()
+  })
+  test('yields all but the last n elements', () => {
+    expect(Array.from(itt.dropLast(1, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3, 4, 5])
+    expect(Array.from(itt.dropLast(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([3, 2])
+  })
+  test(`returns an empty iterator if there aren't enough elements`, () => {
+    expect(Array.from(itt.dropLast(5, [1, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.dropLast(3, [1]))).toEqual([])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.dropLast(2, []))).toEqual([])
+    expect(Array.from(itt.dropLast(5, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until necessary`, () => {
+    let it1 = false, it2 = false
+    const i = itt.dropLast(1, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: 1, done: false})
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
