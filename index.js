@@ -60,8 +60,8 @@ const flatten = G(function*(xs) {for (const x of xs) yield* x})
 const chunksOf = G(function*(n, xs) {
   let list = []
   for (const x of xs) {
-    if (list.length >= n) {yield list; list = []}
     list.push(x)
+    if (list.length >= n) {yield list; list = []}
   }
   if (list.length) yield list
 })
