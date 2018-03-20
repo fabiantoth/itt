@@ -844,7 +844,7 @@ describe('some', () => {
 describe('find', () => {
   test('returns an element that satisfies fn', () => {
     expect(itt.find(x => x === 3, [1, 2, 3, 4])).toBe(3)
-    expect(itt.find(x => x === 0, [0, 1, 2, 3, 4])).toBe(0)
+    expect(itt.find(x => x === 1, [1, 2, 3, 4, 5])).toBe(1)
     expect(itt.find(x => x > 3, [1, 2, 3, 4])).toBe(4)
   })
   test('returns the first element that satisfies fn', () => {
@@ -864,7 +864,7 @@ describe('find', () => {
 describe('findLast', () => {
   test('returns an element that satisfies fn', () => {
     expect(itt.findLast(x => x === 3, [1, 2, 3, 4])).toBe(3)
-    expect(itt.findLast(x => x === 0, [0, 1, 2, 3, 4])).toBe(0)
+    expect(itt.findLast(x => x === 1, [1, 2, 3, 4, 5])).toBe(1)
     expect(itt.findLast(x => x > 3, [1, 2, 3, 4])).toBe(4)
   })
   test('returns the last element that satisfies fn', () => {
