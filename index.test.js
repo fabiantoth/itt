@@ -628,6 +628,44 @@ describe('chunksOf', () => {
   })
 })
 
+describe('subsequences', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.subsequences(2, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).subsequences(2).toArray).toBeDefined()
+  })
+  test('defaults to subsequences of 2', () => {
+    expect(Array.from(itt.subsequences([1, 2, 3, 4]))).toEqual([[1, 2], [2, 3], [3, 4]])
+    expect(Array.from(itt([1, 2, 3, 4]).subsequences())).toEqual([[1, 2], [2, 3], [3, 4]])
+  })
+  test('yields subsequences of the iterator', () => {
+    expect(Array.from(itt.subsequences(4, [1, 2, 3, 4, 5, 6]))).toEqual([[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]])
+    expect(Array.from(itt.subsequences(4, [1, 2, 3, 4]))).toEqual([[1, 2, 3, 4]])
+    expect(Array.from(itt.subsequences(1, [1, 2, 3, 4]))).toEqual([[1], [2], [3], [4]])
+  })
+  test(`returns an empty iterator when there aren't enough elements`, () => {
+    expect(Array.from(itt.subsequences(5, [1, 2, 3, 4]))).toEqual([])
+    expect(Array.from(itt.subsequences(5, [1]))).toEqual([])
+    expect(Array.from(itt.subsequences(2, [1]))).toEqual([])
+  })
+  test('yields [] forever if n <= 0', () => {
+    const i = itt.subsequences(0, [1, 2, 3, 4])
+    for (let n = 100; n--;) {
+      expect(i.next()).toEqual({value: [], done: false})
+    }
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.subsequences(2, []))).toEqual([])
+    expect(Array.from(itt.subsequences(5, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.subsequences(2, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: [1, 2], done: false})
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
