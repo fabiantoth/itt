@@ -895,6 +895,20 @@ describe('findIndex', () => {
   })
 })
 
+describe('findLastIndex', () => {
+  test('returns the index of an element that satisfies fn', () => {
+    expect(itt.findLastIndex(x => x === 'c', ['a', 'b', 'c', 'd'])).toBe(2)
+    expect(itt.findLastIndex(x => x === 'a', ['a', 'b', 'c', 'd', 'e'])).toBe(0)
+  })
+  test('returns the index of the last element that satisfies fn', () => {
+    expect(itt.findLastIndex(x => x > 0, [1, 2, 3])).toBe(2)
+    expect(itt.findLastIndex(x => x > 2, [5, 4, 3, 2, 1])).toBe(2)
+  })
+  test('returns -1 if no element satisfies fn', () => {
+    expect(itt.findLastIndex(x => x === 10, [1, 2, 3])).toBe(-1)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
