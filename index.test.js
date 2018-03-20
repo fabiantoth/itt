@@ -301,9 +301,11 @@ describe('enumerate', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.enumerate([]))).toEqual([])
+    expect(Array.from(itt.enumerate(function*() {}()))).toEqual([])
   })
   test('returns pairs of indices and iterator elements', () => {
     expect(Array.from(itt.enumerate(['a', 'b', 'c', 'd']))).toEqual([[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']])
+    expect(Array.from(itt.enumerate(function*(){yield 5; yield 7; yield 10}()))).toEqual([[0, 5], [1, 7], [2, 10]])
   })
 })
 
