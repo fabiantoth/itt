@@ -74,12 +74,13 @@ const subsequences = G(function*(n = 2, xs) {
   while (buffer.length < n && ({value, done} = xs.next(), !done)) {
     buffer.push(value)
   }
-  if (!done) while ({value, done} = xs.next(), !done) {
+  if (!done) for (;;) {
     yield buffer
+    ;({value, done} = xs.next())
+    if (done) return
     buffer = buffer.slice(1)
     buffer.push(value)
   }
-  if (buffer.length === n) yield buffer
 })
 const lookahead = G(function*(n = 1, xs) {
   if (xs === undefined) {xs = n; n = 1}
