@@ -341,6 +341,36 @@ describe('map', () => {
   })
 })
 
+describe('flatMap', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.flatMap(x => [x, x], [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).map(x => [x, x]).toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    const f = jest.fn(), g = jest.fn()
+    expect(Array.from(itt.flatMap(f, []))).toEqual([])
+    expect(Array.from(itt.flatMap(g, function*() {}()))).toEqual([])
+    expect(f).not.toHaveBeenCalled()
+    expect(g).not.toHaveBeenCalled()
+  })
+  test('applies fn to each element of the iterator and flattens the results', () => {
+    expect(Array.from(itt.flatMap(x => [x, x + 1], [3, 5, 7]))).toEqual([3, 4, 5, 6, 7, 8])
+  })
+  test('accepts child iterators', () => {
+    expect(Array.from(itt.flatMap(x => function*() {yield x; yield x * x}(), function*() {yield 1; yield 2; yield 3}()))).toEqual([1, 1, 2, 4, 3, 9])
+  })
+  test('ignores empty results', () => {
+    expect(Array.from(itt.flatMap(x => x % 2 ? [] : [x * x * x], [9, 5, 2, 4, 7]))).toEqual([8, 64])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.flatMap(x => [x, x], function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
