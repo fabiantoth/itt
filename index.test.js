@@ -91,6 +91,19 @@ describe('irange', () => {
   })
 })
 
+describe('replicate', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.irange().toArray).toBeDefined()
+  })
+  test('yields x n times', () => {
+    expect(Array.from(itt.replicate(10, 3))).toEqual([3, 3, 3, 3, 3, 3, 3, 3, 3, 3])
+  })
+  test('is empty if n <= 0', () => {
+    expect(Array.from(itt.replicate(0, 3))).toEqual([])
+    expect(Array.from(itt.replicate(-1, 3))).toEqual([])
+  })
+})
+
 test('mean', () => {
   expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   expect(itt.mean([])).toBe(NaN)
