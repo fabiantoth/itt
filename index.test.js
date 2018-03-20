@@ -587,6 +587,43 @@ describe('flatten', () => {
   })
 })
 
+describe('chunksOf', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.chunksOf(2, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).reject(x => false).toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.chunksOf(2, []))).toEqual([])
+    expect(Array.from(itt.chunksOf(5, function*() {}()))).toEqual([])
+  })
+  test('yields chunks of n items', () => {
+    expect(Array.from(itt.chunksOf(3, [1, 2, 3, 4, 5, 6, 7, 8, 9]))).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    expect(Array.from(itt.chunksOf(1, [1, 2, 3, 4, 5, 6, 7, 8, 9]))).toEqual([[1], [2], [3], [4], [5], [6], [7], [8], [9]])
+  })
+  test(`yields fewer items in the last chunk if there aren't an even number of elements`, () => {
+    expect(Array.from(itt.chunksOf(3, [1, 2, 3, 4]))).toEqual([[1, 2, 3], [4]])
+    expect(Array.from(itt.chunksOf(3, [1, 2, 3, 4, 5]))).toEqual([[1, 2, 3], [4, 5]])
+  })
+  test(`yields the entire iterator if there are not more than n elements`, () => {
+    expect(Array.from(itt.chunksOf(4, [1, 2, 3, 4]))).toEqual([[1, 2, 3, 4]])
+    expect(Array.from(itt.chunksOf(10, [1, 2]))).toEqual([[1, 2]])
+    expect(Array.from(itt.chunksOf(10, [9]))).toEqual([[9]])
+  })
+  test('yields [] forever if n <= 0', () => {
+    const i = itt.chunksOf(0, [1, 2, 3, 4])
+    for (let n = 100; n--;) {
+      expect(i.next()).toEqual({value: [], done: false})
+    }
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.chunksOf(2, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: [1, 2], done: false})
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
