@@ -104,9 +104,13 @@ describe('replicate', () => {
   })
 })
 
-test('mean', () => {
-  expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
-  expect(itt.mean([])).toBe(NaN)
-  expect(itt([1, 2, 3]).mean()).toBe(2)
-  expect(itt(function*(){}()).mean()).toBe(NaN)
+describe('mean', () => {
+  test('returns the arithmetic mean of the iterator', () => {
+    expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
+    expect(itt([1, 2, 3]).mean()).toBe(2)
+  })
+  test('returns NaN for an empty iterator', () => {
+    expect(itt.mean([])).toBe(NaN)
+    expect(itt(function*(){}()).mean()).toBe(NaN)
+  })
 })
