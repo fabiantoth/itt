@@ -230,7 +230,7 @@ describe('fork', () => {
     expect(b.buffer).toEqual([])
     expect(c.buffer).toEqual([])
   })
-  test('doesn\'t consume its argument before any derived iterators are iterated', () => {
+  test(`doesn't consume the iterator before any derived iterators are iterated`, () => {
     let it = false
     itt.fork(function*() {it = true; yield 1}())
     expect(it).toBe(false)
