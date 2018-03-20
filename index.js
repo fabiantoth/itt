@@ -66,7 +66,8 @@ const chunksOf = G(function*(n = 2, xs) {
   }
   if (list.length) yield list
 })
-const subsequences = G(function*(xs, n = 2) {
+const subsequences = G(function*(n = 2, xs) {
+  if (xs === undefined) {xs = n; n = 2}
   if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
   let buffer = []
   let value, done
@@ -322,7 +323,7 @@ class Iter {
   flatten() {return flatten(this.iter)}
   chunksOf(n) {return chunksOf(n, this.iter)}
   lookahead(n) {return lookahead(this.iter, n)}
-  subsequences(n) {return subsequences(this.iter, n)}
+  subsequences(n) {return subsequences(n, this.iter)}
   drop(n) {return drop(n, this.iter)}
   dropWhile(fn) {return dropWhile(fn, this.iter)}
   dropLast(n) {return dropLast(n, this.iter)}
