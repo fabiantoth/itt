@@ -592,6 +592,10 @@ describe('chunksOf', () => {
     expect(itt.chunksOf(2, [1, 2, 3]).toArray).toBeDefined()
     expect(itt([1, 2, 3]).chunksOf(2).toArray).toBeDefined()
   })
+  test('defaults to subsequences of 2', () => {
+    expect(Array.from(itt.chunksOf([1, 2, 3, 4]))).toEqual([[1, 2], [3, 4]])
+    expect(Array.from(itt([1, 2, 3, 4]).chunksOf())).toEqual([[1, 2], [3, 4]])
+  })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.chunksOf(2, []))).toEqual([])
     expect(Array.from(itt.chunksOf(5, function*() {}()))).toEqual([])
