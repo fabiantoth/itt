@@ -954,6 +954,30 @@ describe('indexOf', () => {
   })
 })
 
+describe('lastIndexOf', () => {
+  test('returns the index of an element identical to x', () => {
+    expect(itt.lastIndexOf('a', ['d', 'b', 'a', 'c', 'e'])).toBe(2)
+    expect(itt.lastIndexOf('d', ['d', 'b', 'a'])).toBe(0)
+  })
+  test('returns the index of the last element identical to x', () => {
+    expect(itt.lastIndexOf('a', ['a', 'a', 'a', 'a'])).toBe(3)
+    expect(itt.lastIndexOf('c', ['a', 'b', 'c', 'c', 'e'])).toBe(3)
+  })
+  test('returns -1 if no element is identical to x', () => {
+    expect(itt.lastIndexOf('a', ['d', 'b', 'f', 'c', 'e'])).toBe(-1)
+    expect(itt.lastIndexOf('z', ['d', 'b', 'a'])).toBe(-1)
+  })
+  test('returns -1 for an empty iterator', () => {
+    expect(itt.lastIndexOf('a', [])).toBe(-1)
+    expect(itt.lastIndexOf('z', function*() {}())).toBe(-1)
+  })
+  test('uses === for equality', () => {
+    expect(itt.lastIndexOf('1', [1, 2, 3])).toBe(-1)
+    expect(itt.lastIndexOf(-0, [1, 1, 0])).toBe(2)
+    expect(itt.lastIndexOf(NaN, [NaN, NaN, NaN])).toBe(-1)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
