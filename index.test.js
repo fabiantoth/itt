@@ -142,7 +142,7 @@ describe('entries', () => {
   test('returns wrapped iterators', () => {
     expect(itt.entries({}).toArray).toBeDefined()
   })
-  test('yields no keys for empty objects', () => {
+  test('yields no entries for empty objects', () => {
     expect(Array.from(itt.entries({}))).toEqual([])
     expect(Array.from(itt.entries(Object.create(null)))).toEqual([])
     expect(Array.from(itt.entries(Object.create({a: 1, b: 2})))).toEqual([])
