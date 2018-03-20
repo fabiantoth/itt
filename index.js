@@ -23,7 +23,13 @@ const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
 const values = G(function*(o) {for (const k of _keys(o)) yield o[k]})
 
-function fork(n = 2, xs) {return new ForkSource(n, xs).derived}
+function fork(n, xs) {
+  if (xs === undefined) {
+    xs = n
+    n = 2
+  }
+  return new ForkSource(n, xs).derived
+}
 const cycle = G(function*(xs) {
   const cache = []
   for (const x of xs) {
