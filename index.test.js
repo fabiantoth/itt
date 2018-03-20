@@ -698,6 +698,32 @@ describe('lookahead', () => {
   })
 })
 
+describe('drop', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.drop(1, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).drop(1).toArray).toBeDefined()
+  })
+  test('yields all but the first n elements', () => {
+    expect(Array.from(itt.drop(2, [1, 2, 3, 4, 5, 6]))).toEqual([3, 4, 5, 6])
+    expect(Array.from(itt.drop(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([2, 1])
+  })
+  test(`returns an empty iterator if there aren't enough elements`, () => {
+    expect(Array.from(itt.drop(5, [1, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.drop(3, [1]))).toEqual([])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.drop(2, []))).toEqual([])
+    expect(Array.from(itt.drop(5, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.drop(1, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
