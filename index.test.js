@@ -13,7 +13,7 @@ test('is', () => {
 
 describe('generator', () => {
   test('returns a wrapped generator', () => {
-    expect(itt.generator(function*(){})().toArray).toBeDefined()
+    expect(itt.generator(function*() {})().toArray).toBeDefined()
   })
   test('forwards arguments', () => {
     const g = itt.generator(function*(a = 1, b = 2) {
@@ -305,7 +305,7 @@ describe('enumerate', () => {
   })
   test('yields pairs of indices and iterator elements', () => {
     expect(Array.from(itt.enumerate(['a', 'b', 'c', 'd']))).toEqual([[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']])
-    expect(Array.from(itt.enumerate(function*(){yield 5; yield 7; yield 10}()))).toEqual([[0, 5], [1, 7], [2, 10]])
+    expect(Array.from(itt.enumerate(function*() {yield 5; yield 7; yield 10}()))).toEqual([[0, 5], [1, 7], [2, 10]])
   })
 })
 
@@ -316,6 +316,6 @@ describe('mean', () => {
   })
   test('returns NaN for an empty iterator', () => {
     expect(itt.mean([])).toBe(NaN)
-    expect(itt(function*(){}()).mean()).toBe(NaN)
+    expect(itt(function*() {}()).mean()).toBe(NaN)
   })
 })
