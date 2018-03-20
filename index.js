@@ -24,10 +24,7 @@ function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
 const values = G(function*(o) {for (const k of _keys(o)) yield o[k]})
 
 function fork(n, xs) {
-  if (xs === undefined) {
-    xs = n
-    n = 2
-  }
+  if (xs === undefined) {xs = n; n = 2}
   return new ForkSource(n, xs).derived
 }
 const cycle = G(function*(xs) {
