@@ -724,6 +724,32 @@ describe('drop', () => {
   })
 })
 
+describe('dropWhile', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.dropWhile(n => n < 3, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).dropWhile(n => n < 3).toArray).toBeDefined()
+  })
+  test('yields all but the initial elements that satisfy fn', () => {
+    expect(Array.from(itt.dropWhile(n => n % 2, [1, 3, 4, 5, 6, 7]))).toEqual([4, 5, 6, 7])
+    expect(Array.from(itt.dropWhile(n => n > 1, function*() {yield 3; yield 2; yield 1; yield 4}()))).toEqual([1, 4])
+  })
+  test(`returns an empty iterator if all elements satisfy fn`, () => {
+    expect(Array.from(itt.dropWhile(n => n < 10, [1, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.dropWhile(n => true, [1]))).toEqual([])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.dropWhile(n => false, []))).toEqual([])
+    expect(Array.from(itt.dropWhile(n => false, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.dropWhile(n => n <= 1, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
