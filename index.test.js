@@ -116,6 +116,22 @@ describe('forever', () => {
   })
 })
 
+describe('iterate', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.iterate().toArray).toBeDefined()
+  })
+  test('yields the initial value first', () => {
+    expect(itt.iterate(1, x => x + 1).next()).toEqual({value: 1, done: false})
+  })
+  test('yields repeated applications of its input function', () => {
+    const i = itt.iterate(1, x => x * 2)
+    expect(i.next()).toEqual({value: 1, done: false})
+    expect(i.next()).toEqual({value: 2, done: false})
+    expect(i.next()).toEqual({value: 4, done: false})
+    expect(i.next()).toEqual({value: 8, done: false})
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
