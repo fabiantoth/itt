@@ -1227,6 +1227,35 @@ describe('tail', () => {
   })
 })
 
+describe('init', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.init([]).toArray).toBeDefined()
+    expect(itt([]).init().toArray).toBeDefined()
+  })
+  test('yields all but the last iterator element', () => {
+    expect(Array.from(itt.init([5, 2, 3]))).toEqual([5, 2])
+    expect(Array.from(itt.init(function*() {yield 'c'; yield 'b'; yield 'a'}()))).toEqual(['c', 'b'])
+  })
+  test('returns an empty iterator when given a singleton iterator', () => {
+    expect(Array.from(itt.init([1]))).toEqual([])
+    expect(Array.from(itt.init(function*() {yield 'c'}()))).toEqual([])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.init([]))).toEqual([])
+    expect(Array.from(itt.init(function*() {}()))).toEqual([])
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([5, 2, 3]).init())).toEqual([5, 2])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.init(function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
