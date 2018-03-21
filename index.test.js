@@ -1005,6 +1005,20 @@ describe('includes', () => {
   })
 })
 
+describe('reduce', () => {
+  test('returns the initial value when given an empty iterator', () => {
+    const o = {}
+    expect(itt.reduce(0, () => {}, [])).toBe(0)
+    expect(itt.reduce(o, () => {}, function*() {}())).toBe(o)
+  })
+  test('accumulates function results', () => {
+    expect(itt.reduce(0, (a, b) => a + b, [5, 4, 3, 2, 1, 0])).toBe(15)
+  })
+  test('folds left-to-right', () => {
+    expect(itt.reduce(':', (a, b) => a + b, ['a', 'b', 'c', 'd', 'e'])).toBe(':abcde')
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
