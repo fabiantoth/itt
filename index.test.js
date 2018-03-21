@@ -1031,11 +1031,13 @@ describe('scan', () => {
     expect(Array.from(itt.scan(':', (a, b) => a + b, ['a', 'b', 'c', 'd']))).toEqual([':a', ':ab', ':abc', ':abcd'])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
-    let it1 = false, it2 = false
-    const i = itt.scan(0, (a, b) => a + b, function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    let it1 = false, it2 = false, it3 = false
+    const i = itt.scan(0, (a, b) => a + b, function*() {it1 = true; yield 1; it2 = true; yield 2; it3 = true; yield 3}())
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
+    i.next()
+    expect(it3).toBe(false)
   })
 })
 
