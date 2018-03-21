@@ -1432,3 +1432,24 @@ describe('keyBy', () => {
     expect(Array.from(itt.keyBy(a => a.length, ['bye', 'hello', 'cat', 'dog', 'world'])).sort((a, b) => a[0] - b[0])).toEqual([[3, 'dog'], [5, 'world']])
   })
 })
+
+describe('unique', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.unique([1, 2, 3, 1, 3, 5]).toArray).toBeDefined()
+  })
+  test('yields each unique iterator element', () => {
+    expect(Array.from(itt.unique([1, 3, 5, 7, 9]))).toEqual([1, 3, 5, 7, 9])
+  })
+  test('only yields the first unique element', () => {
+    expect(Array.from(itt.unique([1, 3, 5, 1, 4, 5, 1, 3, 6]))).toEqual([1, 3, 5, 4, 6])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false, it3 = false
+    const i = itt.unique(function*() {it1 = true; yield 1; it2 = true; yield 1; yield 2; it3 = true; yield 3}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+    i.next()
+    expect(it3).toBe(false)
+  })
+})
