@@ -1376,3 +1376,21 @@ describe('min', () => {
     expect(itt(function*() {}()).min()).toBe(Infinity)
   })
 })
+
+describe('minMax', () => {
+  test('returns the least and greatest of the iterator elements', () => {
+    expect(itt.minMax([-1, 6, 5, 2])).toEqual([-1, 6])
+    expect(itt.minMax([1, -1, 5, -6])).toEqual([-6, 5])
+    expect(itt.minMax([10, 9, 5, 7])).toEqual([5, 10])
+  })
+  test('returns the iterator element for singleton iterators', () => {
+    expect(itt.minMax([5])).toEqual([5, 5])
+  })
+  test('works as a method', () => {
+    expect(itt([5, -1, 3, 4]).minMax()).toEqual([-1, 5])
+  })
+  test('returns [inf, -inf] for an empty iterator', () => {
+    expect(itt.minMax([])).toEqual([Infinity, -Infinity])
+    expect(itt(function*() {}()).minMax()).toEqual([Infinity, -Infinity])
+  })
+})
