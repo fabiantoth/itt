@@ -56,7 +56,7 @@ const unshift = G(function*(...ys) {const xs = ys.pop(); yield* ys; yield* xs})
 const flatten = G(function*(xs) {for (const x of xs) yield* x})
 const chunksOf = G(function*(n = 2, xs) {
   if (xs === undefined) {xs = n; n = 2}
-  if (n <= 0) for (;;) yield []
+  if (n <= 0) return
   let list = []
   for (const x of xs) {
     list.push(x)
@@ -66,7 +66,7 @@ const chunksOf = G(function*(n = 2, xs) {
 })
 const subsequences = G(function*(n = 2, xs) {
   if (xs === undefined) {xs = n; n = 2}
-  if (n <= 0) for (;;) yield []
+  if (n <= 0) return
   if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
   let buffer = []
   let value, done

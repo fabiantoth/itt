@@ -613,11 +613,8 @@ describe('chunksOf', () => {
     expect(Array.from(itt.chunksOf(10, [1, 2]))).toEqual([[1, 2]])
     expect(Array.from(itt.chunksOf(10, [9]))).toEqual([[9]])
   })
-  test('yields [] forever if n <= 0', () => {
-    const i = itt.chunksOf(0, [1, 2, 3, 4])
-    for (let n = 100; n--;) {
-      expect(i.next()).toEqual({value: [], done: false})
-    }
+  test('returns an empty iterator if n <= 0', () => {
+    expect(Array.from(itt.chunksOf(0, [1, 2, 3, 4]))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -647,11 +644,8 @@ describe('subsequences', () => {
     expect(Array.from(itt.subsequences(5, [1]))).toEqual([])
     expect(Array.from(itt.subsequences(2, [1]))).toEqual([])
   })
-  test('yields [] forever if n <= 0', () => {
-    const i = itt.subsequences(0, [1, 2, 3, 4])
-    for (let n = 100; n--;) {
-      expect(i.next()).toEqual({value: [], done: false})
-    }
+  test('returns an empty iterator if n <= 0', () => {
+    expect(Array.from(itt.subsequences(0, [1, 2, 3, 4]))).toEqual([])
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.subsequences(2, []))).toEqual([])
