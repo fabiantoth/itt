@@ -877,6 +877,10 @@ describe('takeWhile', () => {
     expect(Array.from(itt.takeWhile(n => n > 10, [1, 2, 3, 4, 5]))).toEqual([])
     expect(Array.from(itt.takeWhile(n => false, [1]))).toEqual([])
   })
+  test(`returns an empty iterator if no initial elements satisfy fn`, () => {
+    expect(Array.from(itt.takeWhile(n => n % 2, [4, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.takeWhile(n => n % 2, [4, 2, 3]))).toEqual([])
+  })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.takeWhile(n => true, []))).toEqual([])
     expect(Array.from(itt.takeWhile(n => true, function*() {}()))).toEqual([])
