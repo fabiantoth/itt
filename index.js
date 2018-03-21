@@ -196,7 +196,7 @@ function minMax(xs) {
   return [min, max]
 }
 
-function groupBy(fn, unique, xs) {
+function groupBy(fn, unique = false, xs) {
   if (!xs) [unique, xs] = [false, unique]
   return inject(new Map, unique ? (m, x) => {
     const k = fn(x), s = m.get(k)
@@ -366,7 +366,7 @@ class Iter {
   min() {return min(this.iter)}
   minMax() {return minMax(this.iter)}
 
-  groupBy(fn, unique = false) {return groupBy(fn, unique, this.iter)}
+  groupBy(fn, unique) {return groupBy(fn, unique, this.iter)}
   keyBy(fn) {return keyBy(fn, this.iter)}
   unique() {return unique(this.iter)}
 
