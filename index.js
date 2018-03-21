@@ -223,7 +223,6 @@ const unique = G(function*(xs) {
 })
 
 function toArray(xs) {return Array.from(xs)}
-const array = toArray
 function toMap(xs) {return new Map(xs)}
 function toSet(xs) {return new Set(xs)}
 function toObject(xs, empty = false) {
@@ -302,7 +301,6 @@ class Iter {
   [Symbol.iterator]() {return this.iter}
   next() {return this.iter.next()}
   toArray() {return Array.from(this.iter)}
-  array() {return Array.from(this.iter)}
   toMap() {return new Map(this.iter)}
   toSet() {return new Set(this.iter)}
   toObject(empty = false) {return toObject(this.iter, empty)}
@@ -407,7 +405,7 @@ Object.assign(module.exports = from, {
   range, irange,
   replicate, forever, iterate,
   entries, keys, values,
-  toArray, array, toMap, toSet, toObject,
+  toArray, toMap, toSet, toObject,
   intersperse, join,
 
   fork, repeat, cycle, enumerate,

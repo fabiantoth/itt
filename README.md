@@ -850,7 +850,6 @@ itt.range(5).tap(console.log).drain()
 ## Conversion
 
 ### .toArray()
-**.array() [alias]**
 
 An array of the elements in this iterator. Equivalent to `Array.from(this)`.
 

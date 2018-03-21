@@ -1476,8 +1476,4 @@ describe('toArray', () => {
   test('works as a method', () => {
     expect(itt(function*() {yield 1; yield 2; yield 3}()).toArray()).toEqual([1, 2, 3])
   })
-  test('is aliased to array', () => {
-    expect(itt.array(function*() {yield 1; yield 2; yield 3; yield 2; yield 1}())).toEqual([1, 2, 3, 2, 1])
-    expect(itt(function*() {yield 1; yield 2; yield 3; yield 2; yield 1}()).array()).toEqual([1, 2, 3, 2, 1])
-  })
 })
