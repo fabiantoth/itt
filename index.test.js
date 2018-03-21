@@ -658,6 +658,9 @@ describe('subsequences', () => {
     expect(i.next()).toEqual({value: [1, 2], done: false})
     expect(it2).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6]).subsequences(4))).toEqual([[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]])
+  })
 })
 
 describe('lookahead', () => {
@@ -690,6 +693,9 @@ describe('lookahead', () => {
     expect(i.next()).toEqual({value: [1, 2], done: false})
     expect(it2).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4]).lookahead(1))).toEqual([[1, 2], [2, 3], [3, 4], [4]])
+  })
 })
 
 describe('drop', () => {
@@ -715,6 +721,9 @@ describe('drop', () => {
     expect(it1).toBe(false)
     expect(i.next()).toEqual({value: 2, done: false})
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6]).drop(2))).toEqual([3, 4, 5, 6])
   })
 })
 
@@ -742,6 +751,9 @@ describe('dropWhile', () => {
     expect(i.next()).toEqual({value: 2, done: false})
     expect(it2).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 3, 4, 5, 6, 7]).dropWhile(n => n % 2))).toEqual([4, 5, 6, 7])
+  })
 })
 
 describe('dropLast', () => {
@@ -767,6 +779,9 @@ describe('dropLast', () => {
     expect(it1).toBe(false)
     expect(i.next()).toEqual({value: 1, done: false})
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6]).dropLast(1))).toEqual([1, 2, 3, 4, 5])
   })
 })
 
