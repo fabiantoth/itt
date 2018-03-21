@@ -800,6 +800,35 @@ describe('take', () => {
   })
 })
 
+describe('takeWhile', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.takeWhile(n => n < 3, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).takeWhile(n => n < 3).toArray).toBeDefined()
+  })
+  test('yields the initial elements that satisfy fn', () => {
+    expect(Array.from(itt.takeWhile(n => n % 2, [1, 3, 4, 5, 6, 7]))).toEqual([1, 3])
+    expect(Array.from(itt.takeWhile(n => n > 1, function*() {yield 3; yield 2; yield 1; yield 4}()))).toEqual([3, 2])
+  })
+  test(`returns an empty iterator if no elements satisfy fn`, () => {
+    expect(Array.from(itt.takeWhile(n => n > 10, [1, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.takeWhile(n => false, [1]))).toEqual([])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.takeWhile(n => true, []))).toEqual([])
+    expect(Array.from(itt.takeWhile(n => true, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.takeWhile(n => n <= 1, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 3, 4, 5, 6, 7]).takeWhile(n => n % 2))).toEqual([1, 3])
+  })
+})
+
 describe('every', () => {
   test('returns true for an empty iterator', () => {
     expect(itt.every(x => false, [])).toBe(true)
