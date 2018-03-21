@@ -1516,3 +1516,37 @@ describe('toSet', () => {
     expect(itt([1, 'foo', 2, 'bar']).toSet()).toEqual(expect.any(Set))
   })
 })
+
+describe('toObject', () => {
+  test('returns an empty object when given an empty iterator', () => {
+    expect(itt.toObject([])).toEqual({})
+    expect(itt.toObject(function*() {}())).toEqual({})
+    expect(itt.toObject(true, [])).toEqual({})
+    expect(itt.toObject(true, function*() {}())).toEqual({})
+  })
+  test('defaults to Object instances', () => {
+    expect(Object.getPrototypeOf(itt.toObject([]))).toBe(Object.prototype)
+    expect(Object.getPrototypeOf(itt([]).toObject())).toBe(Object.prototype)
+  })
+  test('returns objects', () => {
+    expect(itt.toObject(false, [[1, 'foo'], [2, 'bar']])).toEqual(expect.any(Object))
+    expect(itt.toObject(true, [[1, 'foo'], [2, 'bar']])).toEqual(expect.any(Object))
+  })
+  test('returns Object instances when empty = false', () => {
+    expect(Object.getPrototypeOf(itt.toObject(false, []))).toBe(Object.prototype)
+    expect(Object.getPrototypeOf(itt([]).toObject(false))).toBe(Object.prototype)
+  })
+  test('returns empty objects when empty = true', () => {
+    expect(Object.getPrototypeOf(itt.toObject(true, []))).toBe(null)
+    expect(Object.getPrototypeOf(itt([]).toObject(true))).toBe(null)
+  })
+  test('returns an object constructed from the iterator pairs', () => {
+    expect(itt.toObject([[1, 'foo'], ['a', 6]])).toEqual({1: 'foo', a: 6})
+    expect(itt.toObject(function*() {yield [1, 'foo']; yield ['a', 6]}())).toEqual({1: 'foo', a: 6})
+    expect(itt.toObject(true, [[1, 'foo'], ['a', 6]])).toEqual({1: 'foo', a: 6})
+  })
+  test('works as a method', () => {
+    expect(itt([[1, 'foo'], [2, 'bar']]).toObject()).toEqual({1: 'foo', 2: 'bar'})
+    expect(itt([[1, 'foo'], [2, 'bar']]).toObject(true)).toEqual({1: 'foo', 2: 'bar'})
+  })
+})
