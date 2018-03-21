@@ -1462,3 +1462,18 @@ describe('unique', () => {
     expect(it3).toBe(false)
   })
 })
+
+describe('toArray', () => {
+  test('returns [] when given an empty iterator', () => {
+    expect(itt.toArray([])).toEqual([])
+    expect(itt.toArray(function*() {}())).toEqual([])
+  })
+  test('returns an array of the iterator elements', () => {
+    expect(itt.toArray(function*() {yield 1; yield 2; yield 3; yield 2; yield 1}())).toEqual([1, 2, 3, 2, 1])
+    expect(itt.toArray(function*() {yield 'a'}())).toEqual(['a'])
+    expect(itt.toArray([1])).toEqual([1])
+  })
+  test('works as a method', () => {
+    expect(itt(function*() {yield 1; yield 2; yield 3}()).toArray()).toEqual([1, 2, 3])
+  })
+})
