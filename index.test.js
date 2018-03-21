@@ -1180,6 +1180,20 @@ describe('first', () => {
   })
 })
 
+describe('last', () => {
+  test('returns the last iterator element', () => {
+    expect(itt.last([5, 2, 3])).toBe(3)
+    expect(itt.last(function*() {yield 'c'; yield 'b'; yield 'a'}())).toBe('a')
+  })
+  test('returns undefined for empty iterators', () => {
+    expect(itt.last([])).toBe(undefined)
+    expect(itt.last(function*() {}())).toBe(undefined)
+  })
+  test('works as a method', () => {
+    expect(itt([5, 2, 3]).last()).toBe(3)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
