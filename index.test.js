@@ -1419,6 +1419,9 @@ describe('groupBy', () => {
   test('removes duplicate items when unique = true', () => {
     expect(Array.from(itt.groupBy(x => x.length, true, ['a', 'cc', 'a', 'b', 'bb', 'bb', 'a'])).sort((a, b) => (a[0] - b[0])).map(a => [a[0], Array.from(a[1]).sort()])).toEqual([[1, ['a', 'b']], [2, ['bb', 'cc']]])
   })
+  test('works as a method', () => {
+    expect(Array.from(itt(['a']).groupBy(x => 1))).toEqual([[1, ['a']]])
+  })
 })
 
 describe('keyBy', () => {
@@ -1431,6 +1434,9 @@ describe('keyBy', () => {
   test('later elements overwrite earlier elements', () => {
     expect(Array.from(itt.keyBy(a => a.length, ['bye', 'hello', 'cat', 'dog', 'world'])).sort((a, b) => a[0] - b[0])).toEqual([[3, 'dog'], [5, 'world']])
   })
+  test('works as a method', () => {
+    expect(Array.from(itt(['bye']).keyBy(a => a.length))).toEqual([[3, 'bye']])
+  })
 })
 
 describe('unique', () => {
@@ -1442,6 +1448,9 @@ describe('unique', () => {
   })
   test('only yields the first unique element', () => {
     expect(Array.from(itt.unique([1, 3, 5, 1, 4, 5, 1, 3, 6]))).toEqual([1, 3, 5, 4, 6])
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 3, 5, 7, 9]).unique())).toEqual([1, 3, 5, 7, 9])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false, it3 = false
