@@ -240,8 +240,8 @@ const intersperse = G(function*(sep, xs) {
     use = true
   }
 })
-function join(sep, xs) {
-  if (!xs) {xs = sep; sep = ','}
+function join(sep = ',', xs) {
+  if (xs === undefined) {xs = sep; sep = ','}
   let s = ''
   if (sep) {
     let use = false
@@ -304,7 +304,7 @@ class Iter {
   toMap() {return new Map(this.iter)}
   toSet() {return new Set(this.iter)}
   toObject(empty = false) {return toObject(this.iter, empty)}
-  join(sep = ',') {return join(sep, this.iter)}
+  join(sep) {return join(sep, this.iter)}
   intersperse(sep) {return intersperse(sep, this.iter)}
 
   fork(n) {return fork(n, this.iter)}
