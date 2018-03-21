@@ -1218,6 +1218,13 @@ describe('tail', () => {
   test('works as a method', () => {
     expect(Array.from(itt([5, 2, 3]).tail())).toEqual([2, 3])
   })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.tail(function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
 })
 
 describe('mean', () => {
