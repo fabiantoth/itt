@@ -1296,6 +1296,8 @@ describe('pick', () => {
 describe('sum', () => {
   test('returns the sum of the iterator elements', () => {
     expect(itt.sum([1, 2, 3, 4])).toBe(10)
+  })
+  test('returns the iterator element for singleton iterators', () => {
     expect(itt.sum([5])).toBe(5)
   })
   test('works as a method', () => {
@@ -1311,6 +1313,9 @@ describe('mean', () => {
   test('returns the arithmetic mean of the iterator elements', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   })
+  test('returns the iterator element for singleton iterators', () => {
+    expect(itt.mean([3])).toBe(3)
+  })
   test('works as a method', () => {
     expect(itt([1, 2, 3]).mean()).toBe(2)
   })
@@ -1323,6 +1328,8 @@ describe('mean', () => {
 describe('product', () => {
   test('returns the product of the iterator elements', () => {
     expect(itt.product([1, 2, 3, 4])).toBe(24)
+  })
+  test('returns the iterator element for singleton iterators', () => {
     expect(itt.product([5])).toBe(5)
   })
   test('works as a method', () => {
