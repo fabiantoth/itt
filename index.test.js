@@ -1394,3 +1394,31 @@ describe('minMax', () => {
     expect(itt(function*() {}()).minMax()).toEqual([Infinity, -Infinity])
   })
 })
+
+describe('groupBy', () => {
+  test('returns an empty map when given an empty iterator', () => {
+    expect(itt.groupBy(x => 1, false, []).size).toBe(0)
+    expect(itt.groupBy(x => 1, false, function*() {}()).size).toBe(0)
+    expect(itt.groupBy(x => 1, true, []).size).toBe(0)
+    expect(itt.groupBy(x => 1, true, function*() {}()).size).toBe(0)
+  })
+  test('defaults to non-unique', () => {
+    expect(Array.from(itt.groupBy(x => 1, ['a', 'b', 'c']))).toEqual([[1, ['a', 'b', 'c']]])
+    expect(Array.from(itt(['a', 'b', 'c']).groupBy(x => 1))).toEqual([[1, ['a', 'b', 'c']]])
+  })
+  test('groups items in the map by fn', () => {
+    expect(Array.from(itt.groupBy(x => x.length, ['a', 'bc', 'd', 'e', 'fg', 'hi', 'j'])).sort((a, b) => (a[0] - b[0]))).toEqual([[1, ['a', 'd', 'e', 'j']], [2, ['bc', 'fg', 'hi']]])
+  })
+  test('returns arrays when unique = false', () => {
+    expect(Array.from(itt.groupBy(x => 1, ['a']))).toEqual([[1, ['a']]])
+  })
+  test('keeps duplicate items when unique = false', () => {
+    expect(Array.from(itt.groupBy(x => x.length, ['a', 'bb', 'a', 'a', 'bb', 'bb', 'a'])).sort((a, b) => (a[0] - b[0]))).toEqual([[1, ['a', 'a', 'a', 'a']], [2, ['bb', 'bb', 'bb']]])
+  })
+  test('returns sets when unique = true', () => {
+    expect(Array.from(itt.groupBy(x => 1, true, ['a']))[0][1]).toEqual(expect.any(Set))
+  })
+  test('removes duplicate items when unique = true', () => {
+    expect(Array.from(itt.groupBy(x => x.length, true, ['a', 'cc', 'a', 'b', 'bb', 'bb', 'a'])).sort((a, b) => (a[0] - b[0])).map(a => [a[0], Array.from(a[1]).sort()])).toEqual([[1, ['a', 'b']], [2, ['bb', 'cc']]])
+  })
+})
