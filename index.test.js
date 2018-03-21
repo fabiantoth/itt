@@ -1425,6 +1425,9 @@ describe('sum', () => {
   test('returns the sum of the iterator elements', () => {
     expect(itt.sum([1, 2, 3, 4])).toBe(10)
   })
+  test('converts iterator elements to numbers', () => {
+    expect(itt.sum(['1', {valueOf: () => 2}, '3', 4])).toBe(10)
+  })
   test('returns the iterator element for singleton iterators', () => {
     expect(itt.sum([5])).toBe(5)
   })
@@ -1441,6 +1444,9 @@ describe('mean', () => {
   test('returns the arithmetic mean of the iterator elements', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   })
+  test('converts iterator elements to numbers', () => {
+    expect(itt.mean(['1', {valueOf: () => 2}, '3', 4])).toBe(2.5)
+  })
   test('returns the iterator element for singleton iterators', () => {
     expect(itt.mean([3])).toBe(3)
   })
@@ -1456,6 +1462,9 @@ describe('mean', () => {
 describe('product', () => {
   test('returns the product of the iterator elements', () => {
     expect(itt.product([1, 2, 3, 4])).toBe(24)
+  })
+  test('converts iterator elements to numbers', () => {
+    expect(itt.product(['1', {valueOf: () => 2}, '3', 4])).toBe(24)
   })
   test('returns the iterator element for singleton iterators', () => {
     expect(itt.product([5])).toBe(5)
@@ -1475,6 +1484,9 @@ describe('max', () => {
     expect(itt.max([1, -1, 5, 2])).toBe(5)
     expect(itt.max([1, -1, 5, 7])).toBe(7)
   })
+  test('converts iterator elements to numbers', () => {
+    expect(itt.max(['6', {valueOf: () => -1}, '5', 2])).toBe(6)
+  })
   test('returns the iterator element for singleton iterators', () => {
     expect(itt.max([5])).toBe(5)
   })
@@ -1493,6 +1505,9 @@ describe('min', () => {
     expect(itt.min([1, -1, 5, -6])).toBe(-6)
     expect(itt.min([10, 9, 5, 7])).toBe(5)
   })
+  test('converts iterator elements to numbers', () => {
+    expect(itt.min(['6', {valueOf: () => -1}, '5', 2])).toBe(-1)
+  })
   test('returns the iterator element for singleton iterators', () => {
     expect(itt.min([5])).toBe(5)
   })
@@ -1510,6 +1525,9 @@ describe('minMax', () => {
     expect(itt.minMax([-1, 6, 5, 2])).toEqual([-1, 6])
     expect(itt.minMax([1, -1, 5, -6])).toEqual([-6, 5])
     expect(itt.minMax([10, 9, 5, 7])).toEqual([5, 10])
+  })
+  test('converts iterator elements to numbers', () => {
+    expect(itt.minMax(['6', {valueOf: () => -1}, '5', 2])).toEqual([-1, 6])
   })
   test('returns the iterator element for singleton iterators', () => {
     expect(itt.minMax([5])).toEqual([5, 5])
