@@ -1491,6 +1491,10 @@ describe('toMap', () => {
     expect(m.size).toBe(2)
     expect(m.get(1)).toBe('foo')
     expect(m.get('a')).toBe(6)
+    const n = itt.toMap(function*() {yield [1, 'foo']; yield ['a', 6]}())
+    expect(n.size).toBe(2)
+    expect(n.get(1)).toBe('foo')
+    expect(n.get('a')).toBe(6)
   })
   test('works as a method', () => {
     expect(itt([[1, 'foo'], [2, 'bar']]).toMap()).toEqual(expect.any(Map))
