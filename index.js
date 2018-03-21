@@ -178,7 +178,7 @@ function sum(xs) {return reduce(0, (x, y) => x + Number(y), xs)}
 function mean(xs) {
   let count = 0, sum = 0
   for (const x of xs) {
-    sum += x
+    sum += Number(x)
     ++count
   }
   return sum / count
