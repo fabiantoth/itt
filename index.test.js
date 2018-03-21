@@ -1551,3 +1551,25 @@ describe('toObject', () => {
     expect(itt([[1, 'foo'], [2, 'bar']]).toObject(true)).toEqual({1: 'foo', 2: 'bar'})
   })
 })
+
+describe('intersperse', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.intersperse([]).toArray).toBeDefined()
+    expect(itt([]).intersperse().toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.intersperse(0, []))).toEqual([])
+    expect(Array.from(itt.intersperse(0, function*() {}()))).toEqual([])
+  })
+  test('returns a singleton iterator when given a singleton iterator', () => {
+    expect(Array.from(itt.intersperse(0, [1]))).toEqual([1])
+    expect(Array.from(itt.intersperse(0, function*() {yield 'a'}()))).toEqual(['a'])
+  })
+  test('yields sep between each pair of iterator elements', () => {
+    expect(Array.from(itt.intersperse(0, [1, 2, 3]))).toEqual([1, 0, 2, 0, 3])
+    expect(Array.from(itt.intersperse('!', function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}()))).toEqual(['a', '!', 'b', '!', 'c', '!', 'd'])
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3]).intersperse(0))).toEqual([1, 0, 2, 0, 3])
+  })
+})
