@@ -172,7 +172,7 @@ function tail(xs) {return drop(1, xs)}
 function init(xs) {return dropLast(1, xs)}
 
 function count(xs) {if (Array.isArray(xs)) return xs.length; let i = 0; for (const x of xs) ++i; return i}
-function pick(i, xs) {if (Array.isArray(xs)) return xs[i]; for (const x of xs) if (i-- <= 0) return x}
+function pick(i, xs) {if (Array.isArray(xs)) return xs[i]; if (i < 0) return; for (const x of xs) if (i-- <= 0) return x}
 
 function sum(xs) {return reduce(0, (x, y) => x + Number(y), xs)}
 function mean(xs) {
