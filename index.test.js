@@ -776,6 +776,10 @@ describe('dropWhile', () => {
     expect(Array.from(itt.dropWhile(n => n % 2, [1, 3, 4, 5, 6, 7]))).toEqual([4, 5, 6, 7])
     expect(Array.from(itt.dropWhile(n => n > 1, function*() {yield 3; yield 2; yield 1; yield 4}()))).toEqual([1, 4])
   })
+  test(`yields all elements if no initial elements satisfy fn`, () => {
+    expect(Array.from(itt.dropWhile(n => n % 2, [4, 2, 3, 4, 5]))).toEqual([4, 2, 3, 4, 5])
+    expect(Array.from(itt.dropWhile(n => n % 2, [4, 2, 3]))).toEqual([4, 2, 3])
+  })
   test(`returns an empty iterator if all elements satisfy fn`, () => {
     expect(Array.from(itt.dropWhile(n => n < 10, [1, 2, 3, 4, 5]))).toEqual([])
     expect(Array.from(itt.dropWhile(n => true, [1]))).toEqual([])
