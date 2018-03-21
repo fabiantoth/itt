@@ -1084,6 +1084,26 @@ describe('inject', () => {
   })
 })
 
+describe('forEach', () => {
+  test('applies fn to each iterator element', () => {
+    const res = []
+    itt.forEach(x => res.unshift(x), function*() {yield 1; yield 2; yield 3; yield 4}())
+    expect(res).toEqual([4, 3, 2, 1])
+  })
+  test(`doesn't apply fn when given an empty iterator`, () => {
+    const f = jest.fn(), g = jest.fn()
+    itt.forEach(f, [])
+    itt.forEach(g, [])
+    expect(f).not.toHaveBeenCalled()
+    expect(g).not.toHaveBeenCalled()
+  })
+  test('returns undefined', () => {
+    expect(itt.forEach(() => 1, [])).toBe(undefined)
+    expect(itt.forEach(() => 1, [1, 2, 3, 4, 5])).toBe(undefined)
+    expect(itt.forEach(() => 1, function*() {}())).toBe(undefined)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
