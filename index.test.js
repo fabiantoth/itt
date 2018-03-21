@@ -1063,6 +1063,27 @@ describe('scan1', () => {
   })
 })
 
+describe('inject', () => {
+  test('returns the accumulator when given an empty iterator', () => {
+    const o = {}, p = {}
+    expect(itt.inject(o, () => {}, [])).toBe(o)
+    expect(itt.inject(p, () => {}, function*() {}())).toBe(p)
+  })
+  test(`doesn't apply the update function when given an empty iterator`, () => {
+    const f = jest.fn()
+    itt.inject({}, f, [])
+    expect(f).not.toHaveBeenCalled()
+  })
+  test('returns the accumulator', () => {
+    const o = {}, p = {}
+    expect(itt.inject(o, () => {}, [1])).toBe(o)
+    expect(itt.inject(p, () => {}, [1, 2, 3, 4, 5])).toBe(p)
+  })
+  test('applies the update function to each iterator element', () => {
+    expect(itt.inject([], (els, x) => els.unshift(x), [5, 4, 3, 2, 1])).toEqual([1, 2, 3, 4, 5])
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
