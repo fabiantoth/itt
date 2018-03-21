@@ -1270,6 +1270,29 @@ describe('count', () => {
   })
 })
 
+describe('pick', () => {
+  test('returns the ith iterator element', () => {
+    expect(itt.pick(0, [1, 2, 3, 4])).toBe(1)
+    expect(itt.pick(2, ['a', 'b', 'c', 'd'])).toBe('c')
+    expect(itt.pick(3, [1, 2, 3, 4])).toBe(4)
+    expect(itt.pick(0, function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}())).toBe('a')
+    expect(itt.pick(2, function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}())).toBe('c')
+    expect(itt.pick(3, function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}())).toBe('d')
+  })
+  test('returns undefined for i < 0', () => {
+    expect(itt.pick(-1, [1, 2, 3])).toBe(undefined)
+    expect(itt.pick(-1, function*() {yield 1; yield 2; yield 3}())).toBe(undefined)
+  })
+  test('returns undefined if i >= the number of elements', () => {
+    expect(itt.pick(3, [1, 2, 3])).toBe(undefined)
+    expect(itt.pick(10, [1, 2, 3, 4])).toBe(undefined)
+    expect(itt.pick(3, function*() {yield 1; yield 2; yield 3}())).toBe(undefined)
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).pick(0)).toBe(1)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator elements', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
