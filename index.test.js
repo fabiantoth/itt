@@ -292,6 +292,9 @@ describe('repeat', () => {
     i.next()
     expect(it2).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([4, 5, 6]).repeat(3))).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6])
+  })
 })
 
 describe('enumerate', () => {
@@ -313,6 +316,9 @@ describe('enumerate', () => {
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt(['a', 'b', 'c', 'd']).enumerate())).toEqual([[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']])
   })
 })
 
@@ -338,6 +344,9 @@ describe('map', () => {
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt(['cats', 'dogs', 'cows']).map(x => x + '!'))).toEqual(['cats!', 'dogs!', 'cows!'])
   })
 })
 
@@ -369,6 +378,9 @@ describe('flatMap', () => {
     i.next()
     expect(it2).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([3, 5, 7]).flatMap(x => [x, x + 1]))).toEqual([3, 4, 5, 6, 7, 8])
+  })
 })
 
 describe('tap', () => {
@@ -397,6 +409,9 @@ describe('tap', () => {
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 3, 5, 7]).tap(x => x + 1))).toEqual([1, 3, 5, 7])
   })
 })
 
@@ -428,6 +443,9 @@ describe('filter', () => {
     expect(it2).toBe(true)
     expect(it3).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([9, 8, 6, 4, 5, 3, 1, 2]).filter(x => x % 2))).toEqual([9, 5, 3, 1])
+  })
 })
 
 describe('reject', () => {
@@ -457,6 +475,9 @@ describe('reject', () => {
     expect(it1).toBe(true)
     expect(it2).toBe(true)
     expect(it3).toBe(false)
+  })
+  test(`works as a method`, () => {
+    expect(Array.from(itt([9, 8, 6, 4, 5, 3, 1, 2]).reject(x => x % 2))).toEqual([8, 6, 4, 2])
   })
 })
 
@@ -491,6 +512,9 @@ describe('concat', () => {
     expect(it3).toBe(true)
     expect(it4).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt.concat([1, 2, 3], [4, 5], [6, 7, 8]))).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
+  })
 })
 
 describe('push', () => {
@@ -518,6 +542,9 @@ describe('push', () => {
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3]).push(4, 5, 6))).toEqual([1, 2, 3, 4, 5, 6])
   })
 })
 
@@ -550,6 +577,9 @@ describe('unshift', () => {
     expect(it1).toBe(false)
     i.next()
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3]).unshift(4, 5, 6))).toEqual([4, 5, 6, 1, 2, 3])
   })
 })
 
@@ -584,6 +614,9 @@ describe('flatten', () => {
     expect(it2).toBe(true)
     expect(it3).toBe(true)
     expect(it4).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([[1, 2, 3]]).flatten())).toEqual([1, 2, 3])
   })
 })
 
@@ -622,6 +655,9 @@ describe('chunksOf', () => {
     expect(it1).toBe(false)
     expect(i.next()).toEqual({value: [1, 2], done: false})
     expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6, 7, 8, 9]).chunksOf(3))).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
   })
 })
 
