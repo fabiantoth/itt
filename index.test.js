@@ -1178,6 +1178,10 @@ describe('first', () => {
   test('works as a method', () => {
     expect(itt([5, 2, 3]).first()).toBe(5)
   })
+  test('is aliased to head', () => {
+    expect(itt([5, 2, 3]).head()).toBe(5)
+    expect(itt.head([5, 2, 3])).toBe(5)
+  })
 })
 
 describe('last', () => {
