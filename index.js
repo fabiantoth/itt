@@ -225,7 +225,8 @@ const unique = G(function*(xs) {
 function toArray(xs) {return Array.from(xs)}
 function toMap(xs) {return new Map(xs)}
 function toSet(xs) {return new Set(xs)}
-function toObject(xs, empty = false) {
+function toObject(empty = false, xs) {
+  if (xs === undefined) {xs = empty; empty = false}
   const o = empty ? Object.create(null) : {}
   for (const [k, v] of xs) {
     o[k] = v
@@ -303,7 +304,7 @@ class Iter {
   toArray() {return Array.from(this.iter)}
   toMap() {return new Map(this.iter)}
   toSet() {return new Set(this.iter)}
-  toObject(empty = false) {return toObject(this.iter, empty)}
+  toObject(empty) {return toObject(empty, this.iter)}
   join(sep) {return join(sep, this.iter)}
   intersperse(sep) {return intersperse(sep, this.iter)}
 
