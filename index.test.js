@@ -843,7 +843,7 @@ describe('take', () => {
     expect(Array.from(itt.take(3, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3])
     expect(Array.from(itt.take(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([3])
   })
-  test(`yields all elements if there aren't enough`, () => {
+  test(`yields all elements if there aren't more than n`, () => {
     expect(Array.from(itt.take(5, [1, 2, 3, 4, 5]))).toEqual([1, 2, 3, 4, 5])
     expect(Array.from(itt.take(3, [1]))).toEqual([1])
   })
