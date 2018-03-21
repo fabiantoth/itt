@@ -897,6 +897,40 @@ describe('takeWhile', () => {
   })
 })
 
+describe('takeLast', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.takeLast(1, [1, 2, 3]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).takeLast(1).toArray).toBeDefined()
+  })
+  test('yields the last n elements', () => {
+    expect(Array.from(itt.takeLast(1, [1, 2, 3, 4, 5, 6]))).toEqual([6])
+    expect(Array.from(itt.takeLast(3, [1, 2, 3, 4, 5, 6]))).toEqual([4, 5, 6])
+    expect(Array.from(itt.takeLast(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([1])
+  })
+  test(`returns an empty iterator if n <= 0`, () => {
+    expect(Array.from(itt.takeLast(-5, [1, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.takeLast(0, [1, 2, 3]))).toEqual([])
+  })
+  test(`yields all elements if there aren't more than n`, () => {
+    expect(Array.from(itt.takeLast(5, [1, 2, 3, 4, 5]))).toEqual([1, 2, 3, 4, 5])
+    expect(Array.from(itt.takeLast(3, [1]))).toEqual([1])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.takeLast(2, []))).toEqual([])
+    expect(Array.from(itt.takeLast(5, function*() {}()))).toEqual([])
+  })
+  test(`doesn't consume elements until necessary`, () => {
+    let it1 = false, it2 = false
+    const i = itt.takeLast(1, function*() {it1 = true; yield 1; yield 2; yield 3; it2 = true}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(true)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6]).takeLast(1))).toEqual([6])
+  })
+})
+
 describe('every', () => {
   test('returns true for an empty iterator', () => {
     expect(itt.every(x => false, [])).toBe(true)
