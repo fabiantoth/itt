@@ -1442,6 +1442,7 @@ describe('keyBy', () => {
 describe('unique', () => {
   test('returns wrapped iterators', () => {
     expect(itt.unique([1, 2, 3, 1, 3, 5]).toArray).toBeDefined()
+    expect(itt([1, 2, 3, 1, 3, 5]).unique().toArray).toBeDefined()
   })
   test('yields each unique iterator element', () => {
     expect(Array.from(itt.unique([1, 3, 5, 7, 9]))).toEqual([1, 3, 5, 7, 9])
