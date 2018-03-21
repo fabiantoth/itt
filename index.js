@@ -102,7 +102,7 @@ const lookahead = G(function*(n = 1, xs) {
 const drop = G(function*(n, xs) {for (const x of xs) if (n <= 0) yield x; else --n})
 const dropWhile = G(function*(fn, xs) {let init = true; for (const x of xs) if (!init || !fn(x)) {init = false; yield x}})
 const dropLast = G(function*(n, xs) {
-  if (n === 0) yield* xs; else {
+  if (n <= 0) yield* xs; else {
     const list = []
     let i = 0
     for (const x of xs) {
