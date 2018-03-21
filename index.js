@@ -7,7 +7,7 @@ function from(iter) {return new Iter(iter[Symbol.iterator] ? iter[Symbol.iterato
 const empty = G(function*() {})
 
 const range = G(function*(start, end, skip = 1) {
-  if (end === undefined) [start, end] = [0, start]
+  if (end === undefined) {end = start; start = 0}
   if (skip > 0) for (let i = start; i < end; i += skip) yield i
   else for (let i = start; i > end; i += skip) yield i
 })
@@ -197,7 +197,7 @@ function minMax(xs) {
 }
 
 function groupBy(fn, unique = false, xs) {
-  if (xs === undefined) [unique, xs] = [false, unique]
+  if (xs === undefined) {xs = unique; unique = false}
   return inject(new Map, unique ? (m, x) => {
     const k = fn(x), s = m.get(k)
     if (s) s.add(x)
@@ -241,7 +241,7 @@ const intersperse = G(function*(sep, xs) {
   }
 })
 function join(sep, xs) {
-  if (!xs) [sep, xs] = [',', sep]
+  if (!xs) {xs = sep; sep = ','}
   let s = ''
   if (sep) {
     let use = false
