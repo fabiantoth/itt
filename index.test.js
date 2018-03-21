@@ -1477,3 +1477,22 @@ describe('toArray', () => {
     expect(itt(function*() {yield 1; yield 2; yield 3}()).toArray()).toEqual([1, 2, 3])
   })
 })
+
+describe('toMap', () => {
+  test('returns an empty map when given an empty iterator', () => {
+    expect(itt.toMap([]).size).toBe(0)
+    expect(itt.toMap(function*() {}()).size).toBe(0)
+  })
+  test('returns maps', () => {
+    expect(itt.toMap([[1, 'foo'], [2, 'bar']])).toEqual(expect.any(Map))
+  })
+  test('returns a map constructed from the iterator pairs', () => {
+    const m = itt.toMap([[1, 'foo'], ['a', 6]])
+    expect(m.size).toBe(2)
+    expect(m.get(1)).toBe('foo')
+    expect(m.get('a')).toBe(6)
+  })
+  test('works as a method', () => {
+    expect(itt([[1, 'foo'], [2, 'bar']]).toMap()).toEqual(expect.any(Map))
+  })
+})
