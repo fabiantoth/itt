@@ -1420,3 +1420,15 @@ describe('groupBy', () => {
     expect(Array.from(itt.groupBy(x => x.length, true, ['a', 'cc', 'a', 'b', 'bb', 'bb', 'a'])).sort((a, b) => (a[0] - b[0])).map(a => [a[0], Array.from(a[1]).sort()])).toEqual([[1, ['a', 'b']], [2, ['bb', 'cc']]])
   })
 })
+
+describe('keyBy', () => {
+  test('returns a map', () => {
+    expect(itt.keyBy(a => 1, ['a'])).toEqual(expect.any(Map))
+  })
+  test('maps return values to elements', () => {
+    expect(Array.from(itt.keyBy(a => a.length, ['bye', 'hello'])).sort((a, b) => a[0] - b[0])).toEqual([[3, 'bye'], [5, 'hello']])
+  })
+  test('later elements overwrite earlier elements', () => {
+    expect(Array.from(itt.keyBy(a => a.length, ['bye', 'hello', 'cat', 'dog', 'world'])).sort((a, b) => a[0] - b[0])).toEqual([[3, 'dog'], [5, 'world']])
+  })
+})
