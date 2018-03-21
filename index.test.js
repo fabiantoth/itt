@@ -1127,6 +1127,17 @@ describe('drain', () => {
   })
 })
 
+describe('first', () => {
+  test('returns the first iterator element', () => {
+    expect(itt.first([5, 2, 3])).toBe(5)
+    expect(itt.first(function*() {yield 'c'; yield 'b'; yield 'a'}())).toBe('c')
+  })
+  test('returns undefined for empty iterators', () => {
+    expect(itt.first([])).toBe(undefined)
+    expect(itt.first(function*() {}())).toBe(undefined)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
