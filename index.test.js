@@ -795,6 +795,9 @@ describe('take', () => {
     expect(i.next()).toEqual({value: undefined, done: true})
     expect(it2).toBe(false)
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6]).take(3))).toEqual([1, 2, 3])
+  })
 })
 
 describe('every', () => {
