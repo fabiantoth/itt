@@ -1319,3 +1319,17 @@ describe('mean', () => {
     expect(itt(function*() {}()).mean()).toBe(NaN)
   })
 })
+
+describe('product', () => {
+  test('returns the product of the iterator elements', () => {
+    expect(itt.product([1, 2, 3, 4])).toBe(24)
+    expect(itt.product([5])).toBe(5)
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).product()).toBe(6)
+  })
+  test('returns 1 for an empty iterator', () => {
+    expect(itt.product([])).toBe(1)
+    expect(itt(function*() {}()).product()).toBe(1)
+  })
+})
