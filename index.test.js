@@ -1020,6 +1020,10 @@ describe('reduce', () => {
 })
 
 describe('scan', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.scan(0, () => {}, []).toArray).toBeDefined()
+    expect(itt([]).scan(0, () => {}).toArray).toBeDefined()
+  })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.scan(0, () => {}, []))).toEqual([])
     expect(Array.from(itt.scan(0, () => {}, function*() {}()))).toEqual([])
@@ -1042,6 +1046,10 @@ describe('scan', () => {
 })
 
 describe('scan1', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.scan1(() => {}, []).toArray).toBeDefined()
+    expect(itt([]).scan1(() => {}).toArray).toBeDefined()
+  })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.scan1(() => {}, []))).toEqual([])
     expect(Array.from(itt.scan1(() => {}, function*() {}()))).toEqual([])
