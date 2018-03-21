@@ -1104,6 +1104,21 @@ describe('forEach', () => {
   })
 })
 
+describe('drain', () => {
+  test('consumes all iterator elements', () => {
+    let it1 = false, it2 = false, it3 = false
+    itt.drain(function*() {it1 = true; yield 1; it2 = true; yield 2; it3 = true}())
+    expect(it1).toBe(true)
+    expect(it2).toBe(true)
+    expect(it3).toBe(true)
+  })
+  test('returns undefined', () => {
+    expect(itt.drain([])).toBe(undefined)
+    expect(itt.drain([1, 2, 3, 4, 5])).toBe(undefined)
+    expect(itt.drain(function*() {}())).toBe(undefined)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
