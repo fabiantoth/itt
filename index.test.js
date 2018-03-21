@@ -811,6 +811,9 @@ describe('every', () => {
   test('returns true if every element satisfies fn', () => {
     expect(itt.every(x => x % 2, [3, 5, 7])).toBe(true)
   })
+  test('works as a method', () => {
+    expect(itt([3, 5, 7]).every(x => x % 2)).toBe(true)
+  })
   test('returns false if any element does not satisfy fn', () => {
     expect(itt.every(x => x % 2, [1, 2, 3, 4, 5])).toBe(false)
     expect(itt.every(x => x > 10, [1])).toBe(false)
@@ -831,6 +834,9 @@ describe('some', () => {
     expect(itt.some(x => x > 1, [3, 5, 7])).toBe(true)
     expect(itt.some(x => x % 2, [1, 2, 3, 4, 5])).toBe(true)
   })
+  test('works as a method', () => {
+    expect(itt([3, 5, 7]).some(x => x > 1)).toBe(true)
+  })
   test('returns false if no element satisfies fn', () => {
     expect(itt.some(x => x > 10, [1, 2, 3, 4, 5])).toBe(false)
   })
@@ -850,6 +856,9 @@ describe('find', () => {
   test('returns the first element that satisfies fn', () => {
     expect(itt.find(x => x > 0, [1, 2, 3])).toBe(1)
     expect(itt.find(x => x > 2, [1, 2, 3, 4, 5])).toBe(3)
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).find(x => x > 0)).toBe(1)
   })
   test('returns undefined if no element satisfies fn', () => {
     expect(itt.find(x => x === 10, [1, 2, 3])).toBe(undefined)
@@ -875,6 +884,9 @@ describe('findLast', () => {
     expect(itt.findLast(x => x > 0, [1, 2, 3])).toBe(3)
     expect(itt.findLast(x => x > 2, [5, 4, 3, 2, 1])).toBe(3)
   })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).findLast(x => x > 0)).toBe(3)
+  })
   test('returns undefined if no element satisfies fn', () => {
     expect(itt.findLast(x => x === 10, [1, 2, 3])).toBe(undefined)
   })
@@ -892,6 +904,9 @@ describe('findIndex', () => {
   test('returns the index of the first element that satisfies fn', () => {
     expect(itt.findIndex(x => x > 0, [1, 2, 3])).toBe(0)
     expect(itt.findIndex(x => x > 2, [1, 2, 3, 4, 5])).toBe(2)
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).findIndex(x => x > 0)).toBe(0)
   })
   test('returns -1 if no element satisfies fn', () => {
     expect(itt.findIndex(x => x === 10, [1, 2, 3])).toBe(-1)
@@ -916,6 +931,9 @@ describe('findLastIndex', () => {
     expect(itt.findLastIndex(x => x > 0, [1, 2, 3])).toBe(2)
     expect(itt.findLastIndex(x => x > 2, [5, 4, 3, 2, 1])).toBe(2)
   })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).findLastIndex(x => x > 0)).toBe(2)
+  })
   test('returns -1 if no element satisfies fn', () => {
     expect(itt.findLastIndex(x => x === 10, [1, 2, 3])).toBe(-1)
   })
@@ -933,6 +951,9 @@ describe('indexOf', () => {
   test('returns the index of the first element identical to x', () => {
     expect(itt.indexOf('a', ['a', 'a', 'a', 'a'])).toBe(0)
     expect(itt.indexOf('c', ['a', 'b', 'c', 'c'])).toBe(2)
+  })
+  test('works as a method', () => {
+    expect(itt(['a', 'a', 'a', 'a']).indexOf('a')).toBe(0)
   })
   test('returns -1 if no element is identical to x', () => {
     expect(itt.indexOf('a', ['d', 'b', 'f', 'c', 'e'])).toBe(-1)
@@ -962,6 +983,9 @@ describe('lastIndexOf', () => {
   test('returns the index of the last element identical to x', () => {
     expect(itt.lastIndexOf('a', ['a', 'a', 'a', 'a'])).toBe(3)
     expect(itt.lastIndexOf('c', ['a', 'b', 'c', 'c', 'e'])).toBe(3)
+  })
+  test('works as a method', () => {
+    expect(itt(['a', 'a', 'a', 'a']).lastIndexOf('a')).toBe(3)
   })
   test('returns -1 if no element is identical to x', () => {
     expect(itt.lastIndexOf('a', ['d', 'b', 'f', 'c', 'e'])).toBe(-1)
@@ -998,6 +1022,9 @@ describe('includes', () => {
     expect(itt.includes(-0, [1, 1, 0])).toBe(true)
     expect(itt.includes(NaN, [NaN, NaN, NaN])).toBe(false)
   })
+  test('works as a method', () => {
+    expect(itt(['d', 'b', 'a']).includes('z')).toBe(false)
+  })
   test(`short-circuits when an element is identical to x`, () => {
     let it = false
     const i = itt.includes(1, function*() {yield 1; it = true; yield 2}())
@@ -1013,6 +1040,9 @@ describe('reduce', () => {
   })
   test('accumulates function results', () => {
     expect(itt.reduce(0, (a, b) => a + b, [5, 4, 3, 2, 1, 0])).toBe(15)
+  })
+  test('works as a method', () => {
+    expect(itt([5, 4, 3, 2, 1, 0]).reduce(0, (a, b) => a + b)).toBe(15)
   })
   test('folds left-to-right', () => {
     expect(itt.reduce(':', (a, b) => a + b, ['a', 'b', 'c', 'd', 'e'])).toBe(':abcde')
@@ -1087,6 +1117,10 @@ describe('inject', () => {
     expect(itt.inject(o, () => {}, [1])).toBe(o)
     expect(itt.inject(p, () => {}, [1, 2, 3, 4, 5])).toBe(p)
   })
+  test('works as a method', () => {
+    const o = {}
+    expect(itt([1, 2, 3, 4]).inject(o, () => {})).toBe(o)
+  })
   test('applies the update function to each iterator element', () => {
     expect(itt.inject([], (els, x) => els.unshift(x), [5, 4, 3, 2, 1])).toEqual([1, 2, 3, 4, 5])
   })
@@ -1096,6 +1130,11 @@ describe('forEach', () => {
   test('applies fn to each iterator element', () => {
     const res = []
     itt.forEach(x => res.unshift(x), function*() {yield 1; yield 2; yield 3; yield 4}())
+    expect(res).toEqual([4, 3, 2, 1])
+  })
+  test('works as a method', () => {
+    const res = []
+    itt([1, 2, 3, 4]).forEach(x => res.unshift(x))
     expect(res).toEqual([4, 3, 2, 1])
   })
   test(`doesn't apply fn when given an empty iterator`, () => {
@@ -1136,11 +1175,16 @@ describe('first', () => {
     expect(itt.first([])).toBe(undefined)
     expect(itt.first(function*() {}())).toBe(undefined)
   })
+  test('works as a method', () => {
+    expect(itt([5, 2, 3]).first()).toBe(5)
+  })
 })
 
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
+  })
+  test('works as a method', () => {
     expect(itt([1, 2, 3]).mean()).toBe(2)
   })
   test('returns NaN for an empty iterator', () => {
