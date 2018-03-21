@@ -1587,6 +1587,9 @@ describe('join', () => {
     expect(itt.join(':', ['abc', 'defg', 'hi'])).toEqual('abc:defg:hi')
     expect(itt.join('+', [1, 2, 3, 4, 5])).toEqual('1+2+3+4+5')
   })
+  test('works for multi-character separators', () => {
+    expect(itt.join('==>', [1, 2, 3])).toEqual('1==>2==>3')
+  })
   test(`defaults to sep = ','`, () => {
     expect(itt.join(['abc', 'defg', 'hi'])).toEqual('abc,defg,hi')
     expect(itt.join([1, 2, 3, 4, 5])).toEqual('1,2,3,4,5')
