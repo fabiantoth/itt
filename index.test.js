@@ -476,7 +476,7 @@ describe('reject', () => {
     expect(it2).toBe(true)
     expect(it3).toBe(false)
   })
-  test(`works as a method`, () => {
+  test('works as a method', () => {
     expect(Array.from(itt([9, 8, 6, 4, 5, 3, 1, 2]).reject(x => x % 2))).toEqual([8, 6, 4, 2])
   })
 })
