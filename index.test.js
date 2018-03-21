@@ -1573,3 +1573,27 @@ describe('intersperse', () => {
     expect(Array.from(itt([1, 2, 3]).intersperse(0))).toEqual([1, 0, 2, 0, 3])
   })
 })
+
+describe('join', () => {
+  test('returns an empty string for an empty iterator', () => {
+    expect(itt.join(':', [])).toEqual('')
+    expect(itt.join(':', function*() {}())).toEqual('')
+  })
+  test('stringifies the element for singleton iterators', () => {
+    expect(itt.join(':', [100])).toEqual('100')
+    expect(itt.join(':', ['asdf'])).toEqual('asdf')
+  })
+  test('stringifies each iterator element separated by sep', () => {
+    expect(itt.join(':', ['abc', 'defg', 'hi'])).toEqual('abc:defg:hi')
+    expect(itt.join('+', [1, 2, 3, 4, 5])).toEqual('1+2+3+4+5')
+  })
+  test(`defaults to sep = ','`, () => {
+    expect(itt.join(['abc', 'defg', 'hi'])).toEqual('abc,defg,hi')
+    expect(itt.join([1, 2, 3, 4, 5])).toEqual('1,2,3,4,5')
+    expect(itt(['abc', 'defg', 'hi']).join()).toEqual('abc,defg,hi')
+    expect(itt([1, 2, 3, 4, 5]).join()).toEqual('1,2,3,4,5')
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3, 4, 5]).join('+')).toEqual('1+2+3+4+5')
+  })
+})
