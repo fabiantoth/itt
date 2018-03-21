@@ -1293,6 +1293,20 @@ describe('pick', () => {
   })
 })
 
+describe('sum', () => {
+  test('returns the sum of the iterator elements', () => {
+    expect(itt.sum([1, 2, 3, 4])).toBe(10)
+    expect(itt.sum([5])).toBe(5)
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).sum()).toBe(6)
+  })
+  test('returns 0 for an empty iterator', () => {
+    expect(itt.sum([])).toBe(0)
+    expect(itt(function*() {}()).sum()).toBe(0)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator elements', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
