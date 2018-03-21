@@ -1256,6 +1256,20 @@ describe('init', () => {
   })
 })
 
+describe('count', () => {
+  test('returns the number of iterator elements', () => {
+    expect(itt.count([5, 4, 3, 2])).toEqual(4)
+    expect(itt.count(function*() {yield 1; yield 3; yield 5}())).toEqual(3)
+  })
+  test('returns 0 for empty iterators', () => {
+    expect(itt.count([])).toEqual(0)
+    expect(itt.count(function*() {}())).toEqual(0)
+  })
+  test('works as a method', () => {
+    expect(itt([1, 2, 3]).count()).toEqual(3)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
