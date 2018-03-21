@@ -1403,7 +1403,8 @@ describe('groupBy', () => {
     expect(itt.groupBy(x => 1, true, function*() {}()).size).toBe(0)
   })
   test('returns maps', () => {
-    expect(itt.groupBy(x => 1, ['a', 'b', 'c'])).toEqual(expect.any(Map))
+    expect(itt.groupBy(x => 1, true, ['a', 'b', 'c'])).toEqual(expect.any(Map))
+    expect(itt.groupBy(x => 1, false, ['a', 'b', 'c'])).toEqual(expect.any(Map))
   })
   test('defaults to non-unique', () => {
     expect(Array.from(itt.groupBy(x => 1, ['a', 'b', 'c']))).toEqual([[1, ['a', 'b', 'c']]])
