@@ -1019,6 +1019,26 @@ describe('reduce', () => {
   })
 })
 
+describe('scan', () => {
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.scan(0, () => {}, []))).toEqual([])
+    expect(Array.from(itt.scan(0, () => {}, function*() {}()))).toEqual([])
+  })
+  test('accumulates and yields function results', () => {
+    expect(Array.from(itt.scan(0, (a, b) => a + b, [5, 4, 3, 2, 1, 0]))).toEqual([5, 9, 12, 14, 15, 15])
+  })
+  test('folds left-to-right', () => {
+    expect(Array.from(itt.scan(':', (a, b) => a + b, ['a', 'b', 'c', 'd']))).toEqual([':a', ':ab', ':abc', ':abcd'])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.scan(0, (a, b) => a + b, function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(false)
+  })
+})
+
 describe('mean', () => {
   test('returns the arithmetic mean of the iterator', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
