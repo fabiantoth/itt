@@ -1402,6 +1402,9 @@ describe('groupBy', () => {
     expect(itt.groupBy(x => 1, true, []).size).toBe(0)
     expect(itt.groupBy(x => 1, true, function*() {}()).size).toBe(0)
   })
+  test('returns maps', () => {
+    expect(itt.groupBy(x => 1, ['a', 'b', 'c'])).toEqual(expect.any(Map))
+  })
   test('defaults to non-unique', () => {
     expect(Array.from(itt.groupBy(x => 1, ['a', 'b', 'c']))).toEqual([[1, ['a', 'b', 'c']]])
     expect(Array.from(itt(['a', 'b', 'c']).groupBy(x => 1))).toEqual([[1, ['a', 'b', 'c']]])
