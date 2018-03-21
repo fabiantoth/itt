@@ -807,6 +807,7 @@ describe('dropLast', () => {
   })
   test('yields all but the last n elements', () => {
     expect(Array.from(itt.dropLast(1, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3, 4, 5])
+    expect(Array.from(itt.dropLast(3, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3])
     expect(Array.from(itt.dropLast(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([3, 2])
   })
   test(`returns an empty iterator if there aren't enough elements`, () => {
