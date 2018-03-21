@@ -197,7 +197,7 @@ function minMax(xs) {
 }
 
 function groupBy(fn, unique = false, xs) {
-  if (!xs) [unique, xs] = [false, unique]
+  if (xs === undefined) [unique, xs] = [false, unique]
   return inject(new Map, unique ? (m, x) => {
     const k = fn(x), s = m.get(k)
     if (s) s.add(x)
