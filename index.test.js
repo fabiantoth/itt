@@ -1271,7 +1271,7 @@ describe('count', () => {
 })
 
 describe('mean', () => {
-  test('returns the arithmetic mean of the iterator', () => {
+  test('returns the arithmetic mean of the iterator elements', () => {
     expect(itt.mean([1, 2, 3, 4])).toBe(2.5)
   })
   test('works as a method', () => {
