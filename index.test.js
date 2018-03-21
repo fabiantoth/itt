@@ -1340,3 +1340,21 @@ describe('product', () => {
     expect(itt(function*() {}()).product()).toBe(1)
   })
 })
+
+describe('max', () => {
+  test('returns the greatest of the iterator elements', () => {
+    expect(itt.max([6, -1, 5, 2])).toBe(6)
+    expect(itt.max([1, -1, 5, 2])).toBe(5)
+    expect(itt.max([1, -1, 5, 7])).toBe(7)
+  })
+  test('returns the iterator element for singleton iterators', () => {
+    expect(itt.max([5])).toBe(5)
+  })
+  test('works as a method', () => {
+    expect(itt([5, -1, 3, 4]).max()).toBe(5)
+  })
+  test('returns -inf for an empty iterator', () => {
+    expect(itt.max([])).toBe(-Infinity)
+    expect(itt(function*() {}()).max()).toBe(-Infinity)
+  })
+})
