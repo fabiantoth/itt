@@ -394,7 +394,7 @@ itt.range(10).map(x => x * x).last()
 
 ### .pick(i)
 
-The `i`th element of this iterator
+The `i`th element of this iterator.
 
 ```js
 itt.irange().map(x => x * x).pick(3)
@@ -403,7 +403,7 @@ itt.irange().map(x => x * x).pick(3)
 
 ### .count()
 
-The number of elements in this iterator
+The number of elements in this iterator.
 
 ```js
 itt.range(10).filter(x => x % 2).count()
