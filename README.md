@@ -111,7 +111,7 @@ itt.range(5).map(x => x * x).toArray()
 
 ### irange([start = 0, [skip = 1]])
 
-An iterator over the integers starting at `start` and incrementing or decrementing by `skip`. Best paired with `.take()` or its variants.
+An iterator over the integers starting at `start` and incrementing or decrementing by `skip`. Best paired with `.take` or its variants.
 
 ```js
 itt.irange().map(x => x * x).take(5).toArray()
