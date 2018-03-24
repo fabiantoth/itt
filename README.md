@@ -544,7 +544,7 @@ itt.range(10).map(x => x * x).includes(5)
 
 ### .enumerate()
 
-An iterator which yields pairs, each containing an index and element of this iterator.
+An iterator which yields pairs, each containing a 0-based index and element of this iterator.
 
 ```js
 itt(['foo', 'bar', 'baz']).enumerate().toArray()
