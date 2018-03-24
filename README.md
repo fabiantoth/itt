@@ -573,7 +573,7 @@ itt.range(3).cycle().take(10).toArray()
 
 ### .repeat(n)
 
-An iterator which yields the elements of this iterator, in order, cycled n times.
+An iterator which yields the elements of this iterator, in order, cycled `n` times.
 
 ```js
 itt.range(3).repeat(3).toArray()
