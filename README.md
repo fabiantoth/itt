@@ -728,7 +728,7 @@ itt(['baz', 'qux']).unshift('foo', 'bar').toArray()
 
 ### .reduce(a, fn)
 
-Accumulates `a = fn(a, x)` for each element of this iterator, in iteration order.
+Accumulates `a = fn(a, x)` for each element of this iterator, in iteration order, then returns `a`.
 
 ```js
 itt.range(6).reduce(0, (x, y) => x + y)
