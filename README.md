@@ -584,7 +584,7 @@ itt.range(3).repeat(3).toArray()
 
 ### .unique()
 
-An iterator which yields elements of this iterator and skips elements which are strictly equal to any that have already appeared.
+An iterator which yields elements of this iterator and skips elements which are `Set`-membership-equal to any that have already appeared.
 
 ```js
 itt([1, 4, 7, 6, 4, 6, 5, 2, 1, 0, 9, 7]).unique().toArray()
