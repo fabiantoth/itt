@@ -663,6 +663,13 @@ itt.range(3).concat(itt.range(5), itt.range(3)).toArray()
 /* [ 0, 1, 2, 0, 1, 2, 3, 4, 0, 1, 2 ] */
 ```
 
+**Note:** This method can be called statically with any number of arguments, and yields elements in argument order.
+
+```js
+itt.concat([1, 2, 3], [4, 5, 6], [7, 8, 9]).toArray()
+/* [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] */
+```
+
 ### .zip(xs, [...])
 
 An iterator which yields arrays containing one element from this iterator and one element from each argument iterator, stopping when any iterator is done.
@@ -670,6 +677,13 @@ An iterator which yields arrays containing one element from this iterator and on
 ```js
 itt.irange().zip(['a', 'b', 'c']).toArray()
 /* [ [ 0, 'a' ], [ 1, 'b' ], [ 2, 'c' ] ] */
+```
+
+**Note:** This method can be called statically with any number of arguments, and yields arrays in argument order.
+
+```js
+itt.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]).toArray()
+/* [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ] ] */
 ```
 
 ### .parallel(xs, [...])
@@ -683,6 +697,13 @@ itt.range(5).parallel(['a', 'b', 'c']).toArray()
   [ 2, 'c' ],
   [ 3, undefined ],
   [ 4, undefined ] ] */
+```
+
+**Note:** This method can be called statically with any number of arguments, and yields arrays in argument order.
+
+```js
+itt.parallel([1, 2, 3], [4, 5, 6], [7, 8, 9]).toArray()
+/* [ [ 1, 4, 7 ], [ 2, 5, 8 ], [ 3, 6, 9 ] ] */
 ```
 
 ### .push(x, [...])
