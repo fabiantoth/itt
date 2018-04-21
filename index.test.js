@@ -372,11 +372,13 @@ describe('flatMap', () => {
     expect(Array.from(itt.flatMap(x => x % 2 ? [] : [x * x * x], [9, 5, 2, 4, 7]))).toEqual([8, 64])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
-    let it1 = false, it2 = false
-    const i = itt.flatMap(x => [x, x], function*() {it1 = true; yield 1; it2 = true; yield 2}())
+    let it1 = false, it2 = false, it3 = false, it4 = false
+    const i = itt.flatMap(x => function*() {it3 = true; yield x; it4 = true; yield x}(), function*() {it1 = true; yield 1; it2 = true; yield 2}())
     expect(it1).toBe(false)
+    expect(it3).toBe(false)
     i.next()
     expect(it2).toBe(false)
+    expect(it4).toBe(false)
   })
   test('works as a method', () => {
     expect(Array.from(itt([3, 5, 7]).flatMap(x => [x, x + 1]))).toEqual([3, 4, 5, 6, 7, 8])
