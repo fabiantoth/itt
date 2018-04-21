@@ -1,5 +1,7 @@
 const itt = require('itt')
 
+function* I(...els) {yield* els}
+
 test('is', () => {
   expect(itt.is(1)).toBe(false)
   expect(itt.is({})).toBe(false)
@@ -213,19 +215,19 @@ describe('fork', () => {
     expect(itt([1, 2, 3]).fork(0).length).toBe(0)
   })
   test('returns independent iterators', () => {
-    const [a, b, c] = itt.fork(3, function*() {yield 1; yield 2; yield 3}())
+    const [a, b, c] = itt.fork(3, I(1, 2, 3))
     expect(Array.from(a)).toEqual([1, 2, 3])
     expect(Array.from(b)).toEqual([1, 2, 3])
     expect(Array.from(c)).toEqual([1, 2, 3])
 
-    const [d, e, f, g] = itt.fork(4, function*() {yield 1; yield 2; yield 3}())
+    const [d, e, f, g] = itt.fork(4, I(1, 2, 3))
     expect(Array.from(g)).toEqual([1, 2, 3])
     expect(Array.from(f)).toEqual([1, 2, 3])
     expect(Array.from(e)).toEqual([1, 2, 3])
     expect(Array.from(d)).toEqual([1, 2, 3])
   })
   test('discards values that have been iterated completely', () => {
-    const [a, b, c] = itt.fork(3, function*() {yield 1; yield 2; yield 3}())
+    const [a, b, c] = itt.fork(3, I(1, 2, 3))
     c.next()
     b.next()
     a.next()
@@ -280,7 +282,7 @@ describe('repeat', () => {
     expect(Array.from(itt.repeat(-1, []))).toEqual([])
     expect(Array.from(itt.repeat(5, []))).toEqual([])
     expect(Array.from(itt.repeat(100, []))).toEqual([])
-    expect(Array.from(itt.repeat(100, function*() {}()))).toEqual([])
+    expect(Array.from(itt.repeat(100, I()))).toEqual([])
   })
   test('yields n copies of the iterator', () => {
     expect(Array.from(itt.repeat(3, [4, 5, 6]))).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6])
@@ -304,11 +306,11 @@ describe('enumerate', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.enumerate([]))).toEqual([])
-    expect(Array.from(itt.enumerate(function*() {}()))).toEqual([])
+    expect(Array.from(itt.enumerate(I()))).toEqual([])
   })
   test('yields pairs of indices and iterator elements', () => {
     expect(Array.from(itt.enumerate(['a', 'b', 'c', 'd']))).toEqual([[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']])
-    expect(Array.from(itt.enumerate(function*() {yield 5; yield 7; yield 10}()))).toEqual([[0, 5], [1, 7], [2, 10]])
+    expect(Array.from(itt.enumerate(I(5, 7, 10)))).toEqual([[0, 5], [1, 7], [2, 10]])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -330,12 +332,12 @@ describe('map', () => {
   test('returns an empty iterator when given an empty iterator', () => {
     const f = jest.fn(), g = jest.fn()
     expect(Array.from(itt.map(f, []))).toEqual([])
-    expect(Array.from(itt.map(g, function*() {}()))).toEqual([])
+    expect(Array.from(itt.map(g, I()))).toEqual([])
     expect(f).not.toHaveBeenCalled()
     expect(g).not.toHaveBeenCalled()
   })
   test('applies fn to each element of the iterator', () => {
-    expect(Array.from(itt.map(x => x * x, function*() {yield 1; yield 2; yield 3}()))).toEqual([1, 4, 9])
+    expect(Array.from(itt.map(x => x * x, I(1, 2, 3)))).toEqual([1, 4, 9])
     expect(Array.from(itt.map(x => x + '!', ['cats', 'dogs', 'cows']))).toEqual(['cats!', 'dogs!', 'cows!'])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
@@ -358,7 +360,7 @@ describe('flatMap', () => {
   test('returns an empty iterator when given an empty iterator', () => {
     const f = jest.fn(), g = jest.fn()
     expect(Array.from(itt.flatMap(f, []))).toEqual([])
-    expect(Array.from(itt.flatMap(g, function*() {}()))).toEqual([])
+    expect(Array.from(itt.flatMap(g, I()))).toEqual([])
     expect(f).not.toHaveBeenCalled()
     expect(g).not.toHaveBeenCalled()
   })
@@ -366,7 +368,7 @@ describe('flatMap', () => {
     expect(Array.from(itt.flatMap(x => [x, x + 1], [3, 5, 7]))).toEqual([3, 4, 5, 6, 7, 8])
   })
   test('accepts child iterators', () => {
-    expect(Array.from(itt.flatMap(x => function*() {yield x; yield x * x}(), function*() {yield 1; yield 2; yield 3}()))).toEqual([1, 1, 2, 4, 3, 9])
+    expect(Array.from(itt.flatMap(x => I(x, x * x), I(1, 2, 3)))).toEqual([1, 1, 2, 4, 3, 9])
   })
   test('ignores empty results', () => {
     expect(Array.from(itt.flatMap(x => x % 2 ? [] : [x * x * x], [9, 5, 2, 4, 7]))).toEqual([8, 64])
@@ -396,7 +398,7 @@ describe('tap', () => {
   test('returns an empty iterator when given an empty iterator', () => {
     const f = jest.fn(), g = jest.fn()
     expect(Array.from(itt.tap(f, []))).toEqual([])
-    expect(Array.from(itt.tap(g, function*() {}()))).toEqual([])
+    expect(Array.from(itt.tap(g, I()))).toEqual([])
     expect(f).not.toHaveBeenCalled()
     expect(g).not.toHaveBeenCalled()
   })
@@ -425,7 +427,7 @@ describe('filter', () => {
   test('returns an empty iterator when given an empty iterator', () => {
     const f = jest.fn(), g = jest.fn()
     expect(Array.from(itt.filter(f, []))).toEqual([])
-    expect(Array.from(itt.filter(g, function*() {}()))).toEqual([])
+    expect(Array.from(itt.filter(g, I()))).toEqual([])
     expect(f).not.toHaveBeenCalled()
     expect(g).not.toHaveBeenCalled()
   })
@@ -434,7 +436,7 @@ describe('filter', () => {
   })
   test('returns an empty iterator when no elements satisfy fn', () => {
     expect(Array.from(itt.filter(x => false, [1, 2, 3]))).toEqual([])
-    expect(Array.from(itt.filter(x => false, function*() {yield 1; yield 2; yield 3}()))).toEqual([])
+    expect(Array.from(itt.filter(x => false, I(1, 2, 3)))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false, it3 = false
@@ -458,7 +460,7 @@ describe('reject', () => {
   test('returns an empty iterator when given an empty iterator', () => {
     const f = jest.fn(), g = jest.fn()
     expect(Array.from(itt.reject(f, []))).toEqual([])
-    expect(Array.from(itt.reject(g, function*() {}()))).toEqual([])
+    expect(Array.from(itt.reject(g, I()))).toEqual([])
     expect(f).not.toHaveBeenCalled()
     expect(g).not.toHaveBeenCalled()
   })
@@ -467,7 +469,7 @@ describe('reject', () => {
   })
   test('returns an empty iterator when every element satisfies fn', () => {
     expect(Array.from(itt.reject(x => true, [1, 2, 3]))).toEqual([])
-    expect(Array.from(itt.reject(x => true, function*() {yield 1; yield 2; yield 3}()))).toEqual([])
+    expect(Array.from(itt.reject(x => true, I(1, 2, 3)))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false, it3 = false
@@ -492,11 +494,11 @@ describe('concat', () => {
     expect(Array.from(itt.concat())).toEqual([])
   })
   test('returns an empty iterator when given all empty iterators', () => {
-    expect(Array.from(itt.concat([], function*() {}(), []))).toEqual([])
+    expect(Array.from(itt.concat([], I(), []))).toEqual([])
   })
   test('yields the concatenation of its input iterators', () => {
     expect(Array.from(itt.concat([1, 2, 3]))).toEqual([1, 2, 3])
-    expect(Array.from(itt.concat([1, 2, 3], function*() {yield 4; yield 5}(), [6, 7]))).toEqual([1, 2, 3, 4, 5, 6, 7])
+    expect(Array.from(itt.concat([1, 2, 3], I(4, 5), [6, 7]))).toEqual([1, 2, 3, 4, 5, 6, 7])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false, it3 = false, it4 = false
@@ -526,11 +528,11 @@ describe('push', () => {
   })
   test('returns an empty iterator when given an empty iterator and no elements', () => {
     expect(Array.from(itt.push([]))).toEqual([])
-    expect(Array.from(itt.push(function*() {}()))).toEqual([])
+    expect(Array.from(itt.push(I()))).toEqual([])
   })
   test('yields just the extra elements when given an empty iterator', () => {
     expect(Array.from(itt.push(1, []))).toEqual([1])
-    expect(Array.from(itt.push(1, function*() {}()))).toEqual([1])
+    expect(Array.from(itt.push(1, I()))).toEqual([1])
   })
   test('yields just the iterator elements when given no extra elements', () => {
     expect(Array.from(itt.push([1, 2, 3]))).toEqual([1, 2, 3])
@@ -557,11 +559,11 @@ describe('unshift', () => {
   })
   test('returns an empty iterator when given an empty iterator and no elements', () => {
     expect(Array.from(itt.unshift([]))).toEqual([])
-    expect(Array.from(itt.unshift(function*() {}()))).toEqual([])
+    expect(Array.from(itt.unshift(I()))).toEqual([])
   })
   test('yields just the extra elements when given an empty iterator', () => {
     expect(Array.from(itt.unshift(1, []))).toEqual([1])
-    expect(Array.from(itt.unshift(1, function*() {}()))).toEqual([1])
+    expect(Array.from(itt.unshift(1, I()))).toEqual([1])
   })
   test('yields just the iterator elements when given no extra elements', () => {
     expect(Array.from(itt.unshift([1, 2, 3]))).toEqual([1, 2, 3])
@@ -592,14 +594,14 @@ describe('flatten', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.flatten([]))).toEqual([])
-    expect(Array.from(itt.flatten(function*() {}(), []))).toEqual([])
+    expect(Array.from(itt.flatten(I(), []))).toEqual([])
   })
   test('returns an empty iterator when given all empty child iterators', () => {
-    expect(Array.from(itt.flatten([[], function*() {}(), []]))).toEqual([])
+    expect(Array.from(itt.flatten([[], I(), []]))).toEqual([])
   })
   test('yields the concatenation of each element of its input iterators', () => {
     expect(Array.from(itt.flatten([[1, 2, 3]]))).toEqual([1, 2, 3])
-    expect(Array.from(itt.flatten([[1, 2, 3], function*() {yield 4; yield 5}(), [6, 7]]))).toEqual([1, 2, 3, 4, 5, 6, 7])
+    expect(Array.from(itt.flatten([[1, 2, 3], I(4, 5), [6, 7]]))).toEqual([1, 2, 3, 4, 5, 6, 7])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false, it3 = false, it4 = false
@@ -633,7 +635,7 @@ describe('chunksOf', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.chunksOf(2, []))).toEqual([])
-    expect(Array.from(itt.chunksOf(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.chunksOf(5, I()))).toEqual([])
   })
   test('yields chunks of n items', () => {
     expect(Array.from(itt.chunksOf(3, [1, 2, 3, 4, 5, 6, 7, 8, 9]))).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -687,7 +689,7 @@ describe('subsequences', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.subsequences(2, []))).toEqual([])
-    expect(Array.from(itt.subsequences(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.subsequences(5, I()))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -722,7 +724,7 @@ describe('lookahead', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.lookahead(2, []))).toEqual([])
-    expect(Array.from(itt.lookahead(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.lookahead(5, I()))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -743,7 +745,7 @@ describe('drop', () => {
   })
   test('yields all but the first n elements', () => {
     expect(Array.from(itt.drop(2, [1, 2, 3, 4, 5, 6]))).toEqual([3, 4, 5, 6])
-    expect(Array.from(itt.drop(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([2, 1])
+    expect(Array.from(itt.drop(1, I(3, 2, 1)))).toEqual([2, 1])
   })
   test(`yields all elements if n <= 0`, () => {
     expect(Array.from(itt.drop(-5, [1, 2, 3, 4, 5]))).toEqual([1, 2, 3, 4, 5])
@@ -755,7 +757,7 @@ describe('drop', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.drop(2, []))).toEqual([])
-    expect(Array.from(itt.drop(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.drop(5, I()))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -776,7 +778,7 @@ describe('dropWhile', () => {
   })
   test('yields all but the initial elements that satisfy fn', () => {
     expect(Array.from(itt.dropWhile(n => n % 2, [1, 3, 4, 5, 6, 7]))).toEqual([4, 5, 6, 7])
-    expect(Array.from(itt.dropWhile(n => n > 1, function*() {yield 3; yield 2; yield 1; yield 4}()))).toEqual([1, 4])
+    expect(Array.from(itt.dropWhile(n => n > 1, I(3, 2, 1, 4)))).toEqual([1, 4])
   })
   test(`yields all elements if no initial elements satisfy fn`, () => {
     expect(Array.from(itt.dropWhile(n => n % 2, [4, 2, 3, 4, 5]))).toEqual([4, 2, 3, 4, 5])
@@ -788,7 +790,7 @@ describe('dropWhile', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.dropWhile(n => false, []))).toEqual([])
-    expect(Array.from(itt.dropWhile(n => false, function*() {}()))).toEqual([])
+    expect(Array.from(itt.dropWhile(n => false, I()))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -810,7 +812,7 @@ describe('dropLast', () => {
   test('yields all but the last n elements', () => {
     expect(Array.from(itt.dropLast(1, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3, 4, 5])
     expect(Array.from(itt.dropLast(3, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3])
-    expect(Array.from(itt.dropLast(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([3, 2])
+    expect(Array.from(itt.dropLast(1, I(3, 2, 1)))).toEqual([3, 2])
   })
   test(`yields all elements if n <= 0`, () => {
     expect(Array.from(itt.dropLast(-5, [1, 2, 3, 4, 5]))).toEqual([1, 2, 3, 4, 5])
@@ -822,7 +824,7 @@ describe('dropLast', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.dropLast(2, []))).toEqual([])
-    expect(Array.from(itt.dropLast(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.dropLast(5, I()))).toEqual([])
   })
   test(`doesn't consume elements until necessary`, () => {
     let it1 = false, it2 = false
@@ -843,7 +845,7 @@ describe('take', () => {
   })
   test('yields the first n elements', () => {
     expect(Array.from(itt.take(3, [1, 2, 3, 4, 5, 6]))).toEqual([1, 2, 3])
-    expect(Array.from(itt.take(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([3])
+    expect(Array.from(itt.take(1, I(3, 2, 1)))).toEqual([3])
   })
   test(`yields all elements if there aren't more than n`, () => {
     expect(Array.from(itt.take(5, [1, 2, 3, 4, 5]))).toEqual([1, 2, 3, 4, 5])
@@ -851,7 +853,7 @@ describe('take', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.take(2, []))).toEqual([])
-    expect(Array.from(itt.take(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.take(5, I()))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -873,7 +875,7 @@ describe('takeWhile', () => {
   })
   test('yields the initial elements that satisfy fn', () => {
     expect(Array.from(itt.takeWhile(n => n % 2, [1, 3, 4, 5, 6, 7]))).toEqual([1, 3])
-    expect(Array.from(itt.takeWhile(n => n > 1, function*() {yield 3; yield 2; yield 1; yield 4}()))).toEqual([3, 2])
+    expect(Array.from(itt.takeWhile(n => n > 1, I(3, 2, 1, 4)))).toEqual([3, 2])
   })
   test(`returns an empty iterator if no elements satisfy fn`, () => {
     expect(Array.from(itt.takeWhile(n => n > 10, [1, 2, 3, 4, 5]))).toEqual([])
@@ -885,7 +887,7 @@ describe('takeWhile', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.takeWhile(n => true, []))).toEqual([])
-    expect(Array.from(itt.takeWhile(n => true, function*() {}()))).toEqual([])
+    expect(Array.from(itt.takeWhile(n => true, I()))).toEqual([])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
@@ -907,7 +909,7 @@ describe('takeLast', () => {
   test('yields the last n elements', () => {
     expect(Array.from(itt.takeLast(1, [1, 2, 3, 4, 5, 6]))).toEqual([6])
     expect(Array.from(itt.takeLast(3, [1, 2, 3, 4, 5, 6]))).toEqual([4, 5, 6])
-    expect(Array.from(itt.takeLast(1, function*() {yield 3; yield 2; yield 1;}()))).toEqual([1])
+    expect(Array.from(itt.takeLast(1, I(3, 2, 1)))).toEqual([1])
   })
   test(`returns an empty iterator if n <= 0`, () => {
     expect(Array.from(itt.takeLast(-5, [1, 2, 3, 4, 5]))).toEqual([])
@@ -919,7 +921,7 @@ describe('takeLast', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.takeLast(2, []))).toEqual([])
-    expect(Array.from(itt.takeLast(5, function*() {}()))).toEqual([])
+    expect(Array.from(itt.takeLast(5, I()))).toEqual([])
   })
   test(`doesn't consume elements until necessary`, () => {
     let it1 = false, it2 = false
@@ -940,10 +942,10 @@ describe('transpose', () => {
   })
   test(`yields arrays of elements from its argument's elements`, () => {
     expect(Array.from(itt.transpose([[1, 2, 3], [4, 5, 6]]))).toEqual([[1, 4], [2, 5], [3, 6]])
-    expect(Array.from(itt.transpose([function*() {yield 1; yield 2; yield 3}(), function*() {yield 4; yield 5; yield 6}()]))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.transpose([I(1, 2, 3), I(4, 5, 6)]))).toEqual([[1, 4], [2, 5], [3, 6]])
     expect(Array.from(itt.transpose([[1, 2], [3, 4], [5, 6], [7, 8]]))).toEqual([[1, 3, 5, 7], [2, 4, 6, 8]])
-    expect(Array.from(itt.transpose(function*() {yield [1, 2, 3]; yield [4, 5, 6]}()))).toEqual([[1, 4], [2, 5], [3, 6]])
-    expect(Array.from(itt.transpose(function*() {yield [1, 2, 3]}()))).toEqual([[1], [2], [3]])
+    expect(Array.from(itt.transpose(I([1, 2, 3], [4, 5, 6])))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.transpose(I([1, 2, 3])))).toEqual([[1], [2], [3]])
   })
   test(`doesn't consume elements until necessary`, () => {
     let it1 = false, it2 = false
@@ -955,17 +957,17 @@ describe('transpose', () => {
   test('stops when any iterator runs out of elements', () => {
     expect(Array.from(itt.transpose([[1, 2, 3, 4], [5, 6]]))).toEqual([[1, 5], [2, 6]])
     expect(Array.from(itt.transpose([[1], [2, 3, 4], [5, 6, 7, 8]]))).toEqual([[1, 2, 5]])
-    expect(Array.from(itt.transpose([function*() {yield 1; yield 2; yield 3; yield 4}(), function*() {yield 5; yield 6}()]))).toEqual([[1, 5], [2, 6]])
+    expect(Array.from(itt.transpose([I(1, 2, 3, 4), I(5, 6)]))).toEqual([[1, 5], [2, 6]])
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.transpose([]))).toEqual([])
-    expect(Array.from(itt.transpose(function*() {}()))).toEqual([])
+    expect(Array.from(itt.transpose(I()))).toEqual([])
   })
   test('returns an empty iterator when given any empty iterator elements', () => {
     expect(Array.from(itt.transpose([[], [], []]))).toEqual([])
-    expect(Array.from(itt.transpose([[1, 2, 3], function*() {yield 4; yield 5; yield 6; yield 7; yield 8}(), function*() {}()]))).toEqual([])
+    expect(Array.from(itt.transpose([[1, 2, 3], I(4, 5, 6, 7, 8), I()]))).toEqual([])
     expect(Array.from(itt.transpose([[], [1], [2]]))).toEqual([])
-    expect(Array.from(itt.transpose(function*() {yield []}()))).toEqual([])
+    expect(Array.from(itt.transpose(I([])))).toEqual([])
   })
   test('works as a method', () => {
     expect(Array.from(itt([[1, 2, 3], [4, 5, 6]]).transpose())).toEqual([[1, 4], [2, 5], [3, 6]])
@@ -979,14 +981,14 @@ describe('zip', () => {
   })
   test(`yields arrays of elements from its arguments`, () => {
     expect(Array.from(itt.zip([1, 2, 3], [4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
-    expect(Array.from(itt.zip(function*() {yield 1; yield 2; yield 3}(), function*() {yield 4; yield 5; yield 6}()))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.zip(I(1, 2, 3), I(4, 5, 6)))).toEqual([[1, 4], [2, 5], [3, 6]])
     expect(Array.from(itt.zip([1, 2], [3, 4], [5, 6], [7, 8]))).toEqual([[1, 3, 5, 7], [2, 4, 6, 8]])
     expect(Array.from(itt.zip([1, 2, 3]))).toEqual([[1], [2], [3]])
   })
   test('stops when any iterator runs out of elements', () => {
     expect(Array.from(itt.zip([1, 2, 3, 4], [5, 6]))).toEqual([[1, 5], [2, 6]])
     expect(Array.from(itt.zip([1], [2, 3, 4], [5, 6, 7, 8]))).toEqual([[1, 2, 5]])
-    expect(Array.from(itt.zip(function*() {yield 1; yield 2; yield 3; yield 4}(), function*() {yield 5; yield 6}()))).toEqual([[1, 5], [2, 6]])
+    expect(Array.from(itt.zip(I(1, 2, 3, 4), I(5, 6)))).toEqual([[1, 5], [2, 6]])
   })
   test('returns an empty iterator when given no iterators', () => {
     expect(Array.from(itt.zip())).toEqual([])
@@ -994,7 +996,7 @@ describe('zip', () => {
   test('returns an empty iterator when given any empty iterators', () => {
     expect(Array.from(itt.zip([], [], []))).toEqual([])
     expect(Array.from(itt.zip([1, 2, 3], [4, 5, 6, 7, 8], []))).toEqual([])
-    expect(Array.from(itt.zip([1, 2, 3], function*() {yield 4; yield 5; yield 6; yield 7; yield 8}(), function*() {}()))).toEqual([])
+    expect(Array.from(itt.zip([1, 2, 3], I(4, 5, 6, 7, 8), I()))).toEqual([])
     expect(Array.from(itt.zip([], [1], [2]))).toEqual([])
     expect(Array.from(itt.zip([]))).toEqual([])
   })
@@ -1010,16 +1012,16 @@ describe('parallel', () => {
   })
   test(`yields arrays of elements from its arguments`, () => {
     expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
-    expect(Array.from(itt.parallel(function*() {yield 1; yield 2; yield 3}(), function*() {yield 4; yield 5; yield 6}()))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.parallel(I(1, 2, 3), I(4, 5, 6)))).toEqual([[1, 4], [2, 5], [3, 6]])
     expect(Array.from(itt.parallel([1, 2], [3, 4], [5, 6], [7, 8]))).toEqual([[1, 3, 5, 7], [2, 4, 6, 8]])
     expect(Array.from(itt.parallel([1, 2, 3]))).toEqual([[1], [2], [3]])
   })
   test('stops when all iterators have run out of elements', () => {
     expect(Array.from(itt.parallel([1, 2, 3, 4], [5, 6]))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
     expect(Array.from(itt.parallel([1], [2, 3, 4], [5, 6, 7, 8]))).toEqual([[1, 2, 5], [undefined, 3, 6], [undefined, 4, 7], [undefined, undefined, 8]])
-    expect(Array.from(itt.parallel(function*() {yield 1; yield 2; yield 3; yield 4}(), function*() {yield 5; yield 6}()))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
+    expect(Array.from(itt.parallel(I(1, 2, 3, 4), I(5, 6)))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
     expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6, 7, 8], []))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
-    expect(Array.from(itt.parallel([1, 2, 3], function*() {yield 4; yield 5; yield 6; yield 7; yield 8}(), function*() {}()))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
+    expect(Array.from(itt.parallel([1, 2, 3], I(4, 5, 6, 7, 8), I()))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
     expect(Array.from(itt.parallel([], [1], [2]))).toEqual([[undefined, 1, 2]])
   })
   test('returns an empty iterator when given no iterators', () => {
@@ -1037,7 +1039,7 @@ describe('parallel', () => {
 describe('every', () => {
   test('returns true for an empty iterator', () => {
     expect(itt.every(x => false, [])).toBe(true)
-    expect(itt.every(x => false, function*() {}())).toBe(true)
+    expect(itt.every(x => false, I())).toBe(true)
   })
   test('returns true if every element satisfies fn', () => {
     expect(itt.every(x => x % 2, [3, 5, 7])).toBe(true)
@@ -1059,7 +1061,7 @@ describe('every', () => {
 describe('some', () => {
   test('returns false for an empty iterator', () => {
     expect(itt.some(x => true, [])).toBe(false)
-    expect(itt.some(x => true, function*() {}())).toBe(false)
+    expect(itt.some(x => true, I())).toBe(false)
   })
   test('returns true if any element satisfies fn', () => {
     expect(itt.some(x => x > 1, [3, 5, 7])).toBe(true)
@@ -1096,7 +1098,7 @@ describe('find', () => {
   })
   test('returns undefined for an empty iterator', () => {
     expect(itt.find(x => true, [])).toBe(undefined)
-    expect(itt.find(x => true, function*() {}())).toBe(undefined)
+    expect(itt.find(x => true, I())).toBe(undefined)
   })
   test(`short-circuits when an element satisfies fn`, () => {
     let it = false
@@ -1123,7 +1125,7 @@ describe('findLast', () => {
   })
   test('returns undefined for an empty iterator', () => {
     expect(itt.findLast(x => true, [])).toBe(undefined)
-    expect(itt.findLast(x => true, function*() {}())).toBe(undefined)
+    expect(itt.findLast(x => true, I())).toBe(undefined)
   })
 })
 
@@ -1144,7 +1146,7 @@ describe('findIndex', () => {
   })
   test('returns -1 for an empty iterator', () => {
     expect(itt.findIndex(x => true, [])).toBe(-1)
-    expect(itt.findIndex(x => true, function*() {}())).toBe(-1)
+    expect(itt.findIndex(x => true, I())).toBe(-1)
   })
   test(`short-circuits when an element satisfies fn`, () => {
     let it = false
@@ -1170,7 +1172,7 @@ describe('findLastIndex', () => {
   })
   test('returns -1 for an empty iterator', () => {
     expect(itt.findLastIndex(x => true, [])).toBe(-1)
-    expect(itt.findLastIndex(x => true, function*() {}())).toBe(-1)
+    expect(itt.findLastIndex(x => true, I())).toBe(-1)
   })
 })
 
@@ -1192,7 +1194,7 @@ describe('indexOf', () => {
   })
   test('returns -1 for an empty iterator', () => {
     expect(itt.indexOf('a', [])).toBe(-1)
-    expect(itt.indexOf('z', function*() {}())).toBe(-1)
+    expect(itt.indexOf('z', I())).toBe(-1)
   })
   test('uses === for equality', () => {
     expect(itt.indexOf('1', [1, 2, 3])).toBe(-1)
@@ -1224,7 +1226,7 @@ describe('lastIndexOf', () => {
   })
   test('returns -1 for an empty iterator', () => {
     expect(itt.lastIndexOf('a', [])).toBe(-1)
-    expect(itt.lastIndexOf('z', function*() {}())).toBe(-1)
+    expect(itt.lastIndexOf('z', I())).toBe(-1)
   })
   test('uses === for equality', () => {
     expect(itt.lastIndexOf('1', [1, 2, 3])).toBe(-1)
@@ -1246,7 +1248,7 @@ describe('includes', () => {
   })
   test('returns false for an empty iterator', () => {
     expect(itt.includes('a', [])).toBe(false)
-    expect(itt.includes('z', function*() {}())).toBe(false)
+    expect(itt.includes('z', I())).toBe(false)
   })
   test('uses === for equality', () => {
     expect(itt.includes('1', [1, 2, 3])).toBe(false)
@@ -1267,7 +1269,7 @@ describe('reduce', () => {
   test('returns the initial value when given an empty iterator', () => {
     const o = {}
     expect(itt.reduce(0, () => {}, [])).toBe(0)
-    expect(itt.reduce(o, () => {}, function*() {}())).toBe(o)
+    expect(itt.reduce(o, () => {}, I())).toBe(o)
   })
   test('accumulates function results', () => {
     expect(itt.reduce(0, (a, b) => a + b, [5, 4, 3, 2, 1, 0])).toBe(15)
@@ -1287,7 +1289,7 @@ describe('scan', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.scan(0, () => {}, []))).toEqual([])
-    expect(Array.from(itt.scan(0, () => {}, function*() {}()))).toEqual([])
+    expect(Array.from(itt.scan(0, () => {}, I()))).toEqual([])
   })
   test('accumulates and yields function results', () => {
     expect(Array.from(itt.scan(0, (a, b) => a + b, [5, 4, 3, 2, 1, 0]))).toEqual([5, 9, 12, 14, 15, 15])
@@ -1313,7 +1315,7 @@ describe('scan1', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.scan1(() => {}, []))).toEqual([])
-    expect(Array.from(itt.scan1(() => {}, function*() {}()))).toEqual([])
+    expect(Array.from(itt.scan1(() => {}, I()))).toEqual([])
   })
   test('accumulates and yields function results', () => {
     expect(Array.from(itt.scan1((a, b) => a + b, [5, 4, 3, 2, 1, 0]))).toEqual([5, 9, 12, 14, 15, 15])
@@ -1336,7 +1338,7 @@ describe('inject', () => {
   test('returns the accumulator when given an empty iterator', () => {
     const o = {}, p = {}
     expect(itt.inject(o, () => {}, [])).toBe(o)
-    expect(itt.inject(p, () => {}, function*() {}())).toBe(p)
+    expect(itt.inject(p, () => {}, I())).toBe(p)
   })
   test(`doesn't apply the update function when given an empty iterator`, () => {
     const f = jest.fn()
@@ -1360,7 +1362,7 @@ describe('inject', () => {
 describe('forEach', () => {
   test('applies fn to each iterator element', () => {
     const res = []
-    itt.forEach(x => res.unshift(x), function*() {yield 1; yield 2; yield 3; yield 4}())
+    itt.forEach(x => res.unshift(x), I(1, 2, 3, 4))
     expect(res).toEqual([4, 3, 2, 1])
   })
   test('works as a method', () => {
@@ -1378,7 +1380,7 @@ describe('forEach', () => {
   test('returns undefined', () => {
     expect(itt.forEach(() => 1, [])).toBe(undefined)
     expect(itt.forEach(() => 1, [1, 2, 3, 4, 5])).toBe(undefined)
-    expect(itt.forEach(() => 1, function*() {}())).toBe(undefined)
+    expect(itt.forEach(() => 1, I())).toBe(undefined)
   })
 })
 
@@ -1393,18 +1395,18 @@ describe('drain', () => {
   test('returns undefined', () => {
     expect(itt.drain([])).toBe(undefined)
     expect(itt.drain([1, 2, 3, 4, 5])).toBe(undefined)
-    expect(itt.drain(function*() {}())).toBe(undefined)
+    expect(itt.drain(I())).toBe(undefined)
   })
 })
 
 describe('first', () => {
   test('returns the first iterator element', () => {
     expect(itt.first([5, 2, 3])).toBe(5)
-    expect(itt.first(function*() {yield 'c'; yield 'b'; yield 'a'}())).toBe('c')
+    expect(itt.first(I('c', 'b', 'a'))).toBe('c')
   })
   test('returns undefined for empty iterators', () => {
     expect(itt.first([])).toBe(undefined)
-    expect(itt.first(function*() {}())).toBe(undefined)
+    expect(itt.first(I())).toBe(undefined)
   })
   test('works as a method', () => {
     expect(itt([5, 2, 3]).first()).toBe(5)
@@ -1418,11 +1420,11 @@ describe('first', () => {
 describe('last', () => {
   test('returns the last iterator element', () => {
     expect(itt.last([5, 2, 3])).toBe(3)
-    expect(itt.last(function*() {yield 'c'; yield 'b'; yield 'a'}())).toBe('a')
+    expect(itt.last(I('c', 'b', 'a'))).toBe('a')
   })
   test('returns undefined for empty iterators', () => {
     expect(itt.last([])).toBe(undefined)
-    expect(itt.last(function*() {}())).toBe(undefined)
+    expect(itt.last(I())).toBe(undefined)
   })
   test('works as a method', () => {
     expect(itt([5, 2, 3]).last()).toBe(3)
@@ -1436,15 +1438,15 @@ describe('tail', () => {
   })
   test('yields all but the first iterator element', () => {
     expect(Array.from(itt.tail([5, 2, 3]))).toEqual([2, 3])
-    expect(Array.from(itt.tail(function*() {yield 'c'; yield 'b'; yield 'a'}()))).toEqual(['b', 'a'])
+    expect(Array.from(itt.tail(I('c', 'b', 'a')))).toEqual(['b', 'a'])
   })
   test('returns an empty iterator when given a singleton iterator', () => {
     expect(Array.from(itt.tail([1]))).toEqual([])
-    expect(Array.from(itt.tail(function*() {yield 'c'}()))).toEqual([])
+    expect(Array.from(itt.tail(I('c')))).toEqual([])
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.tail([]))).toEqual([])
-    expect(Array.from(itt.tail(function*() {}()))).toEqual([])
+    expect(Array.from(itt.tail(I()))).toEqual([])
   })
   test('works as a method', () => {
     expect(Array.from(itt([5, 2, 3]).tail())).toEqual([2, 3])
@@ -1465,15 +1467,15 @@ describe('init', () => {
   })
   test('yields all but the last iterator element', () => {
     expect(Array.from(itt.init([5, 2, 3]))).toEqual([5, 2])
-    expect(Array.from(itt.init(function*() {yield 'c'; yield 'b'; yield 'a'}()))).toEqual(['c', 'b'])
+    expect(Array.from(itt.init(I('c', 'b', 'a')))).toEqual(['c', 'b'])
   })
   test('returns an empty iterator when given a singleton iterator', () => {
     expect(Array.from(itt.init([1]))).toEqual([])
-    expect(Array.from(itt.init(function*() {yield 'c'}()))).toEqual([])
+    expect(Array.from(itt.init(I('c')))).toEqual([])
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.init([]))).toEqual([])
-    expect(Array.from(itt.init(function*() {}()))).toEqual([])
+    expect(Array.from(itt.init(I()))).toEqual([])
   })
   test('works as a method', () => {
     expect(Array.from(itt([5, 2, 3]).init())).toEqual([5, 2])
@@ -1490,11 +1492,11 @@ describe('init', () => {
 describe('count', () => {
   test('returns the number of iterator elements', () => {
     expect(itt.count([5, 4, 3, 2])).toEqual(4)
-    expect(itt.count(function*() {yield 1; yield 3; yield 5}())).toEqual(3)
+    expect(itt.count(I(1, 3, 5))).toEqual(3)
   })
   test('returns 0 for empty iterators', () => {
     expect(itt.count([])).toEqual(0)
-    expect(itt.count(function*() {}())).toEqual(0)
+    expect(itt.count(I())).toEqual(0)
   })
   test('works as a method', () => {
     expect(itt([1, 2, 3]).count()).toEqual(3)
@@ -1506,18 +1508,18 @@ describe('pick', () => {
     expect(itt.pick(0, [1, 2, 3, 4])).toBe(1)
     expect(itt.pick(2, ['a', 'b', 'c', 'd'])).toBe('c')
     expect(itt.pick(3, [1, 2, 3, 4])).toBe(4)
-    expect(itt.pick(0, function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}())).toBe('a')
-    expect(itt.pick(2, function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}())).toBe('c')
-    expect(itt.pick(3, function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}())).toBe('d')
+    expect(itt.pick(0, I('a', 'b', 'c', 'd'))).toBe('a')
+    expect(itt.pick(2, I('a', 'b', 'c', 'd'))).toBe('c')
+    expect(itt.pick(3, I('a', 'b', 'c', 'd'))).toBe('d')
   })
   test('returns undefined for i < 0', () => {
     expect(itt.pick(-1, [1, 2, 3])).toBe(undefined)
-    expect(itt.pick(-1, function*() {yield 1; yield 2; yield 3}())).toBe(undefined)
+    expect(itt.pick(-1, I(1, 2, 3))).toBe(undefined)
   })
   test('returns undefined if i >= the number of elements', () => {
     expect(itt.pick(3, [1, 2, 3])).toBe(undefined)
     expect(itt.pick(10, [1, 2, 3, 4])).toBe(undefined)
-    expect(itt.pick(3, function*() {yield 1; yield 2; yield 3}())).toBe(undefined)
+    expect(itt.pick(3, I(1, 2, 3))).toBe(undefined)
   })
   test('works as a method', () => {
     expect(itt([1, 2, 3]).pick(0)).toBe(1)
@@ -1539,7 +1541,7 @@ describe('sum', () => {
   })
   test('returns 0 for an empty iterator', () => {
     expect(itt.sum([])).toBe(0)
-    expect(itt(function*() {}()).sum()).toBe(0)
+    expect(itt(I()).sum()).toBe(0)
   })
 })
 
@@ -1558,7 +1560,7 @@ describe('mean', () => {
   })
   test('returns NaN for an empty iterator', () => {
     expect(itt.mean([])).toBe(NaN)
-    expect(itt(function*() {}()).mean()).toBe(NaN)
+    expect(itt(I()).mean()).toBe(NaN)
   })
 })
 
@@ -1577,7 +1579,7 @@ describe('product', () => {
   })
   test('returns 1 for an empty iterator', () => {
     expect(itt.product([])).toBe(1)
-    expect(itt(function*() {}()).product()).toBe(1)
+    expect(itt(I()).product()).toBe(1)
   })
 })
 
@@ -1598,7 +1600,7 @@ describe('max', () => {
   })
   test('returns -inf for an empty iterator', () => {
     expect(itt.max([])).toBe(-Infinity)
-    expect(itt(function*() {}()).max()).toBe(-Infinity)
+    expect(itt(I()).max()).toBe(-Infinity)
   })
 })
 
@@ -1619,7 +1621,7 @@ describe('min', () => {
   })
   test('returns inf for an empty iterator', () => {
     expect(itt.min([])).toBe(Infinity)
-    expect(itt(function*() {}()).min()).toBe(Infinity)
+    expect(itt(I()).min()).toBe(Infinity)
   })
 })
 
@@ -1640,16 +1642,16 @@ describe('minMax', () => {
   })
   test('returns [inf, -inf] for an empty iterator', () => {
     expect(itt.minMax([])).toEqual([Infinity, -Infinity])
-    expect(itt(function*() {}()).minMax()).toEqual([Infinity, -Infinity])
+    expect(itt(I()).minMax()).toEqual([Infinity, -Infinity])
   })
 })
 
 describe('groupBy', () => {
   test('returns an empty map when given an empty iterator', () => {
     expect(itt.groupBy(x => 1, false, []).size).toBe(0)
-    expect(itt.groupBy(x => 1, false, function*() {}()).size).toBe(0)
+    expect(itt.groupBy(x => 1, false, I()).size).toBe(0)
     expect(itt.groupBy(x => 1, true, []).size).toBe(0)
-    expect(itt.groupBy(x => 1, true, function*() {}()).size).toBe(0)
+    expect(itt.groupBy(x => 1, true, I()).size).toBe(0)
   })
   test('returns maps', () => {
     expect(itt.groupBy(x => 1, true, ['a', 'b', 'c'])).toEqual(expect.any(Map))
@@ -1722,22 +1724,22 @@ describe('unique', () => {
 describe('toArray', () => {
   test('returns [] when given an empty iterator', () => {
     expect(itt.toArray([])).toEqual([])
-    expect(itt.toArray(function*() {}())).toEqual([])
+    expect(itt.toArray(I())).toEqual([])
   })
   test('returns an array of the iterator elements', () => {
-    expect(itt.toArray(function*() {yield 1; yield 2; yield 3; yield 2; yield 1}())).toEqual([1, 2, 3, 2, 1])
-    expect(itt.toArray(function*() {yield 'a'}())).toEqual(['a'])
+    expect(itt.toArray(I(1, 2, 3, 2, 1))).toEqual([1, 2, 3, 2, 1])
+    expect(itt.toArray(I('a'))).toEqual(['a'])
     expect(itt.toArray([1])).toEqual([1])
   })
   test('works as a method', () => {
-    expect(itt(function*() {yield 1; yield 2; yield 3}()).toArray()).toEqual([1, 2, 3])
+    expect(itt(I(1, 2, 3)).toArray()).toEqual([1, 2, 3])
   })
 })
 
 describe('toMap', () => {
   test('returns an empty map when given an empty iterator', () => {
     expect(itt.toMap([]).size).toBe(0)
-    expect(itt.toMap(function*() {}()).size).toBe(0)
+    expect(itt.toMap(I()).size).toBe(0)
   })
   test('returns maps', () => {
     expect(itt.toMap([[1, 'foo'], [2, 'bar']])).toEqual(expect.any(Map))
@@ -1747,7 +1749,7 @@ describe('toMap', () => {
     expect(m.size).toBe(2)
     expect(m.get(1)).toBe('foo')
     expect(m.get('a')).toBe(6)
-    const n = itt.toMap(function*() {yield [1, 'foo']; yield ['a', 6]}())
+    const n = itt.toMap(I([1, 'foo'], ['a', 6]))
     expect(n.size).toBe(2)
     expect(n.get(1)).toBe('foo')
     expect(n.get('a')).toBe(6)
@@ -1760,13 +1762,13 @@ describe('toMap', () => {
 describe('toSet', () => {
   test('returns an empty set when given an empty iterator', () => {
     expect(itt.toSet([]).size).toBe(0)
-    expect(itt.toSet(function*() {}()).size).toBe(0)
+    expect(itt.toSet(I()).size).toBe(0)
   })
   test('returns sets', () => {
     expect(itt.toSet([1, 'foo', 2, 'bar'])).toEqual(expect.any(Set))
   })
   test('returns a set of the iterator pairs', () => {
-    expect(Array.from(itt.toSet(function*() {yield 1; yield 5; yield 'abc'; yield 3; yield 1; yield 7}())).sort()).toEqual([1, 3, 5, 7, 'abc'])
+    expect(Array.from(itt.toSet(I(1, 5, 'abc', 3, 1, 7))).sort()).toEqual([1, 3, 5, 7, 'abc'])
   })
   test('works as a method', () => {
     expect(itt([1, 'foo', 2, 'bar']).toSet()).toEqual(expect.any(Set))
@@ -1776,9 +1778,9 @@ describe('toSet', () => {
 describe('toObject', () => {
   test('returns an empty object when given an empty iterator', () => {
     expect(itt.toObject([])).toEqual({})
-    expect(itt.toObject(function*() {}())).toEqual({})
+    expect(itt.toObject(I())).toEqual({})
     expect(itt.toObject(true, [])).toEqual({})
-    expect(itt.toObject(true, function*() {}())).toEqual({})
+    expect(itt.toObject(true, I())).toEqual({})
   })
   test('defaults to Object instances', () => {
     expect(Object.getPrototypeOf(itt.toObject([]))).toBe(Object.prototype)
@@ -1798,7 +1800,7 @@ describe('toObject', () => {
   })
   test('returns an object constructed from the iterator pairs', () => {
     expect(itt.toObject([[1, 'foo'], ['a', 6]])).toEqual({1: 'foo', a: 6})
-    expect(itt.toObject(function*() {yield [1, 'foo']; yield ['a', 6]}())).toEqual({1: 'foo', a: 6})
+    expect(itt.toObject(I([1, 'foo'], ['a', 6]))).toEqual({1: 'foo', a: 6})
     expect(itt.toObject(true, [[1, 'foo'], ['a', 6]])).toEqual({1: 'foo', a: 6})
   })
   test('works as a method', () => {
@@ -1814,15 +1816,15 @@ describe('intersperse', () => {
   })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.intersperse(0, []))).toEqual([])
-    expect(Array.from(itt.intersperse(0, function*() {}()))).toEqual([])
+    expect(Array.from(itt.intersperse(0, I()))).toEqual([])
   })
   test('returns a singleton iterator when given a singleton iterator', () => {
     expect(Array.from(itt.intersperse(0, [1]))).toEqual([1])
-    expect(Array.from(itt.intersperse(0, function*() {yield 'a'}()))).toEqual(['a'])
+    expect(Array.from(itt.intersperse(0, I('a')))).toEqual(['a'])
   })
   test('yields sep between each pair of iterator elements', () => {
     expect(Array.from(itt.intersperse(0, [1, 2, 3]))).toEqual([1, 0, 2, 0, 3])
-    expect(Array.from(itt.intersperse('!', function*() {yield 'a'; yield 'b'; yield 'c'; yield 'd'}()))).toEqual(['a', '!', 'b', '!', 'c', '!', 'd'])
+    expect(Array.from(itt.intersperse('!', I('a', 'b', 'c', 'd')))).toEqual(['a', '!', 'b', '!', 'c', '!', 'd'])
   })
   test('works as a method', () => {
     expect(Array.from(itt([1, 2, 3]).intersperse(0))).toEqual([1, 0, 2, 0, 3])
@@ -1832,7 +1834,7 @@ describe('intersperse', () => {
 describe('join', () => {
   test('returns an empty string for an empty iterator', () => {
     expect(itt.join(':', [])).toEqual('')
-    expect(itt.join(':', function*() {}())).toEqual('')
+    expect(itt.join(':', I())).toEqual('')
   })
   test('stringifies the element for singleton iterators', () => {
     expect(itt.join(':', [100])).toEqual('100')
