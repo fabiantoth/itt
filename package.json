@@ -19,6 +19,7 @@
   "license": "MIT",
   "repository": "https://github.com/nathan/itt",
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "jest": "^22.3.0"
   },
   "scripts": {
