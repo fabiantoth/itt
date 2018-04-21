@@ -970,6 +970,37 @@ describe('transpose', () => {
   })
 })
 
+describe('zip', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.zip([1, 2, 3], [4, 5, 6]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).zip([4, 5, 6]).toArray).toBeDefined()
+  })
+  test(`yields arrays of elements from its arguments`, () => {
+    expect(Array.from(itt.zip([1, 2, 3], [4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.zip(function*() {yield 1; yield 2; yield 3}(), function*() {yield 4; yield 5; yield 6}()))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.zip([1, 2], [3, 4], [5, 6], [7, 8]))).toEqual([[1, 3, 5, 7], [2, 4, 6, 8]])
+    expect(Array.from(itt.zip([1, 2, 3]))).toEqual([[1], [2], [3]])
+  })
+  test('stops when any iterator runs out of elements', () => {
+    expect(Array.from(itt.zip([1, 2, 3, 4], [5, 6]))).toEqual([[1, 5], [2, 6]])
+    expect(Array.from(itt.zip([1], [2, 3, 4], [5, 6, 7, 8]))).toEqual([[1, 2, 5]])
+    expect(Array.from(itt.zip(function*() {yield 1; yield 2; yield 3; yield 4}(), function*() {yield 5; yield 6}()))).toEqual([[1, 5], [2, 6]])
+  })
+  test('returns an empty iterator when given no iterators', () => {
+    expect(Array.from(itt.zip())).toEqual([])
+  })
+  test('returns an empty iterator when given any empty iterators', () => {
+    expect(Array.from(itt.zip([], [], []))).toEqual([])
+    expect(Array.from(itt.zip([1, 2, 3], [4, 5, 6, 7, 8], []))).toEqual([])
+    expect(Array.from(itt.zip([1, 2, 3], function*() {yield 4; yield 5; yield 6; yield 7; yield 8}(), function*() {}()))).toEqual([])
+    expect(Array.from(itt.zip([], [1], [2]))).toEqual([])
+    expect(Array.from(itt.zip([]))).toEqual([])
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3]).zip([4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
+  })
+})
+
 describe('every', () => {
   test('returns true for an empty iterator', () => {
     expect(itt.every(x => false, [])).toBe(true)
