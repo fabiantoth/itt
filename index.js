@@ -122,6 +122,7 @@ const takeLast = G(function*(n, xs) {
 })
 const transpose = G(function*(xss) {
   const its = Array.from(xss, xs => xs[Symbol.iterator]())
+  if (!its.length) return
   for (;;) {
     const rs = its.map(it => it.next())
     if (rs.some(r => r.done)) return
