@@ -1001,6 +1001,37 @@ describe('zip', () => {
   })
 })
 
+describe('parallel', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.parallel([1, 2, 3], [4, 5, 6]).toArray).toBeDefined()
+    expect(itt([1, 2, 3]).parallel([4, 5, 6]).toArray).toBeDefined()
+  })
+  test(`yields arrays of elements from its arguments`, () => {
+    expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.parallel(function*() {yield 1; yield 2; yield 3}(), function*() {yield 4; yield 5; yield 6}()))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.parallel([1, 2], [3, 4], [5, 6], [7, 8]))).toEqual([[1, 3, 5, 7], [2, 4, 6, 8]])
+    expect(Array.from(itt.parallel([1, 2, 3]))).toEqual([[1], [2], [3]])
+  })
+  test('stops when all iterators have run out of elements', () => {
+    expect(Array.from(itt.parallel([1, 2, 3, 4], [5, 6]))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
+    expect(Array.from(itt.parallel([1], [2, 3, 4], [5, 6, 7, 8]))).toEqual([[1, 2, 5], [undefined, 3, 6], [undefined, 4, 7], [undefined, undefined, 8]])
+    expect(Array.from(itt.parallel(function*() {yield 1; yield 2; yield 3; yield 4}(), function*() {yield 5; yield 6}()))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
+    expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6, 7, 8], []))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
+    expect(Array.from(itt.parallel([1, 2, 3], function*() {yield 4; yield 5; yield 6; yield 7; yield 8}(), function*() {}()))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
+    expect(Array.from(itt.parallel([], [1], [2]))).toEqual([[undefined, 1, 2]])
+  })
+  test('returns an empty iterator when given no iterators', () => {
+    expect(Array.from(itt.parallel())).toEqual([])
+  })
+  test('returns an empty iterator when given all empty iterators', () => {
+    expect(Array.from(itt.parallel([], [], []))).toEqual([])
+    expect(Array.from(itt.parallel([]))).toEqual([])
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 2, 3]).parallel([4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
+  })
+})
+
 describe('every', () => {
   test('returns true for an empty iterator', () => {
     expect(itt.every(x => false, [])).toBe(true)
