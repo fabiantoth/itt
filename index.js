@@ -297,7 +297,14 @@ const slice = G(function*(xs, start = 0, end) {
     let i = 0
     for (const x of xs) list[i++ % n] = x
     if (n > list.length) n = list.length
-    for (let j = 0; j < n + end; j++) yield list[(i + j) % n]
+    let len
+    if (end >= 0) {
+      if (end > i) end = i
+      len = end - (i - n)
+    } else {
+      len = n + end
+    }
+    for (let j = 0; j < len; j++) yield list[(i + j) % n]
   }
 })
 
