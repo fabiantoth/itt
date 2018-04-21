@@ -260,9 +260,12 @@ function join(sep = ',', xs) {
 
 const slice = G(function*(xs, start = 0, end) {
   if (Array.isArray(xs)) {
-    if (start < 0) start += xs.length
-    if (end === undefined) end = xs.length
-    else if (end < 0) end += xs.length
+    const len = xs.length
+    if (start < 0) start += len
+    if (end === undefined) end = len
+    else if (end < 0) end += len
+    if (start < 0) start = 0
+    if (end > len) end = len
     for (let i = start; i < end; ++i) yield xs[i]
   } else if (end === undefined) {
     yield* start < 0 ? takeLast(-start, xs) : drop(start, xs)
