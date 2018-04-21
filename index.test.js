@@ -931,6 +931,45 @@ describe('takeLast', () => {
   })
 })
 
+describe('transpose', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.transpose([[1, 2, 3], [4, 5, 6]]).toArray).toBeDefined()
+    expect(itt([[1, 2, 3], [4, 5, 6]]).transpose().toArray).toBeDefined()
+  })
+  test(`yields arrays of elements from its argument's elements`, () => {
+    expect(Array.from(itt.transpose([[1, 2, 3], [4, 5, 6]]))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.transpose([function*() {yield 1; yield 2; yield 3}(), function*() {yield 4; yield 5; yield 6}()]))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.transpose([[1, 2], [3, 4], [5, 6], [7, 8]]))).toEqual([[1, 3, 5, 7], [2, 4, 6, 8]])
+    expect(Array.from(itt.transpose(function*() {yield [1, 2, 3]; yield [4, 5, 6]}()))).toEqual([[1, 4], [2, 5], [3, 6]])
+    expect(Array.from(itt.transpose(function*() {yield [1, 2, 3]}()))).toEqual([[1], [2], [3]])
+  })
+  test(`doesn't consume elements until necessary`, () => {
+    let it1 = false, it2 = false
+    const i = itt.transpose(function*() {it1 = true; yield [1, 2]; yield [3, 4]; yield [3, 4]; it2 = true}())
+    expect(it1).toBe(false)
+    i.next()
+    expect(it2).toBe(true)
+  })
+  test('stops when any iterator runs out of elements', () => {
+    expect(Array.from(itt.transpose([[1, 2, 3, 4], [5, 6]]))).toEqual([[1, 5], [2, 6]])
+    expect(Array.from(itt.transpose([[1], [2, 3, 4], [5, 6, 7, 8]]))).toEqual([[1, 2, 5]])
+    expect(Array.from(itt.transpose([function*() {yield 1; yield 2; yield 3; yield 4}(), function*() {yield 5; yield 6}()]))).toEqual([[1, 5], [2, 6]])
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.transpose([]))).toEqual([])
+    expect(Array.from(itt.transpose(function*() {}()))).toEqual([])
+  })
+  test('returns an empty iterator when given any empty iterator elements', () => {
+    expect(Array.from(itt.transpose([[], [], []]))).toEqual([])
+    expect(Array.from(itt.transpose([[1, 2, 3], function*() {yield 4; yield 5; yield 6; yield 7; yield 8}(), function*() {}()]))).toEqual([])
+    expect(Array.from(itt.transpose([[], [1], [2]]))).toEqual([])
+    expect(Array.from(itt.transpose(function*() {yield []}()))).toEqual([])
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([[1, 2, 3], [4, 5, 6]]).transpose())).toEqual([[1, 4], [2, 5], [3, 6]])
+  })
+})
+
 describe('every', () => {
   test('returns true for an empty iterator', () => {
     expect(itt.every(x => false, [])).toBe(true)
