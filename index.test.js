@@ -1017,12 +1017,13 @@ describe('parallel', () => {
     expect(Array.from(itt.parallel([1, 2, 3]))).toEqual([[1], [2], [3]])
   })
   test('stops when all iterators have run out of elements', () => {
-    expect(Array.from(itt.parallel([1, 2, 3, 4], [5, 6]))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
-    expect(Array.from(itt.parallel([1], [2, 3, 4], [5, 6, 7, 8]))).toEqual([[1, 2, 5], [undefined, 3, 6], [undefined, 4, 7], [undefined, undefined, 8]])
-    expect(Array.from(itt.parallel(I(1, 2, 3, 4), I(5, 6)))).toEqual([[1, 5], [2, 6], [3, undefined], [4, undefined]])
-    expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6, 7, 8], []))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
-    expect(Array.from(itt.parallel([1, 2, 3], I(4, 5, 6, 7, 8), I()))).toEqual([[1, 4, undefined], [2, 5, undefined], [3, 6, undefined], [undefined, 7, undefined], [undefined, 8, undefined]])
-    expect(Array.from(itt.parallel([], [1], [2]))).toEqual([[undefined, 1, 2]])
+    let u
+    expect(Array.from(itt.parallel([1, 2, 3, 4], [5, 6]))).toEqual([[1, 5], [2, 6], [3, u], [4, u]])
+    expect(Array.from(itt.parallel([1], [2, 3, 4], [5, 6, 7, 8]))).toEqual([[1, 2, 5], [u, 3, 6], [u, 4, 7], [u, u, 8]])
+    expect(Array.from(itt.parallel(I(1, 2, 3, 4), I(5, 6)))).toEqual([[1, 5], [2, 6], [3, u], [4, u]])
+    expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6, 7, 8], []))).toEqual([[1, 4, u], [2, 5, u], [3, 6, u], [u, 7, u], [u, 8, u]])
+    expect(Array.from(itt.parallel([1, 2, 3], I(4, 5, 6, 7, 8), I()))).toEqual([[1, 4, u], [2, 5, u], [3, 6, u], [u, 7, u], [u, 8, u]])
+    expect(Array.from(itt.parallel([], [1], [2]))).toEqual([[u, 1, 2]])
   })
   test('returns an empty iterator when given no iterators', () => {
     expect(Array.from(itt.parallel())).toEqual([])
@@ -1662,19 +1663,26 @@ describe('groupBy', () => {
     expect(Array.from(itt(['a', 'b', 'c']).groupBy(x => 1))).toEqual([[1, ['a', 'b', 'c']]])
   })
   test('groups items in the map by fn', () => {
-    expect(Array.from(itt.groupBy(x => x.length, ['a', 'bc', 'd', 'e', 'fg', 'hi', 'j'])).sort((a, b) => (a[0] - b[0]))).toEqual([[1, ['a', 'd', 'e', 'j']], [2, ['bc', 'fg', 'hi']]])
+    expect(Array.from(itt.groupBy(x => x.length, ['a', 'bc', 'd', 'e', 'fg', 'hi', 'j']))
+      .sort((a, b) => (a[0] - b[0])))
+    .toEqual([[1, ['a', 'd', 'e', 'j']], [2, ['bc', 'fg', 'hi']]])
   })
   test('returns arrays when unique = false', () => {
     expect(Array.from(itt.groupBy(x => 1, ['a']))).toEqual([[1, ['a']]])
   })
   test('keeps duplicate items when unique = false', () => {
-    expect(Array.from(itt.groupBy(x => x.length, ['a', 'bb', 'a', 'a', 'bb', 'bb', 'a'])).sort((a, b) => (a[0] - b[0]))).toEqual([[1, ['a', 'a', 'a', 'a']], [2, ['bb', 'bb', 'bb']]])
+    expect(Array.from(itt.groupBy(x => x.length, ['a', 'bb', 'a', 'a', 'bb', 'bb', 'a']))
+      .sort((a, b) => (a[0] - b[0])))
+    .toEqual([[1, ['a', 'a', 'a', 'a']], [2, ['bb', 'bb', 'bb']]])
   })
   test('returns sets when unique = true', () => {
     expect(Array.from(itt.groupBy(x => 1, true, ['a']))[0][1]).toEqual(expect.any(Set))
   })
   test('removes duplicate items when unique = true', () => {
-    expect(Array.from(itt.groupBy(x => x.length, true, ['a', 'cc', 'a', 'b', 'bb', 'bb', 'a'])).sort((a, b) => (a[0] - b[0])).map(a => [a[0], Array.from(a[1]).sort()])).toEqual([[1, ['a', 'b']], [2, ['bb', 'cc']]])
+    expect(Array.from(itt.groupBy(x => x.length, true, ['a', 'cc', 'a', 'b', 'bb', 'bb', 'a']))
+      .sort((a, b) => (a[0] - b[0]))
+      .map(a => [a[0], Array.from(a[1]).sort()]))
+    .toEqual([[1, ['a', 'b']], [2, ['bb', 'cc']]])
   })
   test('works as a method', () => {
     expect(Array.from(itt(['a']).groupBy(x => 1))).toEqual([[1, ['a']]])
