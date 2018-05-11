@@ -43,7 +43,7 @@ const itt = require('itt')
 
 # API
 
-**[Constructors](#constructors)** — [from(…)](#ittthing-ittfromthing) [empty()](#empty) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn)
+**[Constructors](#constructors)** — [from(…)](#ittthing-ittfromthing) [empty()](#empty) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn) [split(…)](#splitstring-sep--undefined-limit--infinity)
 <br>**[Object iterators](#object-iterators)** — [entries(…)](#entrieso) [keys(…)](#keyso) [values(…)](#valueso)
 <br>**[Utilities](#utilities)** — [is(…)](#ittisthing) [generator(…)](#ittgeneratorg)
 
@@ -143,6 +143,15 @@ An iterator which yields `x`, `fn(x)`, `fn(fn(x))`, etc.
 ```js
 itt.iterate(1, x => x * 2).take(5).toArray()
 /* [ 1, 2, 4, 8, 16 ] */
+```
+
+### split(string, [sep = undefined, [limit = Infinity]])
+
+An iterator which yields slices of `string`, delimited by `sep`, up to a maximum of `limit` items. Just like the built-in `String.prototype.split`, but does not create an intermediate array.
+
+```js
+itt.split('one,two,three,four', ',').toArray()
+/* ['one', 'two', 'three', 'four'] */
 ```
 
 ## Object iterators
