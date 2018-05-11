@@ -18,6 +18,31 @@ const replicate = G(function*(n, x) {for (let i = 0; i < n; ++i) yield x})
 const forever = G(function*(x) {for (;;) yield x})
 const iterate = G(function*(x, fn) {for (;;) {yield x; x = fn(x)}})
 
+const split = G(function*(s, sep, limit = Infinity) {
+  if (sep === undefined) {
+    if (0 < limit) yield s
+    return
+  }
+  sep = String(sep)
+  if (!sep) {
+    const stop = Math.min(limit, s.length)
+    for (let i = 0; i < stop; ++i) yield s.charAt(i)
+    return
+  }
+  let n = 0
+  let i = 0
+  const len = s.length
+  const slen = sep.length
+  for (;;) {
+    if (n >= limit) return
+    const j = s.indexOf(sep, i)
+    yield s.slice(i, j === -1 ? len : j)
+    if (j === -1) return
+    i = j + slen
+    ++n
+  }
+})
+
 const _keys = Object.keys
 const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
@@ -416,6 +441,7 @@ Object.assign(module.exports = from, {
   is, from, generator, empty,
   range, irange,
   replicate, forever, iterate,
+  split,
   entries, keys, values,
   toArray, toMap, toSet, toObject,
   intersperse, join,

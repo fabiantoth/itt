@@ -69,6 +69,67 @@ describe('range', () => {
   })
 })
 
+describe('split', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.split('1,2,3', ',').toArray).toBeDefined()
+  })
+  test('yields the input string when given one argument', () => {
+    expect(Array.from(itt.split('1,2,3'))).toEqual(['1,2,3'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop'))).toEqual(['ab cde fghi jkl mnop'])
+    expect(Array.from(itt.split('aundefinedb'))).toEqual(['aundefinedb'])
+    expect(Array.from(itt.split(''))).toEqual([''])
+  })
+  test('yields subsequences split at each occurrence of the separator', () => {
+    expect(Array.from(itt.split('1,2,3', ','))).toEqual(['1', '2', '3'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' '))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
+  })
+  test('yields an empty string where two instances of the separator are adjacent', () => {
+    expect(Array.from(itt.split('1,,2,,,3', ','))).toEqual(['1', '', '2', '', '', '3'])
+    expect(Array.from(itt.split('ab    cde', ' '))).toEqual(['ab', '', '', '', 'cde'])
+  })
+  test('yields an empty string for leading separators', () => {
+    expect(Array.from(itt.split(',,a,b,c', ','))).toEqual(['', '', 'a', 'b', 'c'])
+    expect(Array.from(itt.split(' 123', ' '))).toEqual(['', '123'])
+  })
+  test('yields an empty string for trailing separators', () => {
+    expect(Array.from(itt.split('a,b,c,,,', ','))).toEqual(['a', 'b', 'c', '', '', ''])
+    expect(Array.from(itt.split('123 ', ' '))).toEqual(['123', ''])
+  })
+  test('yields each character when the separator is ""', () => {
+    expect(Array.from(itt.split('a,b,c', ''))).toEqual(['a', ',', 'b', ',', 'c'])
+    expect(Array.from(itt.split('1a,.', ''))).toEqual(['1', 'a', ',', '.'])
+  })
+  test('yields the input string when the separator does not occur', () => {
+    expect(Array.from(itt.split('123abc', ','))).toEqual(['123abc'])
+    expect(Array.from(itt.split('abcdefg', ' '))).toEqual(['abcdefg'])
+    expect(Array.from(itt.split('-1--2->', '-->'))).toEqual(['-1--2->'])
+  })
+  test('works for multi-character separators', () => {
+    expect(Array.from(itt.split('-1--2->3-->4>--5-->6', '-->'))).toEqual(['-1--2->3', '4>--5', '6'])
+  })
+  test('yields the first n subsequences when given three arguments', () => {
+    expect(Array.from(itt.split('aundefinedb', undefined, 1))).toEqual(['aundefinedb'])
+    expect(Array.from(itt.split('abcdef', '', 1))).toEqual(['a'])
+    expect(Array.from(itt.split('abcdef', '', 2))).toEqual(['a', 'b'])
+    expect(Array.from(itt.split('abcdef', '', 3))).toEqual(['a', 'b', 'c'])
+    expect(Array.from(itt.split('abcdef', '', 10))).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
+    expect(Array.from(itt.split('abcdef', '', Infinity))).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 1))).toEqual(['ab'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 2))).toEqual(['ab', 'cde'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 4))).toEqual(['ab', 'cde', 'fghi', 'jkl'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 10))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', Infinity))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
+  })
+  test('returns an empty iterator for n <= 0', () => {
+    expect(Array.from(itt.split('abcdef', '', 0))).toEqual([])
+    expect(Array.from(itt.split('abcdef', '', -1))).toEqual([])
+    expect(Array.from(itt.split('aundefinedb', undefined, 0))).toEqual([])
+    expect(Array.from(itt.split('aundefinedb', undefined, -1))).toEqual([])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 0))).toEqual([])
+    expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', -1))).toEqual([])
+  })
+})
+
 describe('irange', () => {
   test('returns wrapped iterators', () => {
     expect(itt.irange().toArray).toBeDefined()
