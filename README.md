@@ -27,6 +27,40 @@ console.log(
 991 is prime!
 997 is prime!
 */
+
+fs.readFile('.git/index', (err, buf) => {
+  if (err) return
+  console.log(
+    itt(buf)
+    .take(256)
+    .chunksOf(16)
+    .map(ch => itt(ch)
+      .map(c => c.toString(16).padStart(2, '0'))
+      .push(itt(ch).map(c => c < 32 || c > 0x7f ? '.' : String.fromCharCode(c)).join(''))
+      .join(' '))
+    .join('\n'))
+})
+
+
+/*
+44 49 52 43 00 00 00 02 00 00 00 09 5a 8b 6b 93 DIRC........Z.k.
+39 66 8f b5 5a 8b 6b 93 39 66 8f b5 01 00 00 04 9f..Z.k.9f......
+00 30 13 ba 00 00 81 a4 00 00 01 f5 00 00 00 14 .0..............
+00 00 00 21 88 34 0b 40 1e 20 a8 54 6b 4a 64 19 ...!.4.@. .TkJd.
+b5 34 f1 5f f0 a3 0c f7 00 0a 2e 67 69 74 69 67 .4._.......gitig
+6e 6f 72 65 00 00 00 00 00 00 00 00 5a 72 89 93 nore........Zr..
+19 23 60 b4 5a 55 1e 9c 00 00 00 00 01 00 00 04 .#`.ZU..........
+00 0e 4a 91 00 00 81 a4 00 00 01 f5 00 00 00 14 ..J.............
+00 00 04 16 c7 39 ef 67 ea 2f 0f 44 c3 57 8c 2d .....9.g./.D.W.-
+18 63 20 e0 59 0f 3c c8 00 0a 4c 49 43 45 4e 53 .c .Y.<...LICENS
+45 2e 6d 64 00 00 00 00 00 00 00 00 5a f5 45 45 E.md........Z.EE
+09 c5 59 b8 5a f5 45 45 09 c5 59 b8 01 00 00 04 ..Y.Z.EE..Y.....
+00 0e 61 56 00 00 81 a4 00 00 01 f5 00 00 00 14 ..aV............
+00 00 59 ad 49 8a b6 60 fa d2 83 79 39 5e 61 ee ..Y.I..`...y9^a.
+bf 71 0b 8c 41 84 16 d6 00 09 52 45 41 44 4d 45 .q..A.....README
+2e 6d 64 00 5a da b8 31 13 4f d0 cc 5a da b8 31 .md.Z..1.O..Z..1
+*/
+
 ```
 
 # Install
