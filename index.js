@@ -18,28 +18,80 @@ const replicate = G(function*(n, x) {for (let i = 0; i < n; ++i) yield x})
 const forever = G(function*(x) {for (;;) yield x})
 const iterate = G(function*(x, fn) {for (;;) {yield x; x = fn(x)}})
 
-const split = G(function*(s, sep, limit = Infinity) {
-  if (sep === undefined) {
-    if (0 < limit) yield s
-    return
+const toString = Object.prototype.toString
+const split = G(function*(s, sep, limit) {
+  const re = toString.call(sep) === '[object RegExp]'
+  if (sep != null && !re) {
+    const splitter = sep[Symbol.splitter]
+    if (splitter != null) {
+      yield* splitter.call(sep, s, limit)
+      return
+    }
   }
-  sep = String(sep)
-  if (!sep) {
+  if (limit === undefined) limit = Infinity
+  if (limit <= 0) return
+  s = String(s)
+  if (sep === undefined) {yield s; return}
+  if (!re) sep = String(sep)
+  if (!sep) { // || re && sep.test('')
     const stop = Math.min(limit, s.length)
     for (let i = 0; i < stop; ++i) yield s.charAt(i)
     return
   }
+  if (!s) {
+    if (!re || !sep.test('')) yield ''
+    return
+  }
   let n = 0
-  let i = 0
   const len = s.length
-  const slen = sep.length
-  for (;;) {
-    if (n >= limit) return
-    const j = s.indexOf(sep, i)
-    yield s.slice(i, j === -1 ? len : j)
-    if (j === -1) return
-    i = j + slen
-    ++n
+  if (re) {
+    let empty = null
+    let first = true
+    const r = new RegExp(sep.source, sep.flags.replace(/[yg]/, '') + 'g')
+    for (;;) {
+      const i = r.lastIndex
+      const m = r.exec(s)
+      if (m && empty != null) {
+        yield s.slice(empty, m.index)
+        if (++n >= limit) return
+      }
+      if (m && r.lastIndex === i) {
+        ++r.lastIndex
+        if (i === len) {
+          if (empty == null) yield ''
+          return
+        }
+        empty = first ? i : m.index
+        if (first) {
+          first = false
+          continue
+        }
+      } else {
+        const j = m ? m.index : len
+        if (empty == null) {
+          yield s.slice(i, j)
+          if (++n >= limit) return
+        }
+        first = true
+        empty = null
+      }
+      if (!m) return
+      for (let i = 1, mlen = m.length; i < mlen; ++i) {
+        yield m[i]
+        if (++n >= limit) return
+      }
+    }
+  } else {
+    let i = 0
+    const slen = sep.length
+    for (;;) {
+      if (n >= limit) return
+      const j = s.indexOf(sep, i)
+      yield s.slice(i, j === -1 ? len : j)
+      if (j === -1) return
+      i = j + slen
+      ++n
+    }
   }
 })
 

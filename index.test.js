@@ -83,31 +83,77 @@ describe('split', () => {
     expect(Array.from(itt.split('1,2,3', ','))).toEqual(['1', '2', '3'])
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' '))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
   })
-  test('yields an empty string where two instances of the separator are adjacent', () => {
+  test('stringifies its argument', () => {
+    expect(Array.from(itt.split(0.1, '.'))).toEqual(['0', '1'])
+  })
+  test('supports regular expressions as separators', () => {
+    expect(Array.from(itt.split('ab1cde2f3', /\d/))).toEqual(['ab', 'cde', 'f', ''])
+    expect(Array.from(itt.split('test<reg>the<exp>world', /<\w+>/))).toEqual(['test', 'the', 'world'])
+    expect(Array.from(itt.split('1a,.', /a?/))).toEqual(['1', ',', '.'])
+    expect(Array.from(itt.split('1aa.', /a?/))).toEqual(['1', '', '.'])
+    expect(Array.from(itt.split('1aaa.', /a?/))).toEqual(['1', '', '', '.'])
+    expect(Array.from(itt.split('11aa..', /a?/))).toEqual(['1', '1', '', '.', '.'])
+  })
+  test('supports global regular expressions as separators', () => {
+    expect(Array.from(itt.split('1,2,3', /,/g))).toEqual(['1', '2', '3'])
+  })
+  test('supports sticky regular expressions as separators', () => {
+    expect(Array.from(itt.split('1,2,3', /,/y))).toEqual(['1', '2', '3'])
+  })
+  test('supports case-insensitive regular expressions as separators', () => {
+    expect(Array.from(itt.split('1a2A3', /a/i))).toEqual(['1', '2', '3'])
+  })
+  test('supports Unicode regular expressions as separators', () => {
+    expect(Array.from(itt.split('1𐠂2𐠃3', /[𐠂𐠃]/u))).toEqual(['1', '2', '3'])
+    expect(Array.from(itt.split('1S2ſ3', /s/ui))).toEqual(['1', '2', '3'])
+  })
+  test('yields captured groups from regular expression separators', () => {
+    expect(Array.from(itt.split('ab1cde2f3', /(\d)/))).toEqual(['ab', '1', 'cde', '2', 'f', '3', ''])
+    expect(Array.from(itt.split('test<:reg>the<:exp>world', /(<):(\w+)>/))).toEqual(['test', '<', 'reg', 'the', '<', 'exp', 'world'])
+    expect(Array.from(itt.split('1a,.', /()/))).toEqual(['1', '', 'a', '', ',', '', '.'])
+    expect(Array.from(itt.split('1a,.', /()?/))).toEqual(['1', undefined, 'a', undefined, ',', undefined, '.'])
+    expect(Array.from(itt.split('11aa..', /(a)?/))).toEqual(['1', undefined, '1', 'a', '', 'a', '.', undefined, '.'])
+    expect(Array.from(itt.split('aa', /(a)?/))).toEqual(['', 'a', '', 'a', ''])
+    expect(Array.from(itt.split('aab', /(a)?/))).toEqual(['', 'a', '', 'a', 'b'])
+    expect(Array.from(itt.split('baa', /(a)?/))).toEqual(['b', 'a', '', 'a', ''])
+    expect(Array.from(itt.split('bbabab', /(a)?/))).toEqual(['b', undefined, 'b', 'a', 'b', 'a', 'b'])
+  })
+  test('yields "" where two instances of the separator are adjacent', () => {
     expect(Array.from(itt.split('1,,2,,,3', ','))).toEqual(['1', '', '2', '', '', '3'])
     expect(Array.from(itt.split('ab    cde', ' '))).toEqual(['ab', '', '', '', 'cde'])
   })
-  test('yields an empty string for leading separators', () => {
+  test('yields "" for leading separators', () => {
     expect(Array.from(itt.split(',,a,b,c', ','))).toEqual(['', '', 'a', 'b', 'c'])
     expect(Array.from(itt.split(' 123', ' '))).toEqual(['', '123'])
   })
-  test('yields an empty string for trailing separators', () => {
+  test('yields "" for trailing separators', () => {
     expect(Array.from(itt.split('a,b,c,,,', ','))).toEqual(['a', 'b', 'c', '', '', ''])
     expect(Array.from(itt.split('123 ', ' '))).toEqual(['123', ''])
   })
-  test('yields each character when the separator is ""', () => {
+  test('returns an empty iterator for an empty string and an empty separator', () => {
+    expect(Array.from(itt.split('', ''))).toEqual([])
+    expect(Array.from(itt.split('', /a?/))).toEqual([])
+    expect(Array.from(itt.split('', /^/))).toEqual([])
+  })
+  test('yields "" for an empty string and a non-empty separator', () => {
+    expect(Array.from(itt.split('', ' '))).toEqual([''])
+    expect(Array.from(itt.split('', 'asdf'))).toEqual([''])
+    expect(Array.from(itt.split('', /a/))).toEqual([''])
+  })
+  test('yields each character when the separator is empty', () => {
     expect(Array.from(itt.split('a,b,c', ''))).toEqual(['a', ',', 'b', ',', 'c'])
     expect(Array.from(itt.split('1a,.', ''))).toEqual(['1', 'a', ',', '.'])
   })
   test('yields the input string when the separator does not occur', () => {
     expect(Array.from(itt.split('123abc', ','))).toEqual(['123abc'])
     expect(Array.from(itt.split('abcdefg', ' '))).toEqual(['abcdefg'])
+    expect(Array.from(itt.split('abcdefg', /\d+/))).toEqual(['abcdefg'])
     expect(Array.from(itt.split('-1--2->', '-->'))).toEqual(['-1--2->'])
   })
   test('works for multi-character separators', () => {
     expect(Array.from(itt.split('-1--2->3-->4>--5-->6', '-->'))).toEqual(['-1--2->3', '4>--5', '6'])
   })
-  test('yields the first n subsequences when given three arguments', () => {
+  test('yields the first n subsequences when given a limit', () => {
     expect(Array.from(itt.split('aundefinedb', undefined, 1))).toEqual(['aundefinedb'])
     expect(Array.from(itt.split('abcdef', '', 1))).toEqual(['a'])
     expect(Array.from(itt.split('abcdef', '', 2))).toEqual(['a', 'b'])
@@ -119,6 +165,26 @@ describe('split', () => {
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 4))).toEqual(['ab', 'cde', 'fghi', 'jkl'])
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 10))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', Infinity))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
+  })
+  test('yields the first n elements when given a regexp and a limit', () => {
+    expect(Array.from(itt.split('1,2.3,4', /[,.]/, 3))).toEqual(['1', '2', '3'])
+    expect(Array.from(itt.split('1,2.3,4', /[,.]/, 10))).toEqual(['1', '2', '3', '4'])
+    expect(Array.from(itt.split('bbabababab', /(a)/, 1))).toEqual(['bb'])
+    expect(Array.from(itt.split('bbabababab', /(a)/, 2))).toEqual(['bb', 'a'])
+    expect(Array.from(itt.split('bbabababab', /(a)/, 3))).toEqual(['bb', 'a', 'b'])
+    expect(Array.from(itt.split('bbabababab', /(a)/, 4))).toEqual(['bb', 'a', 'b', 'a'])
+    expect(Array.from(itt.split('abcdefg', /(.)()?/, 4))).toEqual(['', 'a', undefined, ''])
+    expect(Array.from(itt.split('abcdefg', /(.)()?/, 8))).toEqual(['', 'a', undefined, '', 'b', undefined, '', 'c'])
+    expect(Array.from(itt.split('abcdefg', /(.)()?/, 100))).toEqual([
+      '', 'a', undefined,
+      '', 'b', undefined,
+      '', 'c', undefined,
+      '', 'd', undefined,
+      '', 'e', undefined,
+      '', 'f', undefined,
+      '', 'g', undefined,
+      '',
+    ])
   })
   test('returns an empty iterator for n <= 0', () => {
     expect(Array.from(itt.split('abcdef', '', 0))).toEqual([])
