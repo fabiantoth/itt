@@ -184,8 +184,10 @@ itt.iterate(1, x => x * 2).take(5).toArray()
 An iterator which yields slices of `string`, delimited by `sep`, up to a maximum of `limit` items. Just like the built-in `String.prototype.split`, but does not create an intermediate array.
 
 ```js
-itt.split('one,two,three,four', ',').toArray()
-/* ['one', 'two', 'three', 'four'] */
+itt.split('one,two,three,four,five', ',').toArray()
+/* ['one', 'two', 'three', 'four', 'five'] */
+itt.split('one<a>two<b>three<c>four', /<(\w+)>/).toArray()
+/* ['one', 'c', 'two', 'b', 'three', 'c', 'four'] */
 ```
 
 ## Object iterators
