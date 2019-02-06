@@ -321,6 +321,10 @@ describe('cartesianProduct', () => {
       [1, 1, 0, 0], [1, 1, 0, 1], [1, 1, 1, 0], [1, 1, 1, 1],
     ]))
   })
+  test('works as a method', () => {
+    expect(Array.from(itt([0, 1]).cartesianProduct(2))).toEqual([[0, 0], [0, 1], [1, 0], [1, 1]])
+    expect(Array.from(itt([0, 1]).cartesianProduct([2, 3], [4, 5]))).toEqual([[0, 2, 4], [0, 2, 5], [0, 3, 4], [0, 3, 5], [1, 2, 4], [1, 2, 5], [1, 3, 4], [1, 3, 5]])
+  })
 })
 
 describe('entries', () => {

@@ -498,6 +498,10 @@ class Iter {
   unique() {return unique(this.iter)}
 
   slice(start, end) {return slice(this.iter, start, end)}
+
+  cartesianProduct(...xs) {
+    return xs.length === 1 && typeof xs[0] === 'number' ?
+      cartesianProduct(xs[0], this) : cartesianProduct(this, ...xs)}
 }
 class ForkSource {
   constructor(n, iter) {
