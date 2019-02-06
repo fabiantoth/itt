@@ -97,8 +97,8 @@ const split = G(function*(s, sep, limit) {
 
 const cartesianProduct = G(function*(...xs) {
   let els
-  if (xs.length === 2 && typeof xs[1] === 'number') {
-    els = Array(Math.max(0, xs[1])).fill(Array.from(xs[0]))
+  if (xs.length === 2 && typeof xs[0] === 'number') {
+    els = Array(Math.max(0, xs[0])).fill(Array.from(xs[1]))
   } else {
     els = xs.map(a => Array.from(a))
   }

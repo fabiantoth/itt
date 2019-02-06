@@ -204,12 +204,12 @@ itt.cartesianProduct(['A', 'B', 'C'], ['D', 'E', 'F'])
 /* [ 'AD', 'AE', 'AF', 'BD', 'BE', 'BF', 'CD', 'CE', 'CF' ] */
 ```
 
-#### cartesianProduct(xs, n)
+#### cartesianProduct(n = 1, xs)
 
 An iterator of elements in the Cartesian product `xs`<sup>`n`</sup>, i.e., the Cartesian product of `n` copies of `xs`.
 
 ```js
-itt.cartesianProduct([0, 1], 3).map(a => a.join('')).toArray()
+itt.cartesianProduct(3, [0, 1]).map(a => a.join('')).toArray()
 /* [ '000', '001', '010', '011', '100', '101', '110', '111' ] */
 ```
 

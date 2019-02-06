@@ -273,17 +273,23 @@ describe('cartesianProduct', () => {
   })
   test('returns an iterator of an empty array when given no arguments', () => {
     expect(itt.cartesianProduct().toArray()).toEqual([[]])
-    expect(itt.cartesianProduct([], 0).toArray()).toEqual([[]])
-    expect(itt.cartesianProduct([], -10).toArray()).toEqual([[]])
+    expect(itt.cartesianProduct(0, []).toArray()).toEqual([[]])
+    expect(itt.cartesianProduct(-10, []).toArray()).toEqual([[]])
+    expect(itt.cartesianProduct(0, [1, 2]).toArray()).toEqual([[]])
+    expect(itt.cartesianProduct(-10, [1, 2, 3]).toArray()).toEqual([[]])
   })
   test('returns an empty iterator when one or more of the element arrays is empty', () => {
     expect(itt.cartesianProduct([]).toArray()).toEqual([])
     expect(itt.cartesianProduct([], [], [], []).toArray()).toEqual([])
+    expect(itt.cartesianProduct(I()).toArray()).toEqual([])
+    expect(itt.cartesianProduct(I(), I(), I(), I()).toArray()).toEqual([])
     expect(itt.cartesianProduct([], [1, 2, 3], [4, 5, 6]).toArray()).toEqual([])
     expect(itt.cartesianProduct([1, 2, 3], [4, 5, 6], []).toArray()).toEqual([])
     expect(itt.cartesianProduct([1, 2, 3], [], [4, 5, 6], [7, 8, 9]).toArray()).toEqual([])
     expect(itt.cartesianProduct([1, 2, 3], [], [4, 5, 6], [], [7, 8, 9]).toArray()).toEqual([])
-    expect(itt.cartesianProduct([], 10).toArray()).toEqual([])
+    expect(itt.cartesianProduct([1, 2, 3], I(), [4, 5, 6], I(), [7, 8, 9]).toArray()).toEqual([])
+    expect(itt.cartesianProduct(10, []).toArray()).toEqual([])
+    expect(itt.cartesianProduct(10, I()).toArray()).toEqual([])
   })
   test('yields distinct arrays', () => {
     const a = itt.cartesianProduct([1, 2, 3], [4, 5, 6])
@@ -291,7 +297,9 @@ describe('cartesianProduct', () => {
   })
   test('returns an iterator of products of each element array', () => {
     expect(itt.cartesianProduct([1, 2, 3]).toSet()).toEqual(new Set([[1], [2], [3]]))
+    expect(itt.cartesianProduct(I(1, 2, 3)).toSet()).toEqual(new Set([[1], [2], [3]]))
     expect(itt.cartesianProduct([1, 2, 3], [4, 5, 6]).toSet()).toEqual(new Set([[1, 4], [1, 5], [1, 6], [2, 4], [2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]))
+    expect(itt.cartesianProduct([1, 2, 3], I(4, 5, 6)).toSet()).toEqual(new Set([[1, 4], [1, 5], [1, 6], [2, 4], [2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]))
     expect(itt.cartesianProduct([1, 2], [3, 4], [5, 6], [7, 8, 9]).toSet()).toEqual(new Set([
       [1, 3, 5, 7], [1, 3, 5, 8], [1, 3, 5, 9], [1, 3, 6, 7], [1, 3, 6, 8], [1, 3, 6, 9],
       [1, 4, 5, 7], [1, 4, 5, 8], [1, 4, 5, 9], [1, 4, 6, 7], [1, 4, 6, 8], [1, 4, 6, 9],
@@ -302,11 +310,11 @@ describe('cartesianProduct', () => {
   })
   test('steps through later elements first', () => {
     expect(itt.cartesianProduct([1, 2], [3, 4], [5, 6]).toArray()).toEqual([[1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6], [2, 3, 5], [2, 3, 6], [2, 4, 5], [2, 4, 6]])
-    expect(itt.cartesianProduct([0, 1], 3).toArray()).toEqual([[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]])
+    expect(itt.cartesianProduct(3, [0, 1]).toArray()).toEqual([[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]])
   })
   test('returns an iterator of products of n copies of the element array when given n', () => {
-    expect(itt.cartesianProduct([1, 2, 3], 1).toSet()).toEqual(new Set([[1], [2], [3]]))
-    expect(itt.cartesianProduct([0, 1], 4).toSet()).toEqual(new Set([
+    expect(itt.cartesianProduct(1, [1, 2, 3]).toSet()).toEqual(new Set([[1], [2], [3]]))
+    expect(itt.cartesianProduct(4, [0, 1]).toSet()).toEqual(new Set([
       [0, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1],
       [0, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 0], [0, 1, 1, 1],
       [1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 1],
