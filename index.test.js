@@ -272,49 +272,49 @@ describe('cartesianProduct', () => {
     expect(itt.cartesianProduct().toArray).toBeDefined()
   })
   test('returns an iterator of an empty array when given no arguments', () => {
-    expect(itt.cartesianProduct().toArray()).toEqual([[]])
-    expect(itt.cartesianProduct(0, []).toArray()).toEqual([[]])
-    expect(itt.cartesianProduct(-10, []).toArray()).toEqual([[]])
-    expect(itt.cartesianProduct(0, [1, 2]).toArray()).toEqual([[]])
-    expect(itt.cartesianProduct(-10, [1, 2, 3]).toArray()).toEqual([[]])
+    expect(Array.from(itt.cartesianProduct())).toEqual([[]])
+    expect(Array.from(itt.cartesianProduct(0, []))).toEqual([[]])
+    expect(Array.from(itt.cartesianProduct(-10, []))).toEqual([[]])
+    expect(Array.from(itt.cartesianProduct(0, [1, 2]))).toEqual([[]])
+    expect(Array.from(itt.cartesianProduct(-10, [1, 2, 3]))).toEqual([[]])
   })
   test('returns an empty iterator when one or more of the element arrays is empty', () => {
-    expect(itt.cartesianProduct([]).toArray()).toEqual([])
-    expect(itt.cartesianProduct([], [], [], []).toArray()).toEqual([])
-    expect(itt.cartesianProduct(I()).toArray()).toEqual([])
-    expect(itt.cartesianProduct(I(), I(), I(), I()).toArray()).toEqual([])
-    expect(itt.cartesianProduct([], [1, 2, 3], [4, 5, 6]).toArray()).toEqual([])
-    expect(itt.cartesianProduct([1, 2, 3], [4, 5, 6], []).toArray()).toEqual([])
-    expect(itt.cartesianProduct([1, 2, 3], [], [4, 5, 6], [7, 8, 9]).toArray()).toEqual([])
-    expect(itt.cartesianProduct([1, 2, 3], [], [4, 5, 6], [], [7, 8, 9]).toArray()).toEqual([])
-    expect(itt.cartesianProduct([1, 2, 3], I(), [4, 5, 6], I(), [7, 8, 9]).toArray()).toEqual([])
-    expect(itt.cartesianProduct(10, []).toArray()).toEqual([])
-    expect(itt.cartesianProduct(10, I()).toArray()).toEqual([])
+    expect(Array.from(itt.cartesianProduct([]))).toEqual([])
+    expect(Array.from(itt.cartesianProduct([], [], [], []))).toEqual([])
+    expect(Array.from(itt.cartesianProduct(I()))).toEqual([])
+    expect(Array.from(itt.cartesianProduct(I(), I(), I(), I()))).toEqual([])
+    expect(Array.from(itt.cartesianProduct([], [1, 2, 3], [4, 5, 6]))).toEqual([])
+    expect(Array.from(itt.cartesianProduct([1, 2, 3], [4, 5, 6], []))).toEqual([])
+    expect(Array.from(itt.cartesianProduct([1, 2, 3], [], [4, 5, 6], [7, 8, 9]))).toEqual([])
+    expect(Array.from(itt.cartesianProduct([1, 2, 3], [], [4, 5, 6], [], [7, 8, 9]))).toEqual([])
+    expect(Array.from(itt.cartesianProduct([1, 2, 3], I(), [4, 5, 6], I(), [7, 8, 9]))).toEqual([])
+    expect(Array.from(itt.cartesianProduct(10, []))).toEqual([])
+    expect(Array.from(itt.cartesianProduct(10, I()))).toEqual([])
   })
   test('yields distinct arrays', () => {
     const a = itt.cartesianProduct([1, 2, 3], [4, 5, 6])
     expect(a.next().value).not.toBe(a.next().value)
   })
   test('returns an iterator of products of each element array', () => {
-    expect(itt.cartesianProduct([1, 2, 3]).toSet()).toEqual(new Set([[1], [2], [3]]))
-    expect(itt.cartesianProduct(I(1, 2, 3)).toSet()).toEqual(new Set([[1], [2], [3]]))
-    expect(itt.cartesianProduct([1, 2, 3], [4, 5, 6]).toSet()).toEqual(new Set([[1, 4], [1, 5], [1, 6], [2, 4], [2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]))
-    expect(itt.cartesianProduct([1, 2, 3], I(4, 5, 6)).toSet()).toEqual(new Set([[1, 4], [1, 5], [1, 6], [2, 4], [2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]))
-    expect(itt.cartesianProduct([1, 2], [3, 4], [5, 6], [7, 8, 9]).toSet()).toEqual(new Set([
+    expect(new Set(itt.cartesianProduct([1, 2, 3]))).toEqual(new Set([[1], [2], [3]]))
+    expect(new Set(itt.cartesianProduct(I(1, 2, 3)))).toEqual(new Set([[1], [2], [3]]))
+    expect(new Set(itt.cartesianProduct([1, 2, 3], [4, 5, 6]))).toEqual(new Set([[1, 4], [1, 5], [1, 6], [2, 4], [2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]))
+    expect(new Set(itt.cartesianProduct([1, 2, 3], I(4, 5, 6)))).toEqual(new Set([[1, 4], [1, 5], [1, 6], [2, 4], [2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]))
+    expect(new Set(itt.cartesianProduct([1, 2], [3, 4], [5, 6], [7, 8, 9]))).toEqual(new Set([
       [1, 3, 5, 7], [1, 3, 5, 8], [1, 3, 5, 9], [1, 3, 6, 7], [1, 3, 6, 8], [1, 3, 6, 9],
       [1, 4, 5, 7], [1, 4, 5, 8], [1, 4, 5, 9], [1, 4, 6, 7], [1, 4, 6, 8], [1, 4, 6, 9],
       [2, 3, 5, 7], [2, 3, 5, 8], [2, 3, 5, 9], [2, 3, 6, 7], [2, 3, 6, 8], [2, 3, 6, 9],
       [2, 4, 5, 7], [2, 4, 5, 8], [2, 4, 5, 9], [2, 4, 6, 7], [2, 4, 6, 8], [2, 4, 6, 9],
     ]))
-    expect(itt.cartesianProduct([1], [2], [3], [4, 5], [6], [7]).toSet()).toEqual(new Set([[1, 2, 3, 4, 6, 7], [1, 2, 3, 5, 6, 7]]))
+    expect(new Set(itt.cartesianProduct([1], [2], [3], [4, 5], [6], [7]))).toEqual(new Set([[1, 2, 3, 4, 6, 7], [1, 2, 3, 5, 6, 7]]))
   })
   test('steps through later elements first', () => {
-    expect(itt.cartesianProduct([1, 2], [3, 4], [5, 6]).toArray()).toEqual([[1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6], [2, 3, 5], [2, 3, 6], [2, 4, 5], [2, 4, 6]])
-    expect(itt.cartesianProduct(3, [0, 1]).toArray()).toEqual([[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]])
+    expect(Array.from(itt.cartesianProduct([1, 2], [3, 4], [5, 6]))).toEqual([[1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6], [2, 3, 5], [2, 3, 6], [2, 4, 5], [2, 4, 6]])
+    expect(Array.from(itt.cartesianProduct(3, [0, 1]))).toEqual([[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]])
   })
   test('returns an iterator of products of n copies of the element array when given n', () => {
-    expect(itt.cartesianProduct(1, [1, 2, 3]).toSet()).toEqual(new Set([[1], [2], [3]]))
-    expect(itt.cartesianProduct(4, [0, 1]).toSet()).toEqual(new Set([
+    expect(new Set(itt.cartesianProduct(1, [1, 2, 3]))).toEqual(new Set([[1], [2], [3]]))
+    expect(new Set(itt.cartesianProduct(4, [0, 1]))).toEqual(new Set([
       [0, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1],
       [0, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 0], [0, 1, 1, 1],
       [1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 1],
@@ -827,13 +827,14 @@ describe('chunksBy', () => {
     expect(Array.from(itt.chunksBy(sameParity, I()))).toEqual([])
   })
   test('groups items together for which f returns true', () => {
-    expect(itt([1, 1, 2, 3, 5, 8, 13, 21]).chunksBy(sameParity).toArray()).toEqual([[1, 1], [2], [3, 5], [8], [13, 21]])
-    expect(itt([Object, 1, 2, 3, 'a', 'b', 'c', Function, String, 'd', 'e', 4, 5, 'f', Math]).chunksBy(sameType).toArray()).toEqual([
+    expect(Array.from(itt([1, 1, 2, 3, 5, 8, 13, 21]).chunksBy(sameParity))).toEqual([[1, 1], [2], [3, 5], [8], [13, 21]])
+    expect(Array.from(itt([Object, 1, 2, 3, 'a', 'b', 'c', Function, String, 'd', 'e', 4, 5, 'f', Math]).chunksBy(sameType))).toEqual([
       [Object], [1, 2, 3], ['a', 'b', 'c'], [Function, String], ['d', 'e'], [4, 5], ['f'], [Math]])
   })
   test('passes the current chunk prefix as the third argument to f', () => {
-    expect(itt([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]).chunksBy((_1, _2, l) => l.length < 3).toArray()).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]])
-    expect(itt([1, 1, 1, 2, 3, 9, 9, 10, 100, 101, 101, 200]).chunksBy((x, _, l) => x <= itt.sum(l)).toArray()).toEqual([[1, 1, 1, 2, 3], [9, 9, 10], [100], [101, 101, 200]])
+    expect(Array.from(itt([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]).chunksBy((_1, _2, l) => l.length < 3))).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]])
+    expect(Array.from(itt([1, 1, 1, 2, 3, 9, 9, 10, 100, 101, 101, 200]).chunksBy((x, _, l) => x <= itt.sum(l))))
+      .toEqual([[1, 1, 1, 2, 3], [9, 9, 10], [100], [101, 101, 200]])
   })
   test(`doesn't consume elements until they must be yielded`, () => {
     let it1 = false, it2 = false
