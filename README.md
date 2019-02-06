@@ -255,8 +255,8 @@ fn(1, 2, 3).map(x => x * x).toArray()
 Methods can also be used statically by passing an iterator as the last argument. For example:
 
 ```js
-itt.range(5).join() /* '0,1,2,3,4' */
-itt.join(itt.range(5)) /* '0,1,2,3,4' */
+itt.range(10).filter(a => a % 2).join() /* '1,3,5,7,9' */
+itt.join(itt.filter(a => a % 2, itt.range(10))) /* '1,3,5,7,9' */
 ```
 
 ## Slicing
