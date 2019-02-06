@@ -104,22 +104,22 @@ const cartesianProduct = G(function*(...xs) {
   }
   const ls = els.map(a => a.length)
   const n = els.length
-  const l = product(ls)
-  let cur = Array(n).fill(0)
-  for (let i = 0; i < l; ++i) {
+  if (n === 0) {yield []; return}
+  for (let i = 0; i < n; ++i) if (ls[i] === 0) return
+  const cur = Array(n).fill(0)
+  for (;;) {
     const inst = Array(n)
     for (let j = 0; j < n; ++j) inst[j] = els[j][cur[j]]
     yield inst
-    let carry = n
-    do {
-      --carry
+    for (let carry = n; carry--;) {
       if (cur[carry] === ls[carry] - 1) {
         cur[carry] = 0
+        if (carry === 0) return
       } else {
         ++cur[carry]
-        carry = 0
+        break
       }
-    } while (carry)
+    }
   }
 })
 
