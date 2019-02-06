@@ -762,6 +762,10 @@ describe('chunksBy', () => {
     expect(itt.chunksBy(sameParity, [1, 3, 5, 4, 6, 9]).toArray).toBeDefined()
     expect(itt([1, 3, 5, 4, 6, 9]).chunksBy(sameParity).toArray).toBeDefined()
   })
+  test('yields distinct arrays', () => {
+    const a = itt.chunksBy(sameParity, [1, 3, 5, 6, 8, 10])
+    expect(a.next().value).not.toBe(a.next().value)
+  })
   test('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.chunksBy(sameParity, []))).toEqual([])
     expect(Array.from(itt.chunksBy(sameParity, I()))).toEqual([])
@@ -800,6 +804,10 @@ describe('chunksOf', () => {
     expect(Array.from(itt.chunksOf(2, []))).toEqual([])
     expect(Array.from(itt.chunksOf(5, I()))).toEqual([])
   })
+  test('yields distinct arrays', () => {
+    const a = itt.chunksOf(3, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    expect(a.next().value).not.toBe(a.next().value)
+  })
   test('yields chunks of n items', () => {
     expect(Array.from(itt.chunksOf(3, [1, 2, 3, 4, 5, 6, 7, 8, 9]))).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     expect(Array.from(itt.chunksOf(1, [1, 2, 3, 4, 5, 6, 7, 8, 9]))).toEqual([[1], [2], [3], [4], [5], [6], [7], [8], [9]])
@@ -836,6 +844,10 @@ describe('subsequences', () => {
   test('defaults to subsequences of 2', () => {
     expect(Array.from(itt.subsequences([1, 2, 3, 4]))).toEqual([[1, 2], [2, 3], [3, 4]])
     expect(Array.from(itt([1, 2, 3, 4]).subsequences())).toEqual([[1, 2], [2, 3], [3, 4]])
+  })
+  test('yields distinct arrays', () => {
+    const a = itt.subsequences(3, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    expect(a.next().value).not.toBe(a.next().value)
   })
   test('yields subsequences of the iterator', () => {
     expect(Array.from(itt.subsequences(4, [1, 2, 3, 4, 5, 6]))).toEqual([[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]])
@@ -874,6 +886,10 @@ describe('lookahead', () => {
   test('defaults to lookahead of 1', () => {
     expect(Array.from(itt.lookahead([1, 2, 3, 4]))).toEqual([[1, 2], [2, 3], [3, 4], [4]])
     expect(Array.from(itt([1, 2, 3, 4]).lookahead())).toEqual([[1, 2], [2, 3], [3, 4], [4]])
+  })
+  test('yields distinct arrays', () => {
+    const a = itt.lookahead(3, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    expect(a.next().value).not.toBe(a.next().value)
   })
   test('yields n lookahead elements', () => {
     expect(Array.from(itt.lookahead(3, [1, 2, 3, 4, 5, 6]))).toEqual([[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6], [4, 5, 6], [5, 6], [6]])
@@ -1110,6 +1126,10 @@ describe('transpose', () => {
     expect(Array.from(itt.transpose(I([1, 2, 3], [4, 5, 6])))).toEqual([[1, 4], [2, 5], [3, 6]])
     expect(Array.from(itt.transpose(I([1, 2, 3])))).toEqual([[1], [2], [3]])
   })
+  test('yields distinct arrays', () => {
+    const a = itt.transpose([[1, 2, 3, 4], [5, 6, 7, 8]])
+    expect(a.next().value).not.toBe(a.next().value)
+  })
   test(`doesn't consume elements until necessary`, () => {
     let it1 = false, it2 = false
     const i = itt.transpose(function*() {it1 = true; yield [1, 2]; yield [3, 4]; yield [3, 4]; it2 = true}())
@@ -1142,6 +1162,10 @@ describe('zip', () => {
     expect(itt.zip([1, 2, 3], [4, 5, 6]).toArray).toBeDefined()
     expect(itt([1, 2, 3]).zip([4, 5, 6]).toArray).toBeDefined()
   })
+  test('yields distinct arrays', () => {
+    const a = itt.zip([1, 2, 3, 4], [5, 6, 7, 8])
+    expect(a.next().value).not.toBe(a.next().value)
+  })
   test(`yields arrays of elements from its arguments`, () => {
     expect(Array.from(itt.zip([1, 2, 3], [4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
     expect(Array.from(itt.zip(I(1, 2, 3), I(4, 5, 6)))).toEqual([[1, 4], [2, 5], [3, 6]])
@@ -1172,6 +1196,10 @@ describe('parallel', () => {
   test('returns wrapped iterators', () => {
     expect(itt.parallel([1, 2, 3], [4, 5, 6]).toArray).toBeDefined()
     expect(itt([1, 2, 3]).parallel([4, 5, 6]).toArray).toBeDefined()
+  })
+  test('yields distinct arrays', () => {
+    const a = itt.parallel([1, 2, 3, 4], [5, 6, 7, 8])
+    expect(a.next().value).not.toBe(a.next().value)
   })
   test(`yields arrays of elements from its arguments`, () => {
     expect(Array.from(itt.parallel([1, 2, 3], [4, 5, 6]))).toEqual([[1, 4], [2, 5], [3, 6]])
