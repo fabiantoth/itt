@@ -123,6 +123,34 @@ const cartesianProduct = G(function*(...xs) {
   }
 })
 
+const permute = G(function*(r = undefined, iter) {
+  if (iter === undefined) {iter = r; r = undefined}
+  const xs = Array.from(iter)
+  const n = xs.length
+  if (r === undefined) r = n
+  if (r > n) return
+  if (r <= 0 || n === 0) {yield []; return}
+
+  let count = Array(r)
+  for (let i = 0; i < r; ++i) count[i] = n - i
+
+  for (;;) {
+    yield xs.slice(0, r)
+    for (let i = r; i--;) {
+      const x = xs[i]
+      xs.copyWithin(i, i + 1)
+      xs[n-1] = x
+      --count[i]
+      if (count[i] === 0) {
+        count[i] = n - i
+        if (i === 0) return
+      } else {
+        break
+      }
+    }
+  }
+})
+
 const _keys = Object.keys
 const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
@@ -502,6 +530,8 @@ class Iter {
   cartesianProduct(...xs) {
     return xs.length === 1 && typeof xs[0] === 'number' ?
       cartesianProduct(xs[0], this) : cartesianProduct(this, ...xs)}
+
+  permute(n) {return permute(n, this.iter)}
 }
 class ForkSource {
   constructor(n, iter) {
@@ -541,7 +571,7 @@ Object.assign(module.exports = from, {
   entries, keys, values,
   toArray, toMap, toSet, toObject,
   intersperse, join,
-  cartesianProduct,
+  cartesianProduct, permute,
 
   fork, repeat, cycle, enumerate,
   map, tap, flatMap, filter, reject,

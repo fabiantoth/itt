@@ -213,6 +213,18 @@ itt.cartesianProduct(3, [0, 1]).map(a => a.join('')).toArray()
 /* [ '000', '001', '010', '011', '100', '101', '110', '111' ] */
 ```
 
+### permute(n = undefined, xs)
+
+An iterator of all permutations of elements of `xs` of length `n`, or of the same length as `xs` if `n` is undefined.
+
+```js
+itt.permute('ABC').map(s => s.join('')).toArray()
+/* [ 'ABC', 'ACB', 'BCA', 'BAC', 'CAB', 'CBA' ] */
+
+itt.permute(2, 'ABC').map(s => s.join('')).toArray()
+/* [ 'AB', 'AC', 'BC', 'BA', 'CA', 'CB' ] */
+```
+
 ## Object iterators
 
 ### entries(o)
