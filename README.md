@@ -86,8 +86,8 @@ const itt = require('itt')
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.flatMap](#flatmapfn) [.filter](#filterfn) [.reject](#rejectfn) [.scan](#scana-fn) [.scan1](#scan1fn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
+<br>**[Combinatorics](#combinatorics)** — [.cartesianProduct](#cartesianproductxs-) [.permutations](#permutationsn--undefined)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn--2) [.chunksBy](#chunksbyfn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1) [.transpose](#transpose)
-<br>**[Combinatorics](#combinatorics)** — [cartesianProduct](#cartesianproductxs-) [permute](#permuten--undefined-xs)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.parallel](#parallelxs-) [.push](#pushx-) [.unshift](#unshiftx-)
 <br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.mean](#mean) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn) [.forEach](#foreachfn) [.drain](#drain)
 <br>**[Conversion](#conversion)** — [.toArray](#toarray) [.toSet](#toset) [.toMap](#tomap) [.toObject](#toobjectempty--false)
@@ -189,40 +189,6 @@ itt.split('one,two,three,four,five', ',').toArray()
 /* ['one', 'two', 'three', 'four', 'five'] */
 itt.split('one<a>two<b>three<c>four', /<(\w+)>/).toArray()
 /* ['one', 'c', 'two', 'b', 'three', 'c', 'four'] */
-```
-
-## Combinatorics
-
-### cartesianProduct(xs, [...])
-
-An iterator of elements in the Cartesian product of the arguments.
-
-```js
-itt.cartesianProduct(['A', 'B', 'C'], ['D', 'E', 'F'])
-  .map(a => a.join(''))
-  .toArray()
-/* [ 'AD', 'AE', 'AF', 'BD', 'BE', 'BF', 'CD', 'CE', 'CF' ] */
-```
-
-#### cartesianProduct(n = 1, xs)
-
-An iterator of elements in the Cartesian product `xs`<sup>`n`</sup>, i.e., the Cartesian product of `n` copies of `xs`.
-
-```js
-itt.cartesianProduct(3, [0, 1]).map(a => a.join('')).toArray()
-/* [ '000', '001', '010', '011', '100', '101', '110', '111' ] */
-```
-
-### permute(n = undefined, xs)
-
-An iterator of all permutations of elements of `xs` of length `n`, or of the same length as `xs` if `n` is undefined.
-
-```js
-itt.permute('ABC').map(s => s.join('')).toArray()
-/* [ 'ABC', 'ACB', 'BCA', 'BAC', 'CAB', 'CBA' ] */
-
-itt.permute(2, 'ABC').map(s => s.join('')).toArray()
-/* [ 'AB', 'AC', 'BC', 'BA', 'CA', 'CB' ] */
 ```
 
 ## Object iterators
@@ -618,6 +584,49 @@ itt.range(10).map(x => x * x).includes(16)
 
 itt.range(10).map(x => x * x).includes(5)
 /* false */
+```
+
+## Combinatorics
+
+### .cartesianProduct(xs, [...])
+
+An iterator of elements in the Cartesian product of the arguments.
+
+```js
+itt.cartesianProduct(['A', 'B', 'C'], ['D', 'E', 'F'])
+  .map(a => a.join(''))
+  .toArray()
+/* [ 'AD', 'AE', 'AF', 'BD', 'BE', 'BF', 'CD', 'CE', 'CF' ] */
+```
+
+**Note:** This method can be called statically with any number of arguments, and yields arrays in argument order.
+
+```js
+itt(['A', 'B', 'C']).cartesianProduct(['D', 'E', 'F'])
+  .map(a => a.join(''))
+  .toArray()
+/* [ 'AD', 'AE', 'AF', 'BD', 'BE', 'BF', 'CD', 'CE', 'CF' ] */
+```
+
+#### .cartesianProduct(n = 1)
+
+An iterator of elements in the Cartesian product `this`<sup>`n`</sup>, i.e., the Cartesian product of `n` copies of this iterator.
+
+```js
+itt([0, 1]).cartesianProduct(3).map(a => a.join('')).toArray()
+/* [ '000', '001', '010', '011', '100', '101', '110', '111' ] */
+```
+
+### .permutations(n = undefined)
+
+An iterator of all permutations of elements of `xs` of length `n`, or of the same length as `xs` if `n` is undefined.
+
+```js
+itt('ABC').permutations().map(s => s.join('')).toArray()
+/* [ 'ABC', 'ACB', 'BCA', 'BAC', 'CAB', 'CBA' ] */
+
+itt('ABC').permutations(2).map(s => s.join('')).toArray()
+/* [ 'AB', 'AC', 'BC', 'BA', 'CA', 'CB' ] */
 ```
 
 ## Manipulating

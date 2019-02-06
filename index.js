@@ -123,7 +123,7 @@ const cartesianProduct = G(function*(...xs) {
   }
 })
 
-const permute = G(function*(r = undefined, iter) {
+const permutations = G(function*(r = undefined, iter) {
   if (iter === undefined) {iter = r; r = undefined}
   const xs = Array.from(iter)
   const n = xs.length
@@ -531,7 +531,7 @@ class Iter {
     return xs.length === 1 && typeof xs[0] === 'number' ?
       cartesianProduct(xs[0], this) : cartesianProduct(this, ...xs)}
 
-  permute(n) {return permute(n, this.iter)}
+  permutations(n) {return permutations(n, this.iter)}
 }
 class ForkSource {
   constructor(n, iter) {
@@ -571,7 +571,7 @@ Object.assign(module.exports = from, {
   entries, keys, values,
   toArray, toMap, toSet, toObject,
   intersperse, join,
-  cartesianProduct, permute,
+  cartesianProduct, permutations,
 
   fork, repeat, cycle, enumerate,
   map, tap, flatMap, filter, reject,

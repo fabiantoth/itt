@@ -327,16 +327,16 @@ describe('cartesianProduct', () => {
   })
 })
 
-describe('permute', () => {
+describe('permutations', () => {
   test('returns wrapped iterators', () => {
-    expect(itt.permute([1, 2, 3]).toArray).toBeDefined()
+    expect(itt.permutations([1, 2, 3]).toArray).toBeDefined()
   })
   test('yields [] when given an empty iterator', () => {
-    expect(Array.from(itt.permute([]))).toEqual([[]])
-    expect(Array.from(itt.permute(I()))).toEqual([[]])
+    expect(Array.from(itt.permutations([]))).toEqual([[]])
+    expect(Array.from(itt.permutations(I()))).toEqual([[]])
   })
   test('yields permutations of the given sequence', () => {
-    expect(new Set(itt.permute([0, 1, 2, 3]))).toEqual(new Set([
+    expect(new Set(itt.permutations([0, 1, 2, 3]))).toEqual(new Set([
       [0, 1, 2, 3], [0, 1, 3, 2],
       [0, 2, 3, 1], [0, 2, 1, 3],
       [0, 3, 1, 2], [0, 3, 2, 1],
@@ -355,21 +355,21 @@ describe('permute', () => {
     ]))
   })
   test('yields permutations of the given sequence of length r when given r', () => {
-    expect(new Set(itt.permute(1, [0, 1, 2, 3, 4, 5]))).toEqual(new Set([[0], [1], [2], [3], [4], [5]]))
-    expect(new Set(itt.permute(2, [0, 1, 2, 3]))).toEqual(new Set([
+    expect(new Set(itt.permutations(1, [0, 1, 2, 3, 4, 5]))).toEqual(new Set([[0], [1], [2], [3], [4], [5]]))
+    expect(new Set(itt.permutations(2, [0, 1, 2, 3]))).toEqual(new Set([
       [0, 1], [0, 2], [0, 3],
       [1, 2], [1, 3], [1, 0],
       [2, 3], [2, 0], [2, 1],
       [3, 0], [3, 1], [3, 2],
     ]))
-    expect(new Set(itt.permute(2, [0, 1, 2, 3, 4]))).toEqual(new Set([
+    expect(new Set(itt.permutations(2, [0, 1, 2, 3, 4]))).toEqual(new Set([
       [0, 1], [0, 2], [0, 3], [0, 4],
       [1, 2], [1, 3], [1, 4], [1, 0],
       [2, 3], [2, 4], [2, 0], [2, 1],
       [3, 4], [3, 0], [3, 1], [3, 2],
       [4, 0], [4, 1], [4, 2], [4, 3],
     ]))
-    expect(new Set(itt.permute(3, [0, 1, 2, 3, 4]))).toEqual(new Set([
+    expect(new Set(itt.permutations(3, [0, 1, 2, 3, 4]))).toEqual(new Set([
       [0, 1, 2], [0, 1, 3], [0, 1, 4],
       [0, 2, 3], [0, 2, 4], [0, 2, 1],
       [0, 3, 4], [0, 3, 1], [0, 3, 2],
@@ -397,19 +397,19 @@ describe('permute', () => {
     ]))
   })
   test('yields [] when r = 0', () => {
-    expect(Array.from(itt.permute(0, []))).toEqual([[]])
-    expect(Array.from(itt.permute(0, I()))).toEqual([[]])
-    expect(Array.from(itt.permute(0, [1, 2, 3]))).toEqual([[]])
-    expect(Array.from(itt.permute(0, I(1, 2, 3)))).toEqual([[]])
+    expect(Array.from(itt.permutations(0, []))).toEqual([[]])
+    expect(Array.from(itt.permutations(0, I()))).toEqual([[]])
+    expect(Array.from(itt.permutations(0, [1, 2, 3]))).toEqual([[]])
+    expect(Array.from(itt.permutations(0, I(1, 2, 3)))).toEqual([[]])
   })
   test('yields no entries when r > n', () => {
-    expect(Array.from(itt.permute(5, [1, 2, 3]))).toEqual([])
-    expect(Array.from(itt.permute(2, [1]))).toEqual([])
-    expect(Array.from(itt.permute(2, I(1)))).toEqual([])
-    expect(Array.from(itt.permute(1, []))).toEqual([])
-    expect(Array.from(itt.permute(1, I()))).toEqual([])
-    expect(Array.from(itt.permute(3, []))).toEqual([])
-    expect(Array.from(itt.permute(3, I()))).toEqual([])
+    expect(Array.from(itt.permutations(5, [1, 2, 3]))).toEqual([])
+    expect(Array.from(itt.permutations(2, [1]))).toEqual([])
+    expect(Array.from(itt.permutations(2, I(1)))).toEqual([])
+    expect(Array.from(itt.permutations(1, []))).toEqual([])
+    expect(Array.from(itt.permutations(1, I()))).toEqual([])
+    expect(Array.from(itt.permutations(3, []))).toEqual([])
+    expect(Array.from(itt.permutations(3, I()))).toEqual([])
   })
 })
 
