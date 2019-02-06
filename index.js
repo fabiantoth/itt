@@ -141,6 +141,17 @@ const chunksOf = G(function*(n = 2, xs) {
   }
   if (list.length) yield list
 })
+const chunksBy = G(function*(f, xs) {
+  let list = [], y = null
+  for (const x of xs) {
+    if (list.length && !f(x, y, list)) {
+      yield list
+      list = []
+    }
+    list.push(y = x)
+  }
+  if (list.length) yield list
+})
 const subsequences = G(function*(n = 2, xs) {
   if (xs === undefined) {xs = n; n = 2}
   if (n <= 0) return
@@ -410,6 +421,7 @@ class Iter {
   unshift(...xs) {return unshift(...xs, this.iter)}
   flatten() {return flatten(this.iter)}
   chunksOf(n) {return chunksOf(n, this.iter)}
+  chunksBy(fn) {return chunksBy(fn, this.iter)}
   lookahead(n) {return lookahead(n, this.iter)}
   subsequences(n) {return subsequences(n, this.iter)}
   drop(n) {return drop(n, this.iter)}
@@ -501,7 +513,7 @@ Object.assign(module.exports = from, {
   fork, repeat, cycle, enumerate,
   map, tap, flatMap, filter, reject,
   concat, push, unshift, flatten,
-  chunksOf, lookahead, subsequences,
+  chunksOf, chunksBy, lookahead, subsequences,
   drop, dropWhile, dropLast,
   take, takeWhile, takeLast,
   zip, transpose, parallel,

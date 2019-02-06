@@ -751,6 +751,42 @@ describe('flatten', () => {
   })
 })
 
+describe('chunksBy', () => {
+  function sameParity(x, y) {
+    return (x % 2) === (y % 2)
+  }
+  function sameType(x, y) {
+    return typeof x === typeof y
+  }
+  test('returns wrapped iterators', () => {
+    expect(itt.chunksBy(sameParity, [1, 3, 5, 4, 6, 9]).toArray).toBeDefined()
+    expect(itt([1, 3, 5, 4, 6, 9]).chunksBy(sameParity).toArray).toBeDefined()
+  })
+  test('returns an empty iterator when given an empty iterator', () => {
+    expect(Array.from(itt.chunksBy(sameParity, []))).toEqual([])
+    expect(Array.from(itt.chunksBy(sameParity, I()))).toEqual([])
+  })
+  test('groups items together for which f returns true', () => {
+    expect(itt([1, 1, 2, 3, 5, 8, 13, 21]).chunksBy(sameParity).toArray()).toEqual([[1, 1], [2], [3, 5], [8], [13, 21]])
+    expect(itt([Object, 1, 2, 3, 'a', 'b', 'c', Function, String, 'd', 'e', 4, 5, 'f', Math]).chunksBy(sameType).toArray()).toEqual([
+      [Object], [1, 2, 3], ['a', 'b', 'c'], [Function, String], ['d', 'e'], [4, 5], ['f'], [Math]])
+  })
+  test('passes the current chunk prefix as the third argument to f', () => {
+    expect(itt([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]).chunksBy((_1, _2, l) => l.length < 3).toArray()).toEqual([[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]])
+    expect(itt([1, 1, 1, 2, 3, 9, 9, 10, 100, 101, 101, 200]).chunksBy((x, _, l) => x <= itt.sum(l)).toArray()).toEqual([[1, 1, 1, 2, 3], [9, 9, 10], [100], [101, 101, 200]])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false
+    const i = itt.chunksBy(sameParity, function*() {it1 = true; yield 1; yield 2; it2 = true; yield 3}())
+    expect(it1).toBe(false)
+    expect(i.next()).toEqual({value: [1], done: false})
+    expect(it2).toBe(false)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([1, 3, 5, 6, 8, 9, 10, 12]).chunksBy(sameParity))).toEqual([[1, 3, 5], [6, 8], [9], [10, 12]])
+  })
+})
+
 describe('chunksOf', () => {
   test('returns wrapped iterators', () => {
     expect(itt.chunksOf(2, [1, 2, 3]).toArray).toBeDefined()
