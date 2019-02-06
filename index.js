@@ -95,6 +95,34 @@ const split = G(function*(s, sep, limit) {
   }
 })
 
+const cartesianProduct = G(function*(...xs) {
+  let els
+  if (xs.length === 2 && typeof xs[1] === 'number') {
+    els = Array(Math.max(0, xs[1])).fill(Array.from(xs[0]))
+  } else {
+    els = xs.map(a => Array.from(a))
+  }
+  const ls = els.map(a => a.length)
+  const n = els.length
+  const l = product(ls)
+  let cur = Array(n).fill(0)
+  for (let i = 0; i < l; ++i) {
+    const inst = Array(n)
+    for (let j = 0; j < n; ++j) inst[j] = els[j][cur[j]]
+    yield inst
+    let carry = n
+    do {
+      --carry
+      if (cur[carry] === ls[carry] - 1) {
+        cur[carry] = 0
+      } else {
+        ++cur[carry]
+        carry = 0
+      }
+    } while (carry)
+  }
+})
+
 const _keys = Object.keys
 const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
@@ -509,6 +537,7 @@ Object.assign(module.exports = from, {
   entries, keys, values,
   toArray, toMap, toSet, toObject,
   intersperse, join,
+  cartesianProduct,
 
   fork, repeat, cycle, enumerate,
   map, tap, flatMap, filter, reject,

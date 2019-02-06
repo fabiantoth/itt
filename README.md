@@ -78,6 +78,7 @@ const itt = require('itt')
 # API
 
 **[Constructors](#constructors)** — [from(…)](#ittthing-ittfromthing) [empty()](#empty) [range(…)](#rangestart--0-end-skip--1) [irange(…)](#irangestart--0-skip--1) [replicate(…)](#replicaten-x) [forever(…)](#foreverx) [iterate(…)](#iteratex-fn) [split(…)](#splitstring-sep--undefined-limit--infinity)
+<br>**[Combinatorics](#combinatorics)** — [cartesianProduct(…)](#cartesianproductxs-)
 <br>**[Object iterators](#object-iterators)** — [entries(…)](#entrieso) [keys(…)](#keyso) [values(…)](#valueso)
 <br>**[Utilities](#utilities)** — [is(…)](#ittisthing) [generator(…)](#ittgeneratorg)
 
@@ -188,6 +189,28 @@ itt.split('one,two,three,four,five', ',').toArray()
 /* ['one', 'two', 'three', 'four', 'five'] */
 itt.split('one<a>two<b>three<c>four', /<(\w+)>/).toArray()
 /* ['one', 'c', 'two', 'b', 'three', 'c', 'four'] */
+```
+
+## Combinatorics
+
+### cartesianProduct(xs, [...])
+
+An iterator of elements in the Cartesian product of the arguments.
+
+```js
+itt.cartesianProduct(['A', 'B', 'C'], ['D', 'E', 'F'])
+  .map(a => a.join(''))
+  .toArray()
+/* [ 'AD', 'AE', 'AF', 'BD', 'BE', 'BF', 'CD', 'CE', 'CF' ] */
+```
+
+#### cartesianProduct(xs, n)
+
+An iterator of elements in the Cartesian product `xs`<sup>`n`</sup>, i.e., the Cartesian product of `n` copies of `xs`.
+
+```js
+itt.cartesianProduct([0, 1], 3).map(a => a.join('')).toArray()
+/* [ '000', '001', '010', '011', '100', '101', '110', '111' ] */
 ```
 
 ## Object iterators
