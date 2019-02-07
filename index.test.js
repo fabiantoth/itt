@@ -331,6 +331,14 @@ describe('permutations', () => {
   test('returns wrapped iterators', () => {
     expect(itt.permutations([1, 2, 3]).toArray).toBeDefined()
   })
+  test('works as a method', () => {
+    expect(new Set(itt([0, 1, 2, 3, 4, 5]).permutations(1))).toEqual(new Set([[0], [1], [2], [3], [4], [5]]))
+    expect(new Set(itt([3, 4, 5]).permutations())).toEqual(new Set([
+      [3, 4, 5], [3, 5, 4],
+      [4, 5, 3], [4, 3, 5],
+      [5, 3, 4], [5, 4, 3],
+    ]))
+  })
   test('yields [] when given an empty iterator', () => {
     expect(Array.from(itt.permutations([]))).toEqual([[]])
     expect(Array.from(itt.permutations(I()))).toEqual([[]])
