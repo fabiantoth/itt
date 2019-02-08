@@ -562,6 +562,8 @@ class Iter {
   permutations(n) {return permutations(n, this.iter)}
   combinations(n) {return combinations(n, this.iter)}
 }
+const PUSH = Symbol('push')
+const PULL = Symbol('pull')
 class ForkSource {
   constructor(n, xs) {
     this.xs = toRaw(xs)
@@ -571,10 +573,10 @@ class ForkSource {
     }
   }
   [Symbol.iterator]() {return this.derived[Symbol.iterator]()}
-  pull() {
+  [PULL]() {
     const {done, value} = this.xs.next()
     if (done) return
-    for (const b of this.derived) b.push(value)
+    for (const b of this.derived) b[PUSH](value)
   }
 }
 class ForkIter extends Iter {
@@ -584,11 +586,10 @@ class ForkIter extends Iter {
     this.buffer = []
     this.source = source
   }
-  [Symbol.iterator]() {return this}
-  push(v) {this.buffer.push(v)}
+  [PUSH](v) {this.buffer.push(v)}
   next() {
-    if (!this.buffer.length) this.source.pull()
-    return this.buffer.length ? {done: false, value: this.buffer.shift()} : {done: true}
+    if (!this.buffer.length) this.source[PULL]()
+    return this.buffer.length ? {done: false, value: this.buffer.shift()} : {done: true, value: undefined}
   }
 }
 
