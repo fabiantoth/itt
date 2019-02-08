@@ -151,6 +151,34 @@ const permutations = G(function*(r = undefined, iter) {
   }
 })
 
+const combinations = G(function*(r = undefined, iter) {
+  if (iter === undefined) {iter = r; r = undefined}
+  const xs = Array.from(iter)
+  const n = xs.length
+  if (r === undefined) r = n
+  if (r > n) return
+  if (r <= 0 || n === 0) {yield []; return}
+
+  const cur = Array(r)
+  for (let i = 0; i < r; ++i) cur[i] = i
+
+  for (;;) {
+    const inst = Array(r)
+    for (let i = 0; i < r; ++i) inst[i] = xs[cur[i]]
+    yield inst
+
+    let i = r - 1
+    while (cur[i] === n - (r - i)) {
+      if (i === 0) return
+      --i
+    }
+    let k = ++cur[i]
+    for (let j = i + 1; j < r; ++j) {
+      cur[j] = ++k
+    }
+  }
+})
+
 const _keys = Object.keys
 const entries = G(function*(o) {for (const k of _keys(o)) yield [k, o[k]]})
 function keys(o) {return new Iter(_keys(o)[Symbol.iterator]())}
@@ -530,8 +558,8 @@ class Iter {
   cartesianProduct(...xs) {
     return xs.length === 1 && typeof xs[0] === 'number' ?
       cartesianProduct(xs[0], this) : cartesianProduct(this, ...xs)}
-
   permutations(n) {return permutations(n, this.iter)}
+  combinations(n) {return combinations(n, this.iter)}
 }
 class ForkSource {
   constructor(n, iter) {
@@ -571,7 +599,7 @@ Object.assign(module.exports = from, {
   entries, keys, values,
   toArray, toMap, toSet, toObject,
   intersperse, join,
-  cartesianProduct, permutations,
+  cartesianProduct, permutations, combinations,
 
   fork, repeat, cycle, enumerate,
   map, tap, flatMap, filter, reject,

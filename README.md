@@ -86,7 +86,7 @@ const itt = require('itt')
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.flatMap](#flatmapfn) [.filter](#filterfn) [.reject](#rejectfn) [.scan](#scana-fn) [.scan1](#scan1fn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
 <br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
-<br>**[Combinatorics](#combinatorics)** — [.cartesianProduct](#cartesianproductxs-) [.permutations](#permutationsn--undefined)
+<br>**[Combinatorics](#combinatorics)** — [.cartesianProduct](#cartesianproductxs-) [.permutations](#permutationsn--undefined) [.combinations](#combinationsn--undefined)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn--2) [.chunksBy](#chunksbyfn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1) [.transpose](#transpose)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.parallel](#parallelxs-) [.push](#pushx-) [.unshift](#unshiftx-)
 <br>**[Reducing](#reducing)** — [.reduce](#reducea-fn) [.inject](#injecta-fn) [.sum](#sum) [.mean](#mean) [.product](#product) [.max](#max) [.min](#min) [.minMax](#minmax) [.join](#joinsep--) [.groupBy](#groupbyfn-unique--false) [.keyBy](#keybyfn) [.forEach](#foreachfn) [.drain](#drain)
@@ -627,6 +627,15 @@ itt('ABC').permutations().map(s => s.join('')).toArray()
 
 itt('ABC').permutations(2).map(s => s.join('')).toArray()
 /* [ 'AB', 'AC', 'BC', 'BA', 'CA', 'CB' ] */
+```
+
+### .combinations([n = undefined])
+
+An iterator of all combinations of elements of this iterator of length `n` in iteration order, or of the same length as this iterator if `n` is undefined.
+
+```js
+itt('ABCDE').combinations(3).map(s => s.join('')).toArray()
+/* [ 'ABC', 'ABD', 'ABE', 'ACD', 'ACE', 'ADE', 'BCD', 'BCE', 'BDE', 'CDE' ] */
 ```
 
 ## Manipulating

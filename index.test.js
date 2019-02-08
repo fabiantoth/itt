@@ -421,6 +421,94 @@ describe('permutations', () => {
   })
 })
 
+describe('combinations', () => {
+  test('returns wrapped iterators', () => {
+    expect(itt.combinations(2, 'abcdef').toArray).toBeDefined()
+  })
+  test('works as a method', () => {
+    expect(new Set(itt([1, 2, 3]).combinations())).toEqual(new Set([[1, 2, 3]]))
+    expect(new Set(itt([1, 2, 3, 4]).combinations(2))).toEqual(new Set([
+      [1, 2], [1, 3], [1, 4],
+      [2, 3], [2, 4],
+      [3, 4],
+    ]))
+  })
+  test('yields [] when given an empty iterator', () => {
+    expect(Array.from(itt.combinations([]))).toEqual([[]])
+    expect(Array.from(itt.combinations(I()))).toEqual([[]])
+  })
+  test('returns an empty iterator when r > n', () => {
+    expect(Array.from(itt.combinations(1, []))).toEqual([])
+    expect(Array.from(itt.combinations(1, I()))).toEqual([])
+    expect(Array.from(itt.combinations(2, [1]))).toEqual([])
+    expect(Array.from(itt.combinations(2, I(1)))).toEqual([])
+    expect(Array.from(itt.combinations(5, [4, 5, 6]))).toEqual([])
+    expect(Array.from(itt.combinations(5, I(4, 5, 6)))).toEqual([])
+  })
+  test('yields combinations of the given sequence of length r in iteration order', () => {
+    expect(new Set(itt.combinations(1, 'abcdef'))).toEqual(new Set([['a'], ['b'], ['c'], ['d'], ['e'], ['f']]))
+    expect(new Set(itt.combinations(2, [0, 1, 2, 3, 4, 5, 6, 7]))).toEqual(new Set([
+      [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+      [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7],
+      [2, 3], [2, 4], [2, 5], [2, 6], [2, 7],
+      [3, 4], [3, 5], [3, 6], [3, 7],
+      [4, 5], [4, 6], [4, 7],
+      [5, 6], [5, 7],
+      [6, 7],
+    ]))
+    expect(new Set(itt.combinations(3, [0, 1, 2, 3, 4, 5]))).toEqual(new Set([
+      [0, 1, 2], [0, 1, 3], [0, 1, 4], [0, 1, 5],
+      [0, 2, 3], [0, 2, 4], [0, 2, 5],
+      [0, 3, 4], [0, 3, 5],
+      [0, 4, 5],
+      [1, 2, 3], [1, 2, 4], [1, 2, 5],
+      [1, 3, 4], [1, 3, 5],
+      [1, 4, 5],
+      [2, 3, 4], [2, 3, 5],
+      [2, 4, 5],
+      [3, 4, 5],
+    ]))
+    expect(new Set(itt.combinations(4, [0, 1, 2, 3, 4, 5]))).toEqual(new Set([
+      [0, 1, 2, 3], [0, 1, 2, 4], [0, 1, 2, 5],
+      [0, 1, 3, 4], [0, 1, 3, 5],
+      [0, 1, 4, 5],
+      [0, 2, 3, 4], [0, 2, 3, 5],
+      [0, 2, 4, 5],
+      [0, 3, 4, 5],
+      [1, 2, 3, 4], [1, 2, 3, 5],
+      [1, 2, 4, 5],
+      [1, 3, 4, 5],
+      [2, 3, 4, 5],
+    ]))
+    expect(new Set(itt.combinations(5, [0, 1, 2, 3, 4, 5, 6]))).toEqual(new Set([
+      [0, 1, 2, 3, 4], [0, 1, 2, 3, 5], [0, 1, 2, 3, 6],
+      [0, 1, 2, 4, 5], [0, 1, 2, 4, 6],
+      [0, 1, 2, 5, 6],
+      [0, 1, 3, 4, 5], [0, 1, 3, 4, 6],
+      [0, 1, 3, 5, 6],
+      [0, 1, 4, 5, 6],
+      [0, 2, 3, 4, 5], [0, 2, 3, 4, 6],
+      [0, 2, 3, 5, 6],
+      [0, 2, 4, 5, 6],
+      [0, 3, 4, 5, 6],
+      [1, 2, 3, 4, 5], [1, 2, 3, 4, 6],
+      [1, 2, 3, 5, 6],
+      [1, 2, 4, 5, 6],
+      [1, 3, 4, 5, 6],
+      [2, 3, 4, 5, 6],
+    ]))
+    expect(new Set(itt.combinations(6, [0, 1, 2, 3, 4, 5, 6]))).toEqual(new Set([
+      [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 6],
+      [0, 1, 2, 3, 5, 6],
+      [0, 1, 2, 4, 5, 6],
+      [0, 1, 3, 4, 5, 6],
+      [0, 2, 3, 4, 5, 6],
+      [1, 2, 3, 4, 5, 6],
+    ]))
+    expect(new Set(itt.combinations(8, 'abcdefgh'))).toEqual(new Set([['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']]))
+  })
+})
+
 describe('entries', () => {
   test('returns wrapped iterators', () => {
     expect(itt.entries({}).toArray).toBeDefined()
