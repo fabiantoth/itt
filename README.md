@@ -608,7 +608,7 @@ itt(['A', 'B', 'C']).cartesianProduct(['D', 'E', 'F'])
 /* [ 'AD', 'AE', 'AF', 'BD', 'BE', 'BF', 'CD', 'CE', 'CF' ] */
 ```
 
-#### .cartesianProduct(n = 1)
+#### .cartesianProduct([n = 1])
 
 An iterator of elements in the Cartesian product `this`<sup>`n`</sup>, i.e., the Cartesian product of `n` copies of this iterator.
 
@@ -617,9 +617,9 @@ itt([0, 1]).cartesianProduct(3).map(a => a.join('')).toArray()
 /* [ '000', '001', '010', '011', '100', '101', '110', '111' ] */
 ```
 
-### .permutations(n = undefined)
+### .permutations([n = undefined])
 
-An iterator of all permutations of elements of `xs` of length `n`, or of the same length as `xs` if `n` is undefined.
+An iterator of all permutations of elements of this iterator of length `n`, or of the same length as this iterator if `n` is undefined.
 
 ```js
 itt('ABC').permutations().map(s => s.join('')).toArray()
