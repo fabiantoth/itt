@@ -859,6 +859,71 @@ describe('reject', () => {
   })
 })
 
+describe('partition', () => {
+  test('returns wrapped iterators', () => {
+    const [a, b] = itt.partition(x => false, [1, 2, 3])
+    expect(a.toArray).toBeDefined()
+    expect(b.toArray).toBeDefined()
+  })
+  test('returns two empty iterators when given an empty iterator', () => {
+    const f = jest.fn(), g = jest.fn()
+    const [a, b] = itt.partition(f, [])
+    const [c, d] = itt.partition(g, I())
+    expect(Array.from(a)).toEqual([])
+    expect(Array.from(b)).toEqual([])
+    expect(Array.from(c)).toEqual([])
+    expect(Array.from(d)).toEqual([])
+    expect(f).not.toHaveBeenCalled()
+    expect(g).not.toHaveBeenCalled()
+  })
+  test(`first iterator yields only elements which satisfy fn`, () => {
+    const [, b] = itt.partition(x => x % 2, [9, 8, 6, 4, 5, 3, 1, 2])
+    expect(Array.from(b)).toEqual([8, 6, 4, 2])
+  })
+  test(`second iterator yields only elements which don't satisfy fn`, () => {
+    const [a, ] = itt.partition(x => x % 2, [9, 8, 6, 4, 5, 3, 1, 2])
+    expect(Array.from(a)).toEqual([9, 5, 3, 1])
+  })
+  test('first iterator is empty when no elements satisfy fn', () => {
+    const [a, ] = itt.partition(x => false, [1, 2, 3])
+    const [b, ] = itt.partition(x => false, I(1, 2, 3))
+    expect(Array.from(a)).toEqual([])
+    expect(Array.from(b)).toEqual([])
+  })
+  test('second iterator is empty when every element satisfies fn', () => {
+    const [, a] = itt.partition(x => true, [1, 2, 3])
+    const [, b] = itt.partition(x => true, I(1, 2, 3))
+    expect(Array.from(a)).toEqual([])
+    expect(Array.from(a)).toEqual([])
+  })
+  test(`doesn't consume elements until they must be yielded`, () => {
+    let it1 = false, it2 = false, it3 = false, it4 = false
+    const [odd, even] = itt.partition(x => x % 2, function*() {it1 = true; yield 1; it2 = true; yield 2; it3 = true; yield 3; it4 = true}())
+    expect(it1).toBe(false)
+    expect(even.next()).toEqual({value: 2, done: false})
+    expect(it1).toBe(true)
+    expect(it2).toBe(true)
+    expect(it3).toBe(false)
+    expect(odd.next()).toEqual({value: 1, done: false})
+    expect(it1).toBe(true)
+    expect(it2).toBe(true)
+    expect(it3).toBe(false)
+    expect(odd.next()).toEqual({value: 3, done: false})
+    expect(it3).toBe(true)
+  })
+  test('returns independent iterators', () => {
+    const [a, b] = itt.partition(x => x % 2, [9, 8, 6, 4, 5, 3, 1, 1, 2])
+    expect(Array.from(b).length).toEqual(4)
+    expect(Array.from(a).length).toEqual(5)
+    const [c, d] = itt.partition(x => x % 2, [9, 8, 6, 4, 5, 3, 1, 1, 2])
+    expect(Array.from(c).length).toEqual(5)
+    expect(Array.from(d).length).toEqual(4)
+  })
+  test('works as a method', () => {
+    expect(Array.from(itt([9, 8, 6, 4, 5, 3, 1, 2]).partition(x => x % 2), x => Array.from(x))).toEqual([[9, 5, 3, 1], [8, 6, 4, 2]])
+  })
+})
+
 describe('concat', () => {
   test('returns wrapped iterators', () => {
     expect(itt.concat([1, 2, 3], [4, 5, 6]).toArray).toBeDefined()

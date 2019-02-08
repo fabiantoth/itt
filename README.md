@@ -399,6 +399,16 @@ itt([1, 5, 3, 2, 5, 9, 4, 95, 1, 4, 5, 2, 8]).reject(x => x % 2).toArray()
 /* [ 2, 4, 4, 2, 8 ] */
 ```
 
+### .partition(fn)
+
+A pair of iterators. The first yields the elements of this iterator for which `fn` returns a truthy value, and the second yields the elements for which it returns a falsey value.
+
+```js
+const [a, b] = itt([1, 5, 3, 2, 5, 9, 4, 95, 1, 4, 5, 2]).partition(x => x % 2)
+a.toArray() // [ 1, 5, 3, 5, 9, 95, 1, 5 ]
+b.toArray() // [ 2, 4, 4, 2 ]
+```
+
 ### .scan(a, fn)
 
 Accumulates `a = fn(a, x)` for each element of this iterator, in iteration order, and yields each intermediate result. The resultant iterator always yields the same number of elements as this iterator.

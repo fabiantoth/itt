@@ -212,6 +212,9 @@ const flatMap = G(function*(fn, xs) {for (const x of xs) yield* fn(x)})
 const tap = G(function*(fn, xs) {for (const x of xs) {fn(x); yield x}})
 const filter = G(function*(fn, xs) {for (const x of xs) if (fn(x)) yield x})
 const reject = G(function*(fn, xs) {for (const x of xs) if (!fn(x)) yield x})
+function partition(fn, xs) {
+  return new Partition(fn, xs).iters()
+}
 const concat = G(function*(...xss) {for (const xs of xss) yield* xs})
 const push = G(function*(...ys) {const xs = ys.pop(); yield* xs; yield* ys})
 const unshift = G(function*(...ys) {const xs = ys.pop(); yield* ys; yield* xs})
@@ -501,6 +504,7 @@ class Iter {
   tap(fn) {return tap(fn, this.iter)}
   filter(fn) {return filter(fn, this.iter)}
   reject(fn) {return reject(fn, this.iter)}
+  partition(fn) {return partition(fn, this.iter)}
   concat(...xss) {return concat(this.iter, ...xss)}
   push(...xs) {return push(...xs, this.iter)}
   unshift(...xs) {return unshift(...xs, this.iter)}
@@ -592,6 +596,44 @@ class ForkIter extends Iter {
     return this.buffer.length ? {done: false, value: this.buffer.shift()} : {done: true, value: undefined}
   }
 }
+const DONE = {}
+class Partition {
+  constructor(fn, xs) {
+    this.fn = fn
+    this.xs = toRaw(xs)
+    this.keep = new PartitionIter(this, true)
+    this.reject = new PartitionIter(this, false)
+  }
+  *[Symbol.iterator]() {yield this.keep; yield this.reject}
+  iters() {return [this.keep, this.reject]}
+  [PULL](keep) {
+    keep = !!keep
+    for (;;) {
+      const {done, value} = this.xs.next()
+      if (done) return DONE
+      const kept = !!this.fn(value)
+      if (kept === keep) return value
+      ;(kept ? this.keep : this.reject)[PUSH](value)
+    }
+  }
+}
+class PartitionIter extends Iter {
+  constructor(source, keep) {
+    super()
+    this.iter = this
+    this.buffer = []
+    this.source = source
+    this.keep = keep
+  }
+  [PUSH](value) {this.buffer.push(value)}
+  next() {
+    if (this.buffer.length) {
+      return {done: false, value: this.buffer.shift()}
+    }
+    const value = this.source[PULL](this.keep)
+    return value === DONE ? {done: true, value: undefined} : {done: false, value}
+  }
+}
 
 Object.assign(module.exports = from, {
   is, from, generator, empty,
@@ -604,7 +646,7 @@ Object.assign(module.exports = from, {
   cartesianProduct, permutations, combinations,
 
   fork, repeat, cycle, enumerate,
-  map, tap, flatMap, filter, reject,
+  map, tap, flatMap, filter, reject, partition,
   concat, push, unshift, flatten,
   chunksOf, chunksBy, lookahead, subsequences,
   drop, dropWhile, dropLast,
