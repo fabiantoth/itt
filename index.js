@@ -3,7 +3,8 @@
 function is(xs) {return typeof xs[Symbol.iterator] === 'function' || typeof xs.next === 'function'}
 function generator(gen) {return (...args) => new Iter(gen(...args))}
 const G = generator
-function from(iter) {return new Iter(iter[Symbol.iterator] ? iter[Symbol.iterator]() : iter)}
+function toRaw(iter) {return iter[Symbol.iterator] ? iter[Symbol.iterator]() : iter}
+function from(iter) {return new Iter(toRaw(iter))}
 const empty = G(function*() {})
 
 const range = G(function*(start, end, skip = 1) {
@@ -562,8 +563,8 @@ class Iter {
   combinations(n) {return combinations(n, this.iter)}
 }
 class ForkSource {
-  constructor(n, iter) {
-    this.iter = iter
+  constructor(n, xs) {
+    this.xs = toRaw(xs)
     this.derived = Array(n)
     for (let i = this.derived.length; i--;) {
       this.derived[i] = new ForkIter(this)
@@ -571,7 +572,7 @@ class ForkSource {
   }
   [Symbol.iterator]() {return this.derived[Symbol.iterator]()}
   pull() {
-    const {done, value} = this.iter.next()
+    const {done, value} = this.xs.next()
     if (done) return
     for (const b of this.derived) b.push(value)
   }

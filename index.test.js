@@ -589,11 +589,16 @@ describe('fork', () => {
     expect(Array.from(b)).toEqual([1, 2, 3])
     expect(Array.from(c)).toEqual([1, 2, 3])
 
-    const [d, e, f, g] = itt.fork(4, I(1, 2, 3))
-    expect(Array.from(g)).toEqual([1, 2, 3])
-    expect(Array.from(f)).toEqual([1, 2, 3])
-    expect(Array.from(e)).toEqual([1, 2, 3])
+    const [d, e, f] = itt.fork(3, [1, 2, 3])
     expect(Array.from(d)).toEqual([1, 2, 3])
+    expect(Array.from(e)).toEqual([1, 2, 3])
+    expect(Array.from(f)).toEqual([1, 2, 3])
+
+    const [g, h, i, j] = itt.fork(4, I(1, 2, 3))
+    expect(Array.from(j)).toEqual([1, 2, 3])
+    expect(Array.from(i)).toEqual([1, 2, 3])
+    expect(Array.from(h)).toEqual([1, 2, 3])
+    expect(Array.from(g)).toEqual([1, 2, 3])
   })
   test('discards values that have been iterated completely', () => {
     const [a, b, c] = itt.fork(3, I(1, 2, 3))
