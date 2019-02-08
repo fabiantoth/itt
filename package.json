@@ -20,7 +20,7 @@
   "repository": "https://github.com/nathan/itt",
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "jest": "^23.6.0"
+    "jest": "^24.1.0"
   },
   "scripts": {
     "test": "jest"
