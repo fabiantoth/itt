@@ -434,7 +434,14 @@ function join(sep = ',', xs) {
   return s
 }
 
-const slice = G(function*(xs, start = 0, end) {
+const slice = G(function*(start = 0, end, xs) {
+  if (xs === undefined) {
+    if (end === undefined) {
+      xs = start; start = 0
+    } else {
+      xs = end; end = undefined
+    }
+  }
   if (Array.isArray(xs)) {
     const len = xs.length
     if (start < 0) start += len
@@ -558,7 +565,7 @@ class Iter {
   keyBy(fn) {return keyBy(fn, this.iter)}
   unique() {return unique(this.iter)}
 
-  slice(start, end) {return slice(this.iter, start, end)}
+  slice(start, end) {return slice(start, end, this.iter)}
 
   cartesianProduct(...xs) {
     return xs.length === 1 && typeof xs[0] === 'number' ?
