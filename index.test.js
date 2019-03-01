@@ -1596,6 +1596,42 @@ describe('some', () => {
   })
 })
 
+describe('detect', () => {
+  const people = [
+    {name: 'Olivia'},
+    {name: 'Emily', favoriteBook: 'The Grapes of Wrath'},
+    {name: 'Jessica', favoriteBook: 'The Sun Also Rises'},
+  ]
+  test('returns a truthy result of fn', () => {
+    expect(itt.detect(x => x, [0, null, false, undefined, '', 123, 0, null])).toBe(123)
+    expect(itt.detect(x => x.id, [{}, {id: 0}, {id: 'f0a'}, {id: ''}, {}])).toBe('f0a')
+  })
+  test('returns the first truthy result of fn', () => {
+    expect(itt.detect(x => x, [0, null, false, undefined, '', 123, 456])).toBe(123)
+    expect(itt.detect(x => x.id, [{}, {id: 0}, {id: 'f0a'}, {id: 'f0b'}, {}])).toBe('f0a')
+    expect(itt(['bananas', 'oranges', 'blueberries', 'pears', 'apples'])
+      .detect(x => x.match(/(\w)\1/g))).toEqual(['rr'])
+    expect(itt(people).detect(x => x.favoriteBook))
+      .toEqual('The Grapes of Wrath')
+  })
+  test('works as a method', () => {
+    expect(itt([0, 1, null, false]).detect(x => x)).toBe(1)
+  })
+  test('returns undefined if no element satisfies fn', () => {
+    expect(itt.detect(x => x > 100, [1, 2, 3])).toBe(undefined)
+    expect(itt(people).detect(x => x.vehicle)).toEqual(undefined)
+  })
+  test('returns undefined for an empty iterator', () => {
+    expect(itt.detect(fail, [])).toBe(undefined)
+    expect(itt.detect(fail, I())).toBe(undefined)
+  })
+  test(`short-circuits when an element satisfies fn`, () => {
+    let it = false
+    const i = itt.detect(x => x, function*() {yield 1; it = true; yield 2}())
+    expect(it).toBe(false)
+  })
+})
+
 describe('find', () => {
   test('returns an element that satisfies fn', () => {
     expect(itt.find(x => x === 3, [1, 2, 3, 4])).toBe(3)

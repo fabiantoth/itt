@@ -317,6 +317,7 @@ const parallel = G(function*(...xss) {
 
 function every(fn, xs) {for (const x of xs) if (!fn(x)) return false; return true}
 function some(fn, xs) {for (const x of xs) if (fn(x)) return true; return false}
+function detect(fn, xs) {for (const x of xs) {let y = fn(x); if (y) return y}}
 function find(fn, xs) {for (const x of xs) if (fn(x)) return x}
 function findLast(fn, xs) {let y; for (const x of xs) if (fn(x)) y = x; return y}
 function findIndex(fn, xs) {let i = 0; for (const x of xs) {if (fn(x)) return i; ++i} return -1}
@@ -543,6 +544,7 @@ class Iter {
 
   every(fn) {return every(fn, this.iter)}
   some(fn) {return some(fn, this.iter)}
+  detect(fn) {return detect(fn, this.iter)}
   find(fn) {return find(fn, this.iter)}
   findLast(fn) {return findLast(fn, this.iter)}
   findIndex(fn) {return findIndex(fn, this.iter)}
@@ -671,7 +673,7 @@ Object.assign(module.exports = from, {
   drop, dropWhile, dropLast,
   take, takeWhile, takeLast,
   zip, transpose, parallel,
-  every, some,
+  every, some, detect,
   find, findLast, findIndex, findLastIndex, indexOf, lastIndexOf, includes,
   reduce, reduce1, scan, scan1, inject, forEach, drain,
   first, head, last, tail, init,

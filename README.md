@@ -85,7 +85,7 @@ const itt = require('itt')
 <br>**[Slicing](#slicing)** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.flatMap](#flatmapfn) [.filter](#filterfn) [.reject](#rejectfn) [.scan](#scana-fn) [.scan1](#scan1fn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
-<br>**[Searching](#searching)** — [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
+<br>**[Searching](#searching)** — [.detect](#detectfn) [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Combinatorics](#combinatorics)** — [.cartesianProduct](#cartesianproductxs-) [.permutations](#permutationsn--undefined) [.combinations](#combinationsn--undefined)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn--2) [.chunksBy](#chunksbyfn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1) [.transpose](#transpose)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.parallel](#parallelxs-) [.push](#pushx-) [.unshift](#unshiftx-)
@@ -513,6 +513,26 @@ total: 63
 ```
 
 ## Searching
+
+### .detect(fn)
+
+Applies `fn` to each element and returns the first truthy result, or `undefined` if none exists. Equivalent to `.map(fn).find(x => x)`.
+
+```js
+itt(['bananas', 'oranges', 'blueberries', 'pears', 'apples'])
+  .detect(x => x.match(/(\w)\1/g))
+/* [ 'rr' ] */
+
+const people = [
+  {name: 'Olivia'},
+  {name: 'Emily', favoriteBook: 'The Grapes of Wrath'},
+  {name: 'Jessica', favoriteBook: 'The Sun Also Rises'},
+]
+itt(people).detect(x => x.favoriteBook)
+/* 'The Grapes of Wrath' */
+itt(people).detect(x => x.vehicle)
+/* undefined */
+```
 
 ### .find(fn)
 
