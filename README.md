@@ -420,7 +420,7 @@ itt.irange().scan(0, (x, y) => x + y).take(5).toArray()
 
 ### .scan1(fn)
 
-Like `.scan`, but draws (and yields) the initial value of `a` from the first element of this iterator, accumulating `a = fn(a, x)` for each subsequent element.
+Like `.scan`, but draws (and yields) the initial value of `a` from the first element of this iterator, accumulating `a = fn(a, x)` for each subsequent element. The resultant iterator always yields the same number of elements as this iterator.
 
 ```js
 itt.irange().scan1((x, y) => x + y).take(5).toArray()
