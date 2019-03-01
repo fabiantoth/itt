@@ -1554,8 +1554,8 @@ describe('parallel', () => {
 
 describe('every', () => {
   test('returns true for an empty iterator', () => {
-    expect(itt.every(x => false, [])).toBe(true)
-    expect(itt.every(x => false, I())).toBe(true)
+    expect(itt.every(fail, [])).toBe(true)
+    expect(itt.every(fail, I())).toBe(true)
   })
   test('returns true if every element satisfies fn', () => {
     expect(itt.every(x => x % 2, [3, 5, 7])).toBe(true)
@@ -1576,8 +1576,8 @@ describe('every', () => {
 
 describe('some', () => {
   test('returns false for an empty iterator', () => {
-    expect(itt.some(x => true, [])).toBe(false)
-    expect(itt.some(x => true, I())).toBe(false)
+    expect(itt.some(fail, [])).toBe(false)
+    expect(itt.some(fail, I())).toBe(false)
   })
   test('returns true if any element satisfies fn', () => {
     expect(itt.some(x => x > 1, [3, 5, 7])).toBe(true)
@@ -1649,8 +1649,8 @@ describe('find', () => {
     expect(itt.find(x => x === 10, [1, 2, 3])).toBe(undefined)
   })
   test('returns undefined for an empty iterator', () => {
-    expect(itt.find(x => true, [])).toBe(undefined)
-    expect(itt.find(x => true, I())).toBe(undefined)
+    expect(itt.find(fail, [])).toBe(undefined)
+    expect(itt.find(fail, I())).toBe(undefined)
   })
   test(`short-circuits when an element satisfies fn`, () => {
     let it = false
@@ -1676,8 +1676,8 @@ describe('findLast', () => {
     expect(itt.findLast(x => x === 10, [1, 2, 3])).toBe(undefined)
   })
   test('returns undefined for an empty iterator', () => {
-    expect(itt.findLast(x => true, [])).toBe(undefined)
-    expect(itt.findLast(x => true, I())).toBe(undefined)
+    expect(itt.findLast(fail, [])).toBe(undefined)
+    expect(itt.findLast(fail, I())).toBe(undefined)
   })
 })
 
@@ -1697,8 +1697,8 @@ describe('findIndex', () => {
     expect(itt.findIndex(x => x === 10, [1, 2, 3])).toBe(-1)
   })
   test('returns -1 for an empty iterator', () => {
-    expect(itt.findIndex(x => true, [])).toBe(-1)
-    expect(itt.findIndex(x => true, I())).toBe(-1)
+    expect(itt.findIndex(fail, [])).toBe(-1)
+    expect(itt.findIndex(fail, I())).toBe(-1)
   })
   test(`short-circuits when an element satisfies fn`, () => {
     let it = false
@@ -1723,8 +1723,8 @@ describe('findLastIndex', () => {
     expect(itt.findLastIndex(x => x === 10, [1, 2, 3])).toBe(-1)
   })
   test('returns -1 for an empty iterator', () => {
-    expect(itt.findLastIndex(x => true, [])).toBe(-1)
-    expect(itt.findLastIndex(x => true, I())).toBe(-1)
+    expect(itt.findLastIndex(fail, [])).toBe(-1)
+    expect(itt.findLastIndex(fail, I())).toBe(-1)
   })
 })
 
