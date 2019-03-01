@@ -1,5 +1,6 @@
 'use strict'
 
+function id(x) {return x}
 function is(xs) {return typeof xs[Symbol.iterator] === 'function' || typeof xs.next === 'function'}
 function generator(gen) {return (...args) => new Iter(gen(...args))}
 const G = generator
@@ -318,10 +319,34 @@ const parallel = G(function*(...xss) {
 function every(fn, xs) {for (const x of xs) if (!fn(x)) return false; return true}
 function some(fn, xs) {for (const x of xs) if (fn(x)) return true; return false}
 function detect(fn, xs) {for (const x of xs) {let y = fn(x); if (y) return y}}
-function find(fn, xs) {for (const x of xs) if (fn(x)) return x}
-function findLast(fn, xs) {let y; for (const x of xs) if (fn(x)) y = x; return y}
-function findIndex(fn, xs) {let i = 0; for (const x of xs) {if (fn(x)) return i; ++i} return -1}
-function findLastIndex(fn, xs) {let i = 0, j = -1; for (const x of xs) {if (fn(x)) j = i; ++i} return j}
+function find(fn = id, xs) {
+  if (xs === undefined) {xs = fn; fn = id}
+  for (const x of xs) if (fn(x)) return x
+}
+function findLast(fn = id, xs) {
+  if (xs === undefined) {xs = fn; fn = id}
+  let y
+  for (const x of xs) if (fn(x)) y = x
+  return y
+}
+function findIndex(fn = id, xs) {
+  if (xs === undefined) {xs = fn; fn = id}
+  let i = 0
+  for (const x of xs) {
+    if (fn(x)) return i
+    ++i
+  }
+  return -1
+}
+function findLastIndex(fn = id, xs) {
+  if (xs === undefined) {xs = fn; fn = id}
+  let i = 0, j = -1
+  for (const x of xs) {
+    if (fn(x)) j = i
+    ++i
+  }
+  return j
+}
 function indexOf(y, xs) {let i = 0; for (const x of xs) {if (x === y) return i; ++i} return -1}
 function lastIndexOf(y, xs) {let i = 0, j = -1; for (const x of xs) {if (x === y) j = i; ++i} return j}
 function includes(y, xs) {for (const x of xs) if (x === y) return true; return false}

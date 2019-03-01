@@ -1657,6 +1657,18 @@ describe('find', () => {
     const i = itt.find(x => true, function*() {yield 1; it = true; yield 2}())
     expect(it).toBe(false)
   })
+  test('defaults to the identity function', () => {
+    expect(itt.find([])).toBe(undefined)
+    expect(itt.find(I())).toBe(undefined)
+    expect(itt.find([1])).toBe(1)
+    expect(itt.find(I(1))).toBe(1)
+    expect(itt.find([0, false, null, undefined, '', NaN])).toBe(undefined)
+    expect(itt.find([0, false, null, undefined, '', 123, NaN])).toBe(123)
+    expect(itt.find([0, false, null, undefined, '', 123, 456, NaN])).toBe(123)
+    expect(itt.find(I(0, false, null, undefined, '', NaN))).toBe(undefined)
+    expect(itt.find(I(0, false, null, undefined, '', 123, NaN))).toBe(123)
+    expect(itt.find(I(0, false, null, undefined, '', 123, 456, NaN))).toBe(123)
+  })
 })
 
 describe('findLast', () => {
@@ -1678,6 +1690,18 @@ describe('findLast', () => {
   test('returns undefined for an empty iterator', () => {
     expect(itt.findLast(fail, [])).toBe(undefined)
     expect(itt.findLast(fail, I())).toBe(undefined)
+  })
+  test('defaults to the identity function', () => {
+    expect(itt.findLast([])).toBe(undefined)
+    expect(itt.findLast(I())).toBe(undefined)
+    expect(itt.findLast([1])).toBe(1)
+    expect(itt.findLast(I(1))).toBe(1)
+    expect(itt.findLast([0, false, null, undefined, '', NaN])).toBe(undefined)
+    expect(itt.findLast([0, 123, false, null, undefined, '', NaN])).toBe(123)
+    expect(itt.findLast([0, 123, false, null, undefined, '', 456, NaN])).toBe(456)
+    expect(itt.findLast(I(0, false, null, undefined, '', NaN))).toBe(undefined)
+    expect(itt.findLast(I(0, 123, false, null, undefined, '', NaN))).toBe(123)
+    expect(itt.findLast(I(0, 123, false, null, undefined, '', 456, NaN))).toBe(456)
   })
 })
 
@@ -1705,6 +1729,18 @@ describe('findIndex', () => {
     const i = itt.findIndex(x => true, function*() {yield 1; it = true; yield 2}())
     expect(it).toBe(false)
   })
+  test('defaults to the identity function', () => {
+    expect(itt.findIndex([])).toBe(-1)
+    expect(itt.findIndex(I())).toBe(-1)
+    expect(itt.findIndex([1])).toBe(0)
+    expect(itt.findIndex(I(1))).toBe(0)
+    expect(itt.findIndex([0, false, null, undefined, '', NaN])).toBe(-1)
+    expect(itt.findIndex([0, false, null, undefined, '', 123, NaN])).toBe(5)
+    expect(itt.findIndex([0, false, null, undefined, '', 123, 456, NaN])).toBe(5)
+    expect(itt.findIndex(I(0, false, null, undefined, '', NaN))).toBe(-1)
+    expect(itt.findIndex(I(0, false, null, undefined, '', 123, NaN))).toBe(5)
+    expect(itt.findIndex(I(0, false, null, undefined, '', 123, 456, NaN))).toBe(5)
+  })
 })
 
 describe('findLastIndex', () => {
@@ -1725,6 +1761,18 @@ describe('findLastIndex', () => {
   test('returns -1 for an empty iterator', () => {
     expect(itt.findLastIndex(fail, [])).toBe(-1)
     expect(itt.findLastIndex(fail, I())).toBe(-1)
+  })
+  test('defaults to the identity function', () => {
+    expect(itt.findLastIndex([])).toBe(-1)
+    expect(itt.findLastIndex(I())).toBe(-1)
+    expect(itt.findLastIndex([1])).toBe(0)
+    expect(itt.findLastIndex(I(1))).toBe(0)
+    expect(itt.findLastIndex([0, false, null, undefined, '', NaN])).toBe(-1)
+    expect(itt.findLastIndex([0, 123, false, null, undefined, '', NaN])).toBe(1)
+    expect(itt.findLastIndex([0, 456, false, null, undefined, '', 123, NaN])).toBe(6)
+    expect(itt.findLastIndex(I(0, false, null, undefined, '', NaN))).toBe(-1)
+    expect(itt.findLastIndex(I(0, 123, false, null, undefined, '', NaN))).toBe(1)
+    expect(itt.findLastIndex(I(0, 456, false, null, undefined, '', 123, NaN))).toBe(6)
   })
 })
 

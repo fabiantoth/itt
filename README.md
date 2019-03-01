@@ -85,7 +85,7 @@ const itt = require('itt')
 <br>**[Slicing](#slicing)** — [.slice](#slicestart--0-end--undefined) [.drop](#dropn) [.dropWhile](#dropwhilefn) [.dropLast](#droplastn) [.take](#taken) [.takeWhile](#takewhilefn) [.takeLast](#takelastn) [.tail](#tail) [.init](#init)
 <br>**[Transforming](#transforming)** — [.map](#mapfn) [.flatMap](#flatmapfn) [.filter](#filterfn) [.reject](#rejectfn) [.scan](#scana-fn) [.scan1](#scan1fn)
 <br>**[Querying](#querying)** — [.first](#first) [.last](#last) [.pick](#picki) [.count](#count) [.every](#everyfn) [.some](#somefn) [.tap](#tapfn)
-<br>**[Searching](#searching)** — [.detect](#detectfn) [.find](#findfn) [.findLast](#findlastfn) [.findIndex](#findindexfn) [.findLastIndex](#findlastindexfn) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
+<br>**[Searching](#searching)** — [.detect](#detectfn) [.find](#findfn--id) [.findLast](#findlastfn--id) [.findIndex](#findindexfn--id) [.findLastIndex](#findlastindexfn--id) [.indexOf](#indexofx) [.lastIndexOf](#lastindexofx) [.includes](#includesx)
 <br>**[Combinatorics](#combinatorics)** — [.cartesianProduct](#cartesianproductxs-) [.permutations](#permutationsn--undefined) [.combinations](#combinationsn--undefined)
 <br>**[Manipulating](#manipulating)** — [.enumerate](#enumerate) [.intersperse](#interspersesep) [.cycle](#cycle) [.repeat](#repeatn) [.unique](#unique) [.flatten](#flatten) [.chunksOf](#chunksofn--2) [.chunksBy](#chunksbyfn) [.subsequences](#subsequencesn--2) [.lookahead](#lookaheadn--1) [.transpose](#transpose)
 <br>**[Combining](#combining)** — [.concat](#concatxs-) [.zip](#zipxs-) [.parallel](#parallelxs-) [.push](#pushx-) [.unshift](#unshiftx-)
@@ -516,7 +516,7 @@ total: 63
 
 ### .detect(fn)
 
-Applies `fn` to each element and returns the first truthy result, or `undefined` if none exists. Equivalent to `.map(fn).find(x => x)`.
+Applies `fn` to each element and returns the first truthy result, or `undefined` if none exists. Equivalent to `.map(fn).find()`.
 
 ```js
 itt(['bananas', 'oranges', 'blueberries', 'pears', 'apples'])
@@ -534,9 +534,9 @@ itt(people).detect(x => x.vehicle)
 /* undefined */
 ```
 
-### .find(fn)
+### .find([fn = undefined])
 
-The first element of this iterator for which `fn` returns a truthy value, or `undefined` if none exists.
+The first element of this iterator for which `fn` returns a truthy value (if `fn` is undefined, the first truthy element of this iterator), or `undefined` if none exists.
 
 ```js
 itt.range(10).map(x => x * x).find(x => x > 10)
@@ -546,9 +546,9 @@ itt.range(10).map(x => x * x).find(x => x > 100)
 /* undefined */
 ```
 
-### .findLast(fn)
+### .findLast([fn = undefined])
 
-The last element of this iterator for which `fn` returns a truthy value, or `undefined` if none exists.
+The last element of this iterator for which `fn` returns a truthy value (if `fn` is undefined, the last truthy element of this iterator), or `undefined` if none exists.
 
 ```js
 itt.range(10).map(x => x * x).find(x => x > 10)
@@ -558,9 +558,9 @@ itt.range(10).map(x => x * x).find(x => x > 100)
 /* undefined */
 ```
 
-### .findIndex(fn)
+### .findIndex([fn = undefined])
 
-The 0-based index of the first element of this iterator for which `fn` returns a truthy value, or -1 if none exists.
+The 0-based index of the first element of this iterator for which `fn` returns a truthy value (if `fn` is undefined, the first truthy element of this iterator), or -1 if none exists.
 
 ```js
 itt.range(10).map(x => x * x).findIndex(x => x > 10)
@@ -570,9 +570,9 @@ itt.range(10).map(x => x * x).findIndex(x => x > 100)
 /* -1 */
 ```
 
-### .findLastIndex(fn)
+### .findLastIndex([fn = undefined])
 
-The 0-based index of the last element of this iterator for which `fn` returns a truthy value, or -1 if none exists.
+The 0-based index of the last element of this iterator for which `fn` returns a truthy value (if `fn` is undefined, the last truthy element of this iterator), or -1 if none exists.
 
 ```js
 itt.range(10).map(x => x * x).findLastIndex(x => x > 10)
