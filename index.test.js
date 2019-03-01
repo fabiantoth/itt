@@ -2,15 +2,21 @@ const itt = require('itt')
 
 function* I(...els) {yield* els}
 
-test('is', () => {
-  expect(itt.is(1)).toBe(false)
-  expect(itt.is({})).toBe(false)
-  expect(itt.is(Object)).toBe(false)
-  expect(itt.is('test')).toBe(true)
-  expect(itt.is('test'[Symbol.iterator]())).toBe(true)
-  expect(itt.is([1, 2, 3])).toBe(true)
-  expect(itt.is([1, 2, 3][Symbol.iterator]())).toBe(true)
-  expect(itt.is(itt.range(5))).toBe(true)
+describe('is', () => {
+  test('rejects non-iterators', () => {
+    expect(itt.is(1)).toBe(false)
+    expect(itt.is({})).toBe(false)
+    expect(itt.is(Object)).toBe(false)
+  })
+  test('accepts iterables', () => {
+    expect(itt.is('test')).toBe(true)
+    expect(itt.is([1, 2, 3])).toBe(true)
+  })
+  test('accepts iterators', () => {
+    expect(itt.is('test'[Symbol.iterator]())).toBe(true)
+    expect(itt.is([1, 2, 3][Symbol.iterator]())).toBe(true)
+    expect(itt.is(I(0, 1, 2, 3, 4))).toBe(true)
+  })
 })
 
 describe('generator', () => {
@@ -28,9 +34,13 @@ describe('generator', () => {
   })
 })
 
-test('from', () => {
-  expect(itt([1, 2, 3, 4]).toArray).toBeDefined()
-  expect(itt.from([1, 2, 3, 4]).toArray).toBeDefined()
+describe('from', () => {
+  test('can be used as itt(..)', () => {
+    expect(itt([1, 2, 3, 4]).toArray).toBeDefined()
+  })
+  test('can be used as itt.from(...)', () => {
+    expect(itt.from([1, 2, 3, 4]).toArray).toBeDefined()
+  })
 })
 
 describe('empty', () => {
