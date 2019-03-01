@@ -1,6 +1,7 @@
 const itt = require('itt')
 
 function* I(...els) {yield* els}
+function fail() {throw new Error('Should never be called')}
 
 describe('is', () => {
   test('rejects non-iterators', () => {
@@ -1794,6 +1795,28 @@ describe('reduce', () => {
   })
   test('folds left-to-right', () => {
     expect(itt.reduce(':', (a, b) => a + b, ['a', 'b', 'c', 'd', 'e'])).toBe(':abcde')
+  })
+})
+
+describe('reduce1', () => {
+  test('returns undefined when given an empty iterator', () => {
+    const o = {}
+    expect(itt.reduce1(fail, [])).toBe(undefined)
+    expect(itt.reduce1(fail, I())).toBe(undefined)
+  })
+  test('returns the first element when given only one element', () => {
+    expect(itt.reduce1(fail, [5])).toBe(5)
+    expect(itt.reduce1(fail, I(3))).toBe(3)
+  })
+  test('accumulates function results', () => {
+    expect(itt.reduce1((a, b) => a + b, [5, 4, 3, 2, 1, 0])).toBe(15)
+    expect(itt.reduce1((a, b) => a + b, I(3, 2, 1, 0))).toBe(6)
+  })
+  test('works as a method', () => {
+    expect(itt([5, 4, 3, 2, 1, 0]).reduce1((a, b) => a + b)).toBe(15)
+  })
+  test('folds left-to-right', () => {
+    expect(itt.reduce1((a, b) => a + b, ['a', 'b', 'c', 'd', 'e'])).toBe('abcde')
   })
 })
 

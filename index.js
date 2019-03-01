@@ -325,6 +325,17 @@ function indexOf(y, xs) {let i = 0; for (const x of xs) {if (x === y) return i; 
 function lastIndexOf(y, xs) {let i = 0, j = -1; for (const x of xs) {if (x === y) j = i; ++i} return j}
 function includes(y, xs) {for (const x of xs) if (x === y) return true; return false}
 function reduce(a, fn, xs) {for (const x of xs) a = fn(a, x); return a}
+function reduce1(fn, xs) {
+  xs = xs[Symbol.iterator]()
+  let x = xs.next()
+  if (!x.done) {
+    let a = x.value
+    while (!(x = xs.next()).done) {
+      a = fn(a, x.value)
+    }
+    return a
+  }
+}
 const scan = G(function*(a, fn, xs) {for (const x of xs) {a = fn(a, x); yield a}})
 const scan1 = G(function*(fn, xs) {
   xs = xs[Symbol.iterator]()
@@ -540,6 +551,7 @@ class Iter {
   lastIndexOf(x) {return lastIndexOf(x, this.iter)}
   includes(x) {return includes(x, this.iter)}
   reduce(a, fn) {return reduce(a, fn, this.iter)}
+  reduce1(fn) {return reduce1(fn, this.iter)}
   scan(a, fn) {return scan(a, fn, this.iter)}
   scan1(fn) {return scan1(fn, this.iter)}
   inject(a, fn) {return inject(a, fn, this.iter)}
@@ -661,7 +673,7 @@ Object.assign(module.exports = from, {
   zip, transpose, parallel,
   every, some,
   find, findLast, findIndex, findLastIndex, indexOf, lastIndexOf, includes,
-  reduce, scan, scan1, inject, forEach, drain,
+  reduce, reduce1, scan, scan1, inject, forEach, drain,
   first, head, last, tail, init,
   count, pick,
   sum, mean, product, min, max, minMax,

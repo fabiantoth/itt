@@ -856,6 +856,15 @@ itt.range(6).reduce(0, (x, y) => x + y)
 /* 15 */
 ```
 
+### .reduce1(fn)
+
+Like `.reduce`, but draws the initial value of `a` from the first element of this iterator, accumulating `a = fn(a, x)` for each subsequent element and then returning `a`. Returns `undefined` if this iterator is empty.
+
+```js
+itt.range(6).reduce1((x, y) => x + y)
+/* 15 */
+```
+
 ### .inject(a, fn)
 
 Calls `fn(a, x)` for each element of this iterator, in iteration order, then returns `a`.
