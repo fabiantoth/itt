@@ -432,7 +432,7 @@ itt.irange().scan1((x, y) => x + y).take(5).toArray()
 ### .first()
 **.head() [alias]**
 
-The first element of this iterator.
+The first element of this iterator, or `undefined` if this iterator is empty.
 
 ```js
 itt.irange().map(x => x * x).drop(5).first()
@@ -441,7 +441,7 @@ itt.irange().map(x => x * x).drop(5).first()
 
 ### .last()
 
-The last element of this iterator.
+The last element of this iterator, or `undefined` if this iterator is empty.
 
 ```js
 itt.range(10).map(x => x * x).last()
@@ -450,7 +450,7 @@ itt.range(10).map(x => x * x).last()
 
 ### .pick(i)
 
-The `i`th element of this iterator.
+The `i`th element of this iterator, or `undefined` if it does not exist.
 
 ```js
 itt.irange().map(x => x * x).pick(3)
