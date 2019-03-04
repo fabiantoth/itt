@@ -244,15 +244,15 @@ const chunksBy = G(function*(f, xs) {
 const subsequences = G(function*(n = 2, xs) {
   if (xs === undefined) {xs = n; n = 2}
   if (n <= 0) return
-  if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
+  const it = toRaw(xs)
   let buffer = []
   let value, done
-  while (buffer.length < n && ({value, done} = xs.next(), !done)) {
+  while (buffer.length < n && ({value, done} = it.next(), !done)) {
     buffer.push(value)
   }
   if (!done) for (;;) {
     yield buffer
-    ;({value, done} = xs.next())
+    ;({value, done} = it.next())
     if (done) return
     buffer = buffer.slice(1)
     buffer.push(value)
@@ -260,13 +260,13 @@ const subsequences = G(function*(n = 2, xs) {
 })
 const lookahead = G(function*(n = 1, xs) {
   if (xs === undefined) {xs = n; n = 1}
-  if (xs[Symbol.iterator]) xs = xs[Symbol.iterator]()
+  const it = toRaw(xs)
   let buffer = []
   let value, done
-  while (buffer.length < n && ({value, done} = xs.next()) && !done) {
+  while (buffer.length < n && ({value, done} = it.next()) && !done) {
     buffer.push(value)
   }
-  if (!done) while (({value, done} = xs.next()) && !done) {
+  if (!done) while (({value, done} = it.next()) && !done) {
     buffer.push(value)
     yield buffer
     buffer = buffer.slice(1)
