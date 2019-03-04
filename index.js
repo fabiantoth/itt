@@ -622,7 +622,6 @@ class ForkSource {
       this.derived[i] = new ForkIter(this)
     }
   }
-  [Symbol.iterator]() {return this.derived[Symbol.iterator]()}
   [PULL]() {
     const {done, value} = this.xs.next()
     if (done) return
@@ -650,7 +649,6 @@ class Partition {
     this.keep = new PartitionIter(this, true)
     this.reject = new PartitionIter(this, false)
   }
-  *[Symbol.iterator]() {yield this.keep; yield this.reject}
   iters() {return [this.keep, this.reject]}
   [PULL](keep) {
     keep = !!keep
