@@ -176,6 +176,17 @@ describe('split', () => {
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 4))).toEqual(['ab', 'cde', 'fghi', 'jkl'])
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', 10))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
     expect(Array.from(itt.split('ab cde fghi jkl mnop', ' ', Infinity))).toEqual(['ab', 'cde', 'fghi', 'jkl', 'mnop'])
+    expect(Array.from(itt.split('abcdef', /(?=\w)/, 1))).toEqual(['a'])
+  })
+  it('supports @@split', () => {
+    const pattern = {*[Symbol.split](string, limit) {
+      yield {pattern: this, string, limit}
+    }}
+    expect(Array.from(itt.split('string', pattern, 10))).toEqual([{
+      pattern,
+      string: 'string',
+      limit: 10,
+    }])
   })
   it('yields the first n elements when given a regexp and a limit', () => {
     expect(Array.from(itt.split('1,2.3,4', /[,.]/, 3))).toEqual(['1', '2', '3'])

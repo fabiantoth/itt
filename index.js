@@ -24,7 +24,7 @@ const toString = Object.prototype.toString
 const split = G(function*(s, sep, limit) {
   const re = toString.call(sep) === '[object RegExp]'
   if (sep != null && !re) {
-    const splitter = sep[Symbol.splitter]
+    const splitter = sep[Symbol.split]
     if (splitter != null) {
       yield* splitter.call(sep, s, limit)
       return
