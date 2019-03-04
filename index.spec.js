@@ -1,6 +1,7 @@
 const itt = require('.')
 
 function* I(...els) {yield* els}
+// istanbul ignore next
 function fail() {throw new Error('Should never be called')}
 
 describe('is', () => {
@@ -1236,6 +1237,14 @@ describe('lookahead', () => {
   it('yields no lookahead if n <= 0', () => {
     expect(Array.from(itt.lookahead(0, [1, 2, 3, 4]))).toEqual([[1], [2], [3], [4]])
   })
+  it('works on bare iterators', () => {
+    const inner = [1, 2, 3, 4][Symbol.iterator]()
+    const it = {next: inner.next.bind(inner)}
+    expect(Array.from(itt.lookahead(it))).toEqual([[1, 2], [2, 3], [3, 4], [4]])
+    const inner2 = [1, 2, 3, 4][Symbol.iterator]()
+    const it2 = {next: inner2.next.bind(inner2)}
+    expect(Array.from(itt.lookahead(2, it2))).toEqual([[1, 2, 3], [2, 3, 4], [3, 4], [4]])
+  })
   it('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.lookahead(2, []))).toEqual([])
     expect(Array.from(itt.lookahead(5, I()))).toEqual([])
@@ -1364,6 +1373,10 @@ describe('take', () => {
   it(`yields all elements if there aren't more than n`, () => {
     expect(Array.from(itt.take(5, [1, 2, 3, 4, 5]))).toEqual([1, 2, 3, 4, 5])
     expect(Array.from(itt.take(3, [1]))).toEqual([1])
+  })
+  it(`returns an empty iterator if n <= 0`, () => {
+    expect(Array.from(itt.take(0, [1, 2, 3, 4, 5]))).toEqual([])
+    expect(Array.from(itt.take(-100, [1]))).toEqual([])
   })
   it('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.take(2, []))).toEqual([])
@@ -1679,6 +1692,16 @@ describe('find', () => {
     expect(itt.find(I(0, false, null, undefined, '', NaN))).toBe(undefined)
     expect(itt.find(I(0, false, null, undefined, '', 123, NaN))).toBe(123)
     expect(itt.find(I(0, false, null, undefined, '', 123, 456, NaN))).toBe(123)
+    expect(itt.find(undefined, [])).toBe(undefined)
+    expect(itt.find(undefined, I())).toBe(undefined)
+    expect(itt.find(undefined, [1])).toBe(1)
+    expect(itt.find(undefined, I(1))).toBe(1)
+    expect(itt.find(undefined, [0, false, null, undefined, '', NaN])).toBe(undefined)
+    expect(itt.find(undefined, [0, false, null, undefined, '', 123, NaN])).toBe(123)
+    expect(itt.find(undefined, [0, false, null, undefined, '', 123, 456, NaN])).toBe(123)
+    expect(itt.find(undefined, I(0, false, null, undefined, '', NaN))).toBe(undefined)
+    expect(itt.find(undefined, I(0, false, null, undefined, '', 123, NaN))).toBe(123)
+    expect(itt.find(undefined, I(0, false, null, undefined, '', 123, 456, NaN))).toBe(123)
   })
 })
 
@@ -1713,6 +1736,16 @@ describe('findLast', () => {
     expect(itt.findLast(I(0, false, null, undefined, '', NaN))).toBe(undefined)
     expect(itt.findLast(I(0, 123, false, null, undefined, '', NaN))).toBe(123)
     expect(itt.findLast(I(0, 123, false, null, undefined, '', 456, NaN))).toBe(456)
+    expect(itt.findLast(undefined, [])).toBe(undefined)
+    expect(itt.findLast(undefined, I())).toBe(undefined)
+    expect(itt.findLast(undefined, [1])).toBe(1)
+    expect(itt.findLast(undefined, I(1))).toBe(1)
+    expect(itt.findLast(undefined, [0, false, null, undefined, '', NaN])).toBe(undefined)
+    expect(itt.findLast(undefined, [0, 123, false, null, undefined, '', NaN])).toBe(123)
+    expect(itt.findLast(undefined, [0, 123, false, null, undefined, '', 456, NaN])).toBe(456)
+    expect(itt.findLast(undefined, I(0, false, null, undefined, '', NaN))).toBe(undefined)
+    expect(itt.findLast(undefined, I(0, 123, false, null, undefined, '', NaN))).toBe(123)
+    expect(itt.findLast(undefined, I(0, 123, false, null, undefined, '', 456, NaN))).toBe(456)
   })
 })
 
@@ -1751,6 +1784,16 @@ describe('findIndex', () => {
     expect(itt.findIndex(I(0, false, null, undefined, '', NaN))).toBe(-1)
     expect(itt.findIndex(I(0, false, null, undefined, '', 123, NaN))).toBe(5)
     expect(itt.findIndex(I(0, false, null, undefined, '', 123, 456, NaN))).toBe(5)
+    expect(itt.findIndex(undefined, [])).toBe(-1)
+    expect(itt.findIndex(undefined, I())).toBe(-1)
+    expect(itt.findIndex(undefined, [1])).toBe(0)
+    expect(itt.findIndex(undefined, I(1))).toBe(0)
+    expect(itt.findIndex(undefined, [0, false, null, undefined, '', NaN])).toBe(-1)
+    expect(itt.findIndex(undefined, [0, false, null, undefined, '', 123, NaN])).toBe(5)
+    expect(itt.findIndex(undefined, [0, false, null, undefined, '', 123, 456, NaN])).toBe(5)
+    expect(itt.findIndex(undefined, I(0, false, null, undefined, '', NaN))).toBe(-1)
+    expect(itt.findIndex(undefined, I(0, false, null, undefined, '', 123, NaN))).toBe(5)
+    expect(itt.findIndex(undefined, I(0, false, null, undefined, '', 123, 456, NaN))).toBe(5)
   })
 })
 
@@ -1784,6 +1827,16 @@ describe('findLastIndex', () => {
     expect(itt.findLastIndex(I(0, false, null, undefined, '', NaN))).toBe(-1)
     expect(itt.findLastIndex(I(0, 123, false, null, undefined, '', NaN))).toBe(1)
     expect(itt.findLastIndex(I(0, 456, false, null, undefined, '', 123, NaN))).toBe(6)
+    expect(itt.findLastIndex(undefined, [])).toBe(-1)
+    expect(itt.findLastIndex(undefined, I())).toBe(-1)
+    expect(itt.findLastIndex(undefined, [1])).toBe(0)
+    expect(itt.findLastIndex(undefined, I(1))).toBe(0)
+    expect(itt.findLastIndex(undefined, [0, false, null, undefined, '', NaN])).toBe(-1)
+    expect(itt.findLastIndex(undefined, [0, 123, false, null, undefined, '', NaN])).toBe(1)
+    expect(itt.findLastIndex(undefined, [0, 456, false, null, undefined, '', 123, NaN])).toBe(6)
+    expect(itt.findLastIndex(undefined, I(0, false, null, undefined, '', NaN))).toBe(-1)
+    expect(itt.findLastIndex(undefined, I(0, 123, false, null, undefined, '', NaN))).toBe(1)
+    expect(itt.findLastIndex(undefined, I(0, 456, false, null, undefined, '', 123, NaN))).toBe(6)
   })
 })
 
@@ -2029,6 +2082,9 @@ describe('drain', () => {
     expect(itt.drain([])).toBe(undefined)
     expect(itt.drain([1, 2, 3, 4, 5])).toBe(undefined)
     expect(itt.drain(I())).toBe(undefined)
+  })
+  it('works as a method', () => {
+    expect(itt([1, 2, 3, 4, 5]).drain()).toBe(undefined)
   })
 })
 
@@ -2487,6 +2543,9 @@ describe('join', () => {
   it('works for multi-character separators', () => {
     expect(itt.join('==>', [1, 2, 3])).toEqual('1==>2==>3')
   })
+  it('works for an empty separator', () => {
+    expect(itt.join('', [1, 2, 3])).toEqual('123')
+  })
   it(`defaults to sep = ','`, () => {
     expect(itt.join(['abc', 'defg', 'hi'])).toEqual('abc,defg,hi')
     expect(itt.join([1, 2, 3, 4, 5])).toEqual('1,2,3,4,5')
@@ -2799,6 +2858,40 @@ describe('slice', () => {
     expect(Array.from(itt.slice(0, -9, [9, 8, 7, 6, 5, 4, 3, 2, 1]))).toEqual([])
     expect(Array.from(itt.slice(0, -12, [9, 8, 7, 6, 5, 4, 3, 2, 1]))).toEqual([])
     expect(Array.from(itt.slice(4, -12, [9, 8, 7, 6, 5, 4, 3, 2, 1]))).toEqual([])
+    expect(Array.from(itt.slice(0, -1, I()))).toEqual([])
+    expect(Array.from(itt.slice(1, -1, I()))).toEqual([])
+    expect(Array.from(itt.slice(5, -2, I()))).toEqual([])
+    expect(Array.from(itt.slice(5, -5, I()))).toEqual([])
+    expect(Array.from(itt.slice(0, -1, I(1)))).toEqual([])
+    expect(Array.from(itt.slice(1, -1, I(1)))).toEqual([])
+    expect(Array.from(itt.slice(3, -10, I(1)))).toEqual([])
+    expect(Array.from(itt.slice(2, -1, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(1, -2, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(1, -1, I(1, 2, 3)))).toEqual([2])
+    expect(Array.from(itt.slice(1, -2, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(0, -1, I(1, 2, 3)))).toEqual([1, 2])
+    expect(Array.from(itt.slice(0, -2, I(1, 2, 3)))).toEqual([1])
+    expect(Array.from(itt.slice(3, -1, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(3, -3, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(5, -1, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(5, -5, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(3, -10, I(1, 2, 3)))).toEqual([])
+    expect(Array.from(itt.slice(7, -3, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(5, -3, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([4])
+    expect(Array.from(itt.slice(7, -1, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([2])
+    expect(Array.from(itt.slice(4, -1, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([5, 4, 3, 2])
+    expect(Array.from(itt.slice(1, -6, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([8, 7])
+    expect(Array.from(itt.slice(6, -1, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([3, 2])
+    expect(Array.from(itt.slice(6, -3, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(6, -6, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(8, -1, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(0, -1, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([9, 8, 7, 6, 5, 4, 3, 2])
+    expect(Array.from(itt.slice(5, -4, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(10, -4, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(0, -4, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([9, 8, 7, 6, 5])
+    expect(Array.from(itt.slice(0, -9, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(0, -12, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
+    expect(Array.from(itt.slice(4, -12, I(9, 8, 7, 6, 5, 4, 3, 2, 1)))).toEqual([])
   })
   it('returns an empty iterator when given an empty iterator', () => {
     expect(Array.from(itt.slice([]))).toEqual([])
